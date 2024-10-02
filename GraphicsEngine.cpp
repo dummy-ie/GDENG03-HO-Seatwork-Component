@@ -70,6 +70,7 @@ bool GraphicsEngine::release()
 
 	m_d3d_device->Release();
 
+	delete this;
 	return true;
 }
 
@@ -160,11 +161,23 @@ void GraphicsEngine::releaseCompiledShader()
 
 GraphicsEngine* GraphicsEngine::P_SHARED_INSTANCE = NULL;
 GraphicsEngine::GraphicsEngine() {}
+GraphicsEngine::~GraphicsEngine() {}
 GraphicsEngine::GraphicsEngine(const GraphicsEngine&) {}
 
 GraphicsEngine* GraphicsEngine::getInstance() {
-	if (P_SHARED_INSTANCE == NULL)
-		P_SHARED_INSTANCE = new GraphicsEngine();
-
 	return P_SHARED_INSTANCE;
+}
+
+void GraphicsEngine::initialize()
+{
+	P_SHARED_INSTANCE = new GraphicsEngine();
+	P_SHARED_INSTANCE->init();
+}
+
+void GraphicsEngine::destroy()
+{
+	if (P_SHARED_INSTANCE != NULL)
+	{
+		P_SHARED_INSTANCE->release();
+	}
 }

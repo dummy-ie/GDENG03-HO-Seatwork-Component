@@ -4,13 +4,14 @@ using namespace application;
 
 int main()
 {
-	AppWindow app;
-	if (app.init())
+	AppWindow::initialize();
+	AppWindow* runningApp = (AppWindow*)AppWindow::getInstance();
+	runningApp->initializeEngine();
+
+	while(runningApp->isRunning())
 	{
-		while(app.isRunning())
-		{
-			app.broadcast();
-		}
+		runningApp->broadcast();
 	}
+
 	return 0;
 }

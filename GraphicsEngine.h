@@ -41,14 +41,6 @@ namespace engine
 			friend class PixelShader;
 
 		public:
-			~GraphicsEngine();
-
-		public:
-			// Initialize the Graphics Engine and DirectX 11 Device
-			bool init();
-			// Release all the resources loaded
-			bool release();
-
 			SwapChain* createSwapChain();
 			DeviceContext* getImmediateDeviceContext();
 			VertexBuffer* createVertexBuffer();
@@ -62,15 +54,23 @@ namespace engine
 			void releaseCompiledShader();
 
 		private:
+			// Initialize the Graphics Engine and DirectX 11 Device
+			bool init();
+			// Release all the resources loaded
+			bool release();
+		private:
 			static GraphicsEngine* P_SHARED_INSTANCE;
 
 		private:
 			GraphicsEngine();
+			~GraphicsEngine();
 			GraphicsEngine(GraphicsEngine const&);
 			GraphicsEngine& operator = (GraphicsEngine const&);
 
 		public:
 			static GraphicsEngine* getInstance();
+			static void initialize();
+			static void destroy();
 		};
 	}
 }

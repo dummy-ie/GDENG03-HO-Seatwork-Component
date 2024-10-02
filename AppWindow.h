@@ -35,13 +35,25 @@ namespace application
 		float m_angle = 0;
 
 	public:
-		AppWindow();
-		~AppWindow();
-
-	public:
 		virtual void onCreate() override;
 		virtual void onUpdate() override;
 		virtual void onDestroy() override;
+
+		void initializeEngine();
+
+	private:
+		static AppWindow* P_SHARED_INSTANCE;
+
+	private:
+		AppWindow();
+		~AppWindow();
+		AppWindow(AppWindow const&);
+		AppWindow& operator = (AppWindow const&);
+
+	public:
+		static AppWindow* getInstance();
+		static void initialize();
+		static void destroy();
 	};
 }
 
