@@ -1,33 +1,35 @@
 #pragma once
 
-struct vec3
-{
-	float x, y, z;
-};
+#include "ConstantBuffer.h"
+#include "Matrix4x4.h"
+#include "Vector3D.h"
+
+using namespace math;
+using namespace engine::graphics;
 
 struct vertex
 {
-	vec3 position;
-	vec3 position1;
-	vec3 color;
-	vec3 color1;
+	Vector3D position;
+	Vector3D position1;
+	Vector3D color;
+	Vector3D color1;
 };
 
 class GameObject
 {
 protected:
-	vec3 position;
-	vec3 scale;
+	Vector3D position;
+	Vector3D scale;
 
 public:
-	GameObject(vec3 position, vec3 scale);
+	GameObject(Vector3D position, Vector3D scale);
 	~GameObject();
 
 public:
 	virtual void update(float deltaTime);
-	virtual void draw();
-	virtual void setPosition(vec3 position);
-	virtual void setScale(vec3 scale);
+	virtual void draw(ConstantBuffer* cb);
+	virtual void setPosition(Vector3D position);
+	virtual void setScale(Vector3D scale);
 
 public:
 	virtual void onCreate();

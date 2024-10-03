@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GameObject.h"
-
 #include "GraphicsEngine.h"
 #include "VertexBuffer.h"
 #include "VertexShader.h"
@@ -10,36 +9,28 @@
 
 using namespace engine::graphics;
 
-__declspec(align(16))
-struct constant
-{
-	float m_angle;
-};
-
 class Quad : public GameObject
 {
 private:
 	vertex list[4];
-	vec3 color;
+	Vector3D color;
 
 	VertexBuffer* m_vb;
 	VertexShader* m_vs;
 	PixelShader* m_ps;
-	ConstantBuffer* m_cb;
-
-	float m_angle = 0;
 
 public:
-	Quad(vec3 position, vec3 scale, vec3 color);
+	Quad(Vector3D position, Vector3D scale, Vector3D color);
 	~Quad();
 
 public:
 	void onCreate() override;
 	void update(float deltaTime) override;
-	void draw() override;
+	void draw(ConstantBuffer* cb) override;
 	void onDestroy() override;
-	void setPosition(vec3 position) override;
-	void setScale(vec3 scale) override;
-	void setColor(vec3 color);
+
+	void setPosition(Vector3D position) override;
+	void setScale(Vector3D scale) override;
+	void setColor(Vector3D color);
 };
 

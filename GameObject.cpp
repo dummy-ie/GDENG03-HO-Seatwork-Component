@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-GameObject::GameObject(vec3 position, vec3 scale)
+GameObject::GameObject(Vector3D position, Vector3D scale)
 {
 	this->position = position;
 	this->scale = scale;
@@ -18,16 +18,16 @@ void GameObject::update(float deltaTime)
 {
 }
 
-void GameObject::draw()
+void GameObject::draw(ConstantBuffer* cb)
 {
 }
 
-void GameObject::setPosition(vec3 position)
+void GameObject::setPosition(Vector3D position)
 {
 	this->position = position;
 }
 
-void GameObject::setScale(vec3 scale)
+void GameObject::setScale(Vector3D scale)
 {
 	this->scale = scale;
 }

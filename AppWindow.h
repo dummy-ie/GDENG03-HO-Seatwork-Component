@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <Windows.h>
 
 #include "Window.h"
 #include "GraphicsEngine.h"
@@ -12,8 +11,6 @@
 #include "PixelShader.h"
 #include "ConstantBuffer.h"
 #include "GameObject.h"
-#include "Quad.h"
-#include "EngineTime.h"
 
 namespace application
 {
@@ -24,15 +21,21 @@ namespace application
 	private:
 		SwapChain* m_swap_chain;
 
+		ConstantBuffer* m_cb;
+
 		std::vector<Viewport*> viewPorts;
 		std::vector<GameObject*> objectList;
 
+		float m_angle = 0;
+		float m_delta_pos;
+		float m_delta_scale;
 	public:
 		virtual void onCreate() override;
 		virtual void onUpdate() override;
 		virtual void onDestroy() override;
 
 		void initializeEngine();
+		void updateQuadPosition();
 
 	private:
 		static AppWindow* P_SHARED_INSTANCE;
