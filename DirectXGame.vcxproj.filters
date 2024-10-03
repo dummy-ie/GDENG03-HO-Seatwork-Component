@@ -40,7 +40,19 @@
     <Filter Include="GameEngine\GraphicsEngine\Viewport">
       <UniqueIdentifier>{094d8b1c-3d1d-4cb0-8d61-f38f4c054f24}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameEngine\GraphicsEngine\Rasterizer">
+    <Filter Include="App\GameObjects\Cube">
+      <UniqueIdentifier>{fbd6c00f-6bf1-422f-b2c6-033bdda412b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\TimeSystem">
+      <UniqueIdentifier>{5b069f66-58e7-4b15-a736-816846cebee1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Math">
+      <UniqueIdentifier>{fd555ae8-c67e-4a45-9f99-113ed4adbda9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\IndexBuffer">
+      <UniqueIdentifier>{38e5b8ee-4ef4-41c4-9666-93bcc042d516}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\RasterizerState">
       <UniqueIdentifier>{56eeedac-8305-4c67-8611-9749e1464ad6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -85,7 +97,16 @@
       <Filter>GameEngine\GraphicsEngine\Viewport</Filter>
     </ClCompile>
     <ClCompile Include="Rasterizer.cpp">
-      <Filter>GameEngine\GraphicsEngine\Rasterizer</Filter>
+      <Filter>GameEngine\GraphicsEngine\RasterizerState</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>App\GameObjects\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineTime.cpp">
+      <Filter>GameEngine\TimeSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>GameEngine\GraphicsEngine\IndexBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -126,7 +147,22 @@
       <Filter>GameEngine\GraphicsEngine\Viewport</Filter>
     </ClInclude>
     <ClInclude Include="Rasterizer.h">
-      <Filter>GameEngine\GraphicsEngine\Rasterizer</Filter>
+      <Filter>GameEngine\GraphicsEngine\RasterizerState</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>App\GameObjects\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineTime.h">
+      <Filter>GameEngine\TimeSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4x4.h">
+      <Filter>GameEngine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3D.h">
+      <Filter>GameEngine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>GameEngine\GraphicsEngine\IndexBuffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

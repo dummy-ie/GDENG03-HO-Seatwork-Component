@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 
+#include "Cube.h"
 #include "Quad.h"
 #include "EngineTime.h"
 #include "Vector3D.h"
@@ -100,14 +101,13 @@ void AppWindow::initializeEngine()
 	m_cb->load(&cc, sizeof(constant));
 
 	// Quads added to object list
-
-	const Vector3D scale = { 0.25, 0.25, 0.25 };
-
-	objectList.push_back(new Quad({ 0.6f, 0.6f, 0 }, { 0.25f, 0.25f, 0.25f }, {1, 0, 0}));
+	/*objectList.push_back(new Quad({0.6f, 0.6f, 0 }, {0.25f, 0.25f, 0.25f }, {1, 0, 0}));
 	objectList.push_back(new Quad({0,0,0},  {0.25f, 0.25f, 0.25f }, {0, 1, 0}));
-	objectList.push_back(new Quad({-0.6,-0.6,0}, { 0.25f, 0.25f, 0.25f }, {0, 0, 1}));
+	objectList.push_back(new Quad({-0.6,-0.6,0}, { 0.25f, 0.25f, 0.25f }, {0, 0, 1}));*/
 
 	//objectList.push_back(new Quad({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1, 0, 0 }));
+
+	objectList.push_back(new Cube({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1, 0, 0 }));
 
 	for (GameObject* gameObject : objectList) {
 		gameObject->onCreate();
@@ -133,12 +133,26 @@ void AppWindow::updateQuadPosition()
 
 	if (m_delta_pos > 1.0f)
 		m_delta_pos = 0;
-
+	
 	Matrix4x4 temp;
 
-	cc.m_world.setScale(Vector3D::lerp(Vector3D(0.5f, 0.5, 0), Vector3D(1, 1, 0), (sin(m_delta_scale) + 1.0f) / 2.0f));
+	//cc.m_world.setScale(Vector3D::lerp(Vector3D(0.5f, 0.5, 0), Vector3D(1, 1, 0), (sin(m_delta_scale) + 1.0f) / 2.0f));
 
-	temp.setTranslation(Vector3D::lerp(Vector3D(-1.5f, -1.5f, 0), Vector3D(1.5f, 1.5f, 0), m_delta_pos));
+	//temp.setTranslation(Vector3D::lerp(Vector3D(-1.5f, -1.5f, 0), Vector3D(1.5f, 1.5f, 0), m_delta_pos));
+	//cc.m_world *= temp;
+
+	cc.m_world.setScale(Vector3D(1, 1, 1));
+
+	temp.setIdentity();
+	temp.setRotationZ(m_delta_scale);
+	cc.m_world *= temp;
+
+	temp.setIdentity();
+	temp.setRotationY(m_delta_scale);
+	cc.m_world *= temp;
+
+	temp.setIdentity();
+	temp.setRotationX(m_delta_scale);
 	cc.m_world *= temp;
 
 	cc.m_view.setIdentity();
@@ -148,7 +162,7 @@ void AppWindow::updateQuadPosition()
 	FLOAT width = windowRect.right - windowRect.left;
 	FLOAT height = windowRect.bottom - windowRect.top;
 
-	cc.m_proj.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
+	cc.m_proj.setOrthoLH(width / 300.0f, height / 300.0f, -4.0f, 4.0f);
 
 	m_cb->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cc);
 }

@@ -13,6 +13,7 @@ namespace engine
 		class VertexShader;
 		class PixelShader;
 		class Viewport;
+		class IndexBuffer;
 
 		class DeviceContext
 		{
@@ -29,7 +30,10 @@ namespace engine
 		public:
 			void clearRenderTargetColor(SwapChain* swap_chain, float red, float green, float blue, float alpha);
 			void setVertexBuffer(VertexBuffer* vertex_buffer);
+			void setIndexBuffer(IndexBuffer* index_buffer);
+
 			void drawTriangleList(UINT vertex_count, UINT start_vertex_index);
+			void drawIndexedTriangleList(UINT index_count, UINT start_vertex_index, UINT start_index_location);
 			void drawTriangleStrip(UINT vertex_count, UINT start_vertex_index);
 
 			//void setViewportSize(UINT width, UINT height, int index);
