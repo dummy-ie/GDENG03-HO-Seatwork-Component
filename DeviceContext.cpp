@@ -46,15 +46,34 @@ void DeviceContext::drawTriangleStrip(UINT vertex_count, UINT start_vertex_index
 	m_device_context->Draw(vertex_count, start_vertex_index);
 }
 
-void DeviceContext::setViewportSize(UINT width, UINT height)
+void DeviceContext::setViewport(Viewport* vp)
+{
+	m_device_context->RSSetViewports(1, &vp->vp);
+	setRasterizerState(&vp->rasterizer);
+}
+
+/*void DeviceContext::setViewportSize(UINT width, UINT height, int index)
 {
 	D3D11_VIEWPORT vp = {};
-	vp.Width = (FLOAT)width;
-	vp.Height = (FLOAT)height;
+	vp.TopLeftX = 0.0f;
+	vp.TopLeftY = 0.0f;
+	vp.Width = (FLOAT)width / 2;
+	vp.Height = (FLOAT)height / 2;
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
-	m_device_context->RSSetViewports(1, &vp);
-}
+
+	D3D11_VIEWPORT vp2;
+	vp2.TopLeftX = (FLOAT)width / 2;
+	vp2.TopLeftY = 0.0f;
+	vp2.Width = (FLOAT)width / 2;
+	vp2.Height = (FLOAT)height / 2;
+	vp2.MinDepth = 0.0f;
+	vp2.MaxDepth = 1.0f;
+
+	D3D11_VIEWPORT viewports[] = { vp, vp2 }; 
+
+	m_device_context->RSSetViewports(1, &viewports[index]);
+}*/
 
 void DeviceContext::setVertexShader(VertexShader* vertex_shader)
 {
@@ -74,6 +93,11 @@ void DeviceContext::setConstantBuffer(VertexShader* vertex_shader, ConstantBuffe
 void DeviceContext::setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer)
 {
 	m_device_context->PSSetConstantBuffers(0, 1, &buffer->m_buffer);
+}
+
+void DeviceContext::setRasterizerState(Rasterizer* rasterizer)
+{
+	m_device_context->RSSetState(rasterizer->m_rasterizer_state);
 }
 
 bool DeviceContext::release()

@@ -15,7 +15,7 @@ void GameObject::onCreate()
 {
 }
 
-void GameObject::update()
+void GameObject::update(float deltaTime)
 {
 }
 

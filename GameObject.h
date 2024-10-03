@@ -25,7 +25,7 @@ public:
 	~GameObject();
 
 public:
-	virtual void update();
+	virtual void update(float deltaTime);
 	virtual void draw();
 	virtual void setPosition(vec3 position);
 	virtual void setScale(vec3 scale);

@@ -13,6 +13,7 @@ namespace engine
 		class VertexShader;
 		class ConstantBuffer;
 		class PixelShader;
+		class Viewport;
 
 		class GraphicsEngine
 		{
@@ -39,6 +40,8 @@ namespace engine
 			friend class ConstantBuffer;
 			friend class VertexShader;
 			friend class PixelShader;
+			friend class Viewport;
+			friend class Rasterizer;
 
 		public:
 			SwapChain* createSwapChain();
@@ -48,6 +51,8 @@ namespace engine
 
 			VertexShader* createVertexShader(const void* shader_byte_code, size_t byte_code_size);
 			PixelShader* createPixelShader(const void* shader_byte_code, size_t byte_code_size);
+
+			Viewport* createViewport(FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth, FLOAT maxDepth, D3D11_FILL_MODE fillMode = D3D11_FILL_SOLID);
 
 			bool compileVertexShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size);
 			bool compilePixelShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size);

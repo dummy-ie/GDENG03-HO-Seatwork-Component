@@ -37,6 +37,12 @@
     <Filter Include="GameEngine\GraphicsEngine\ConstantBuffer">
       <UniqueIdentifier>{2944137e-871e-477e-98b9-69b8f19ac886}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\Viewport">
+      <UniqueIdentifier>{094d8b1c-3d1d-4cb0-8d61-f38f4c054f24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\Rasterizer">
+      <UniqueIdentifier>{56eeedac-8305-4c67-8611-9749e1464ad6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -75,6 +81,12 @@
     <ClCompile Include="ConstantBuffer.cpp">
       <Filter>GameEngine\GraphicsEngine\ConstantBuffer</Filter>
     </ClCompile>
+    <ClCompile Include="Viewport.cpp">
+      <Filter>GameEngine\GraphicsEngine\Viewport</Filter>
+    </ClCompile>
+    <ClCompile Include="Rasterizer.cpp">
+      <Filter>GameEngine\GraphicsEngine\Rasterizer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -109,6 +121,12 @@
     </ClInclude>
     <ClInclude Include="ConstantBuffer.h">
       <Filter>GameEngine\GraphicsEngine\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewport.h">
+      <Filter>GameEngine\GraphicsEngine\Viewport</Filter>
+    </ClInclude>
+    <ClInclude Include="Rasterizer.h">
+      <Filter>GameEngine\GraphicsEngine\Rasterizer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

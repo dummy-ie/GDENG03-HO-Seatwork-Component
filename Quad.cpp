@@ -13,14 +13,11 @@ Quad::~Quad()
 
 void Quad::onCreate()
 {
-	/*this->list[0] = { -0.25f, -0.25f, 0.0f, 1, 1, 1 };
-	this->list[1] = { -0.25f,  0.25f, 0.0f, 1, 1, 1 };
-	this->list[2] = { 0.25f, -0.25f, 0.0f, 1, 1, 1 };
-	this->list[3] = { 0.25f,  0.25f, 0.0f, 1, 1, 1 };*/
-	this->list[0] = { -1.0f, -1.0f, 0.0f, 1, 1, 1 };
-	this->list[1] = { -1.0f,  1.0f, 0.0f, 1, 1, 1 };
-	this->list[2] = { 1.0f, -1.0f, 0.0f, 1, 1, 1 };
-	this->list[3] = { 1.0f,  1.0f, 0.0f, 1, 1, 1 };
+	// Initialize Constant Position and Colors (White)
+	this->list[0] = { -1.0f, -1.0f, 0.0f, -0.64f, -0.22f,  0.0f, 1, 1, 1, 1, 1, 1 };
+	this->list[1] = { -1.0f,  1.0f, 0.0f, -0.22f, 1.56f, 0.0f, 1, 1, 1, 1, 1, 1 };
+	this->list[2] = { 1.0f, -1.0f, 0.0f, 1.5f, -1.46f, 0.0f,1, 1, 1, 1, 1, 1 };
+	this->list[3] = { 1.0f,  1.0f, 0.0f, 1.76f, 1.54f, 0.0f, 1, 1, 1, 1, 1, 1 };
 
 	this->setPosition(position);
 	this->setScale(scale);
@@ -30,6 +27,12 @@ void Quad::onCreate()
 
 	void* shader_byte_code = nullptr;
 	size_t size_shader = 0;
+
+	constant cc;
+	cc.m_angle = 29.83f;
+
+	m_cb = GraphicsEngine::getInstance()->createConstantBuffer();
+	m_cb->load(&cc, sizeof(constant));
 
 	m_vb = GraphicsEngine::getInstance()->createVertexBuffer();
 
@@ -43,12 +46,23 @@ void Quad::onCreate()
 	GraphicsEngine::getInstance()->releaseCompiledShader();
 }
 
-void Quad::update()
+void Quad::update(float deltaTime)
 {
+	m_angle += 1.57f * deltaTime;
+
+	constant cc;
+	cc.m_angle = m_angle;
+
+
+	// DISABLED ANIMATION
+	m_cb->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cc);
 }
 
+// Sets shaders and draws afterwards
 void Quad::draw()
 {
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_vs, m_cb);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_ps, m_cb);
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexShader(m_vs);
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setPixelShader(m_ps);
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexBuffer(m_vb);
@@ -57,6 +71,7 @@ void Quad::draw()
 
 void Quad::onDestroy()
 {
+	m_cb->release();
 	m_vb->release();
 	m_vs->release();
 	m_ps->release();
@@ -71,9 +86,13 @@ void Quad::setPosition(vec3 position)
 		this->list[i].position.x += position.x;
 		this->list[i].position.y += position.y;
 		this->list[i].position.z += position.z;
+		this->list[i].position1.x += position.x;
+		this->list[i].position1.y += position.y;
+		this->list[i].position1.z += position.z;
 	}
 }
 
+// Too lazy to create a matrix
 void Quad::setScale(vec3 scale)
 {
 	GameObject::setScale(scale);
@@ -82,18 +101,27 @@ void Quad::setScale(vec3 scale)
 		this->list[i].position.x -= position.x;
 		this->list[i].position.y -= position.y;
 		this->list[i].position.z -= position.z;
+		this->list[i].position1.x -= position.x;
+		this->list[i].position1.y -= position.y;
+		this->list[i].position1.z -= position.z;
 	}
 	for (int i = 0; i < 4; i++)
 	{
 		this->list[i].position.x *= scale.x;
 		this->list[i].position.y *= scale.y;
 		this->list[i].position.z *= scale.z;
+		this->list[i].position1.x *= scale.x;
+		this->list[i].position1.y *= scale.y;
+		this->list[i].position1.z *= scale.z;
 	}
 	for (int i = 0; i < 4; i++)
 	{
 		this->list[i].position.x += position.x;
 		this->list[i].position.y += position.y;
 		this->list[i].position.z += position.z;
+		this->list[i].position1.x += position.x;
+		this->list[i].position1.y += position.y;
+		this->list[i].position1.z += position.z;
 	}
 }
 
@@ -103,6 +131,7 @@ void Quad::setColor(vec3 color)
 	for (int i = 0; i < 4; i++)
 	{
 		this->list[i].color = color;
+		this->list[i].color1 = color;
 	}
 } 
 

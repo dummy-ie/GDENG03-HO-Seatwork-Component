@@ -21,18 +21,12 @@ namespace application
 	{
 	private:
 		SwapChain* m_swap_chain;
-		VertexBuffer* m_vb;
-		VertexBuffer* m_vb2;
-		VertexBuffer* m_vb3;
-		VertexShader* m_vs;
-		PixelShader* m_ps;
-		ConstantBuffer* m_cb;
 
+		std::vector<Viewport*> viewPorts;
 		std::vector<GameObject*> objectList;
 
 		unsigned long m_old_time = 0;
 		float m_delta_time = 0;
-		float m_angle = 0;
 
 	public:
 		virtual void onCreate() override;

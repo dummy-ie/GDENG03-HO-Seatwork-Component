@@ -120,6 +120,16 @@ PixelShader* GraphicsEngine::createPixelShader(const void* shader_byte_code, siz
 	return ps;
 }
 
+Viewport* GraphicsEngine::createViewport(FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth,
+	FLOAT maxDepth, D3D11_FILL_MODE fillMode)
+{
+	Viewport* vp = new Viewport();
+
+	vp->init(topLeftX, topLeftY, width, height, minDepth, maxDepth, fillMode);
+
+	return vp;
+}
+
 bool GraphicsEngine::compileVertexShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size)
 {
 	ID3DBlob* error_blob = nullptr;

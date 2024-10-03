@@ -1,6 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
+#include "Viewport.h"
 
 namespace engine
 {
@@ -11,6 +12,7 @@ namespace engine
 		class ConstantBuffer;
 		class VertexShader;
 		class PixelShader;
+		class Viewport;
 
 		class DeviceContext
 		{
@@ -30,16 +32,18 @@ namespace engine
 			void drawTriangleList(UINT vertex_count, UINT start_vertex_index);
 			void drawTriangleStrip(UINT vertex_count, UINT start_vertex_index);
 
-			void setViewportSize(UINT width, UINT height);
-
+			//void setViewportSize(UINT width, UINT height, int index);
+			void setViewport(Viewport* vp);
 
 			void setVertexShader(VertexShader* vertex_shader);
 			void setPixelShader(PixelShader* pixel_shader);
 
 			void setConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer);
 			void setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer);
+			void setRasterizerState(Rasterizer* rasterizer);
 
-;			bool release();
+
+			bool release();
 		};
 	}
 }
