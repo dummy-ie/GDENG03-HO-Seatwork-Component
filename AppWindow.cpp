@@ -24,13 +24,6 @@ void AppWindow::onUpdate()
 	//RECT rc = this->getClientWindowRect();
 	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top, 0);
 
-
-	unsigned long new_time = 0;
-	if (m_old_time)
-		new_time = ::GetTickCount() - m_old_time;
-	m_delta_time = new_time / 1000.0f;
-	m_old_time = ::GetTickCount();
-
 	//m_angle += 1.57f * m_delta_time;
 
 	//constant cc;
@@ -56,7 +49,7 @@ void AppWindow::onUpdate()
 		GraphicsEngine::getInstance()->getImmediateDeviceContext()->drawTriangleStrip(m_vb3->getSizeVertexList(), 0);*/
 
 		for (int i = 0; i < objectList.size(); i++) {
-			objectList[i]->update(m_delta_time);
+			objectList[i]->update(EngineTime::getDeltaTime());
 			objectList[i]->draw();
 		}
 	}
@@ -103,22 +96,24 @@ void AppWindow::initializeEngine()
 
 	// Quads added to object list
 	
-	const vec3 scale = { 0.25, 0.25, 0.25 };
+	/*const vec3 scale = { 0.25, 0.25, 0.25 };
 
 	objectList.push_back(new Quad({ 0.6f, 0.6f, 0 }, { 0.25f, 0.25f, 0.25f }, {1, 0, 0}));
 	objectList.push_back(new Quad({0,0,0},  {0.25f, 0.25f, 0.25f }, {0, 1, 0}));
-	objectList.push_back(new Quad({-0.6,-0.6,0}, { 0.25f, 0.25f, 0.25f }, {0, 0, 1}));
+	objectList.push_back(new Quad({-0.6,-0.6,0}, { 0.25f, 0.25f, 0.25f }, {0, 0, 1}));*/
+
+	objectList.push_back(new Quad({ 0.0f, 0.0f, 0.0f }, { 0.5f, 0.5f, 0.5f }, { 1, 0, 0 }));
 
 	for (GameObject* gameObject : objectList) {
 		gameObject->onCreate();
 	}
 
-	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
+	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
 
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, height / 2, width / 2, height / 2, 0.0f, 1.0f));
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));
+	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
+	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
+	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, height / 2, width / 2, height / 2, 0.0f, 1.0f));
+	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));
 }
 
 AppWindow* AppWindow::P_SHARED_INSTANCE = NULL;

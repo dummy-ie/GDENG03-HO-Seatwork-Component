@@ -1,10 +1,11 @@
 #include "Quad.h"
 
-Quad::Quad(vec3 position, vec3 scale, vec3 color) :	GameObject(position, scale, color)
+Quad::Quad(vec3 position, vec3 scale, vec3 color) : GameObject(position, scale)
 {
 	m_vb = nullptr;
 	m_vs = nullptr;
 	m_ps = nullptr;
+	this->color = color;
 }
 
 Quad::~Quad()
@@ -127,7 +128,6 @@ void Quad::setScale(vec3 scale)
 
 void Quad::setColor(vec3 color)
 {
-	GameObject::setColor(color);
 	for (int i = 0; i < 4; i++)
 	{
 		this->list[i].color = color;

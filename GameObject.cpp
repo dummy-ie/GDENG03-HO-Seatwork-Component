@@ -1,10 +1,9 @@
 #include "GameObject.h"
 
-GameObject::GameObject(vec3 position, vec3 scale, vec3 color)
+GameObject::GameObject(vec3 position, vec3 scale)
 {
 	this->position = position;
 	this->scale = scale;
-	this->color = color;
 }
 
 GameObject::~GameObject()
@@ -31,11 +30,6 @@ void GameObject::setPosition(vec3 position)
 void GameObject::setScale(vec3 scale)
 {
 	this->scale = scale;
-}
-
-void GameObject::setColor(vec3 color)
-{
-	this->color = color;
 }
 
 void GameObject::onDestroy()

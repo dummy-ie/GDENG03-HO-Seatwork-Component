@@ -20,6 +20,7 @@ class Quad : public GameObject
 {
 private:
 	vertex list[4];
+	vec3 color;
 
 	VertexBuffer* m_vb;
 	VertexShader* m_vs;
@@ -39,6 +40,6 @@ public:
 	void onDestroy() override;
 	void setPosition(vec3 position) override;
 	void setScale(vec3 scale) override;
-	void setColor(vec3 color) override;
+	void setColor(vec3 color);
 };
 
