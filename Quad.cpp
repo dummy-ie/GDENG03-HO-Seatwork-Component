@@ -25,8 +25,8 @@ void Quad::onCreate()
 	this->list[2] = { Vector3D(0.5f,-0.5f,0.0f),     Vector3D(0.75f,-0.73f,0.0f), Vector3D(0,0,1),  Vector3D(1,0,0) };
 	this->list[3] = { Vector3D(0.5f,0.5f,0.0f),     Vector3D(0.88f,0.77f,0.0f),    Vector3D(1,1,1), Vector3D(0,0,1) };
 
-	//this->setPosition(position);
-	//this->setScale(scale);
+	this->setPosition(position);
+	this->setScale(scale);
 	//this->setColor(color);
 
 	UINT size_list = ARRAYSIZE(list);
@@ -73,48 +73,48 @@ void Quad::setPosition(Vector3D position)
 {
 	GameObject::setPosition(position);
 
-	/*for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
-		this->list[i].position.x += position.x;
-		this->list[i].position.y += position.y;
-		this->list[i].position.z += position.z;
-		this->list[i].position1.x += position.x;
-		this->list[i].position1.y += position.y;
-		this->list[i].position1.z += position.z;
-	}*/
+		this->list[i].position.m_x += position.m_x;
+		this->list[i].position.m_y += position.m_y;
+		this->list[i].position.m_z += position.m_z;
+		this->list[i].position1.m_x += position.m_x;
+		this->list[i].position1.m_y += position.m_y;
+		this->list[i].position1.m_z += position.m_z;
+	}
 }
 
 // Too lazy to create a matrix
 void Quad::setScale(Vector3D scale)
 {
 	GameObject::setScale(scale);
-	/*for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
-		this->list[i].position.x -= position.x;
-		this->list[i].position.y -= position.y;
-		this->list[i].position.z -= position.z;
-		this->list[i].position1.x -= position.x;
-		this->list[i].position1.y -= position.y;
-		this->list[i].position1.z -= position.z;
+		this->list[i].position.m_x -= position.m_x;
+		this->list[i].position.m_y -= position.m_y;
+		this->list[i].position.m_z -= position.m_z;
+		this->list[i].position1.m_x -= position.m_x;
+		this->list[i].position1.m_y -= position.m_y;
+		this->list[i].position1.m_z -= position.m_z;
 	}
 	for (int i = 0; i < 4; i++)
 	{
-		this->list[i].position.x *= scale.x;
-		this->list[i].position.y *= scale.y;
-		this->list[i].position.z *= scale.z;
-		this->list[i].position1.x *= scale.x;
-		this->list[i].position1.y *= scale.y;
-		this->list[i].position1.z *= scale.z;
+		this->list[i].position.m_x *= scale.m_x;
+		this->list[i].position.m_y *= scale.m_y;
+		this->list[i].position.m_z *= scale.m_z;
+		this->list[i].position1.m_x *= scale.m_x;
+		this->list[i].position1.m_y *= scale.m_y;
+		this->list[i].position1.m_z *= scale.m_z;
 	}
 	for (int i = 0; i < 4; i++)
 	{
-		this->list[i].position.x += position.x;
-		this->list[i].position.y += position.y;
-		this->list[i].position.z += position.z;
-		this->list[i].position1.x += position.x;
-		this->list[i].position1.y += position.y;
-		this->list[i].position1.z += position.z;
-	}*/
+		this->list[i].position.m_x += position.m_x;
+		this->list[i].position.m_y += position.m_y;
+		this->list[i].position.m_z += position.m_z;
+		this->list[i].position1.m_x += position.m_x;
+		this->list[i].position1.m_y += position.m_y;
+		this->list[i].position1.m_z += position.m_z;
+	}
 }
 
 void Quad::setColor(Vector3D color)

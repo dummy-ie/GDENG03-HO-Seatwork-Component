@@ -101,13 +101,13 @@ void AppWindow::initializeEngine()
 
 	// Quads added to object list
 
-	/*const vec3 scale = { 0.25, 0.25, 0.25 };
+	const Vector3D scale = { 0.25, 0.25, 0.25 };
 
 	objectList.push_back(new Quad({ 0.6f, 0.6f, 0 }, { 0.25f, 0.25f, 0.25f }, {1, 0, 0}));
 	objectList.push_back(new Quad({0,0,0},  {0.25f, 0.25f, 0.25f }, {0, 1, 0}));
-	objectList.push_back(new Quad({-0.6,-0.6,0}, { 0.25f, 0.25f, 0.25f }, {0, 0, 1}));*/
+	objectList.push_back(new Quad({-0.6,-0.6,0}, { 0.25f, 0.25f, 0.25f }, {0, 0, 1}));
 
-	objectList.push_back(new Quad({ 0.0f, 0.0f, 0.0f }, { 0.5f, 0.5f, 0.5f }, { 1, 0, 0 }));
+	//objectList.push_back(new Quad({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1, 0, 0 }));
 
 	for (GameObject* gameObject : objectList) {
 		gameObject->onCreate();
@@ -136,11 +136,10 @@ void AppWindow::updateQuadPosition()
 
 	Matrix4x4 temp;
 
-	cc.m_world.setScale (Vector3D::lerp(Vector3D(0.5f, 0.5, 0), Vector3D(1, 1, 0), (sin(m_delta_scale) + 1.0f) / 2.0f));
+	cc.m_world.setScale(Vector3D::lerp(Vector3D(0.5f, 0.5, 0), Vector3D(1, 1, 0), (sin(m_delta_scale) + 1.0f) / 2.0f));
 
 	temp.setTranslation(Vector3D::lerp(Vector3D(-1.5f, -1.5f, 0), Vector3D(1.5f, 1.5f, 0), m_delta_pos));
 	cc.m_world *= temp;
-
 
 	cc.m_view.setIdentity();
 
