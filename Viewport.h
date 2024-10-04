@@ -2,7 +2,7 @@
 
 #include <d3d11.h>
 
-#include "Rasterizer.h"
+#include "RasterizerState.h"
 
 namespace engine
 {
@@ -12,7 +12,8 @@ namespace engine
 		{
 		private:
 			D3D11_VIEWPORT vp;
-			Rasterizer rasterizer;
+			RasterizerState* solid_rasterizer_state;
+			RasterizerState* wireframe_rasterizer_state;
 
 		private:
 			friend class DeviceContext;
@@ -25,9 +26,11 @@ namespace engine
 			void setPosition(FLOAT topLeftX, FLOAT topLeftY);
 			void setSize(FLOAT width, FLOAT height);
 			void setDepth(FLOAT minDepth, FLOAT maxDepth);
+			void setRasterizerSolidState();
+			void setRasterizerWireframeState();
 
 			void init(FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth,
-				FLOAT maxDepth, D3D11_FILL_MODE fillMode = D3D11_FILL_SOLID);
+				FLOAT maxDepth);
 			void release();
 		};
 	}

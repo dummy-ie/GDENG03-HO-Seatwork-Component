@@ -1,5 +1,7 @@
 #include "Viewport.h"
 
+#include "GraphicsEngine.h"
+
 using namespace engine::graphics;
 
 Viewport::Viewport()
@@ -29,17 +31,31 @@ void Viewport::setDepth(FLOAT minDepth, FLOAT maxDepth)
 	vp.MaxDepth = maxDepth;
 }
 
-void Viewport::init(FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth, FLOAT maxDepth, D3D11_FILL_MODE fillMode)
+void Viewport::setRasterizerSolidState()
 {
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setRasterizerState(solid_rasterizer_state);
+}
+
+void Viewport::setRasterizerWireframeState()
+{
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setRasterizerState(wireframe_rasterizer_state);
+}
+
+void Viewport::init(FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth, FLOAT maxDepth)
+{
+	solid_rasterizer_state = GraphicsEngine::getInstance()->createRasterizerState();
+	wireframe_rasterizer_state = GraphicsEngine::getInstance()->createRasterizerState(D3D11_FILL_WIREFRAME, D3D11_CULL_NONE);
+
 	setPosition(topLeftX, topLeftY);
 	setSize(width, height);
 	setDepth(minDepth, maxDepth);
-	rasterizer.init();
-	rasterizer.setFillMode(fillMode);
+
+	setRasterizerSolidState();
 }
 
 void Viewport::release()
 {
-	rasterizer.release();
+	solid_rasterizer_state->release();
+	wireframe_rasterizer_state->release();
 	delete this;
 }

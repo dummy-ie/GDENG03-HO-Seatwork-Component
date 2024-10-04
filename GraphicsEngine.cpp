@@ -127,13 +127,22 @@ PixelShader* GraphicsEngine::createPixelShader(const void* shader_byte_code, siz
 }
 
 Viewport* GraphicsEngine::createViewport(FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth,
-	FLOAT maxDepth, D3D11_FILL_MODE fillMode)
+	FLOAT maxDepth)
 {
 	Viewport* vp = new Viewport();
 
-	vp->init(topLeftX, topLeftY, width, height, minDepth, maxDepth, fillMode);
+	vp->init(topLeftX, topLeftY, width, height, minDepth, maxDepth);
 
 	return vp;
+}
+
+RasterizerState* GraphicsEngine::createRasterizerState(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode)
+{
+	RasterizerState* rasterizer_state = new RasterizerState();
+
+	rasterizer_state->init(fillMode, cullMode);
+
+	return rasterizer_state;
 }
 
 bool GraphicsEngine::compileVertexShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size)

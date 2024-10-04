@@ -96,7 +96,7 @@
     <ClCompile Include="Viewport.cpp">
       <Filter>GameEngine\GraphicsEngine\Viewport</Filter>
     </ClCompile>
-    <ClCompile Include="Rasterizer.cpp">
+    <ClCompile Include="RasterizerState.cpp">
       <Filter>GameEngine\GraphicsEngine\RasterizerState</Filter>
     </ClCompile>
     <ClCompile Include="Cube.cpp">
@@ -146,7 +146,7 @@
     <ClInclude Include="Viewport.h">
       <Filter>GameEngine\GraphicsEngine\Viewport</Filter>
     </ClInclude>
-    <ClInclude Include="Rasterizer.h">
+    <ClInclude Include="RasterizerState.h">
       <Filter>GameEngine\GraphicsEngine\RasterizerState</Filter>
     </ClInclude>
     <ClInclude Include="Cube.h">

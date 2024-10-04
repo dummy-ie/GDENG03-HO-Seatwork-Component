@@ -6,24 +6,24 @@ namespace engine
 {
 	namespace graphics
 	{
-		class Rasterizer
+		class RasterizerState
 		{
 		private:
 			ID3D11RasterizerState* m_rasterizer_state;
-			D3D11_RASTERIZER_DESC desc;
+			// desc;
 
 		private:
 			friend class Viewport;
 			friend class DeviceContext;
 
 		public:
-			Rasterizer();
-			~Rasterizer();
+			RasterizerState();
+			~RasterizerState();
 
 		private:
 			void updateState();
 		public:
-			bool init();
+			bool init(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode);
 			bool release();
 
 			void setFillMode(D3D11_FILL_MODE fillMode);

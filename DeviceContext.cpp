@@ -5,6 +5,7 @@
 #include "ConstantBuffer.h"
 #include "VertexShader.h"
 #include "PixelShader.h"
+#include "RasterizerState.h"
 
 using namespace engine::graphics;
 
@@ -62,7 +63,6 @@ void DeviceContext::drawTriangleStrip(UINT vertex_count, UINT start_vertex_index
 void DeviceContext::setViewport(Viewport* vp)
 {
 	m_device_context->RSSetViewports(1, &vp->vp);
-	setRasterizerState(&vp->rasterizer);
 }
 
 /*void DeviceContext::setViewportSize(UINT width, UINT height, int index)
@@ -108,9 +108,9 @@ void DeviceContext::setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer*
 	m_device_context->PSSetConstantBuffers(0, 1, &buffer->m_buffer);
 }
 
-void DeviceContext::setRasterizerState(Rasterizer* rasterizer)
+void DeviceContext::setRasterizerState(RasterizerState* rasterizer_state)
 {
-	m_device_context->RSSetState(rasterizer->m_rasterizer_state);
+	m_device_context->RSSetState(rasterizer_state->m_rasterizer_state);
 }
 
 bool DeviceContext::release()

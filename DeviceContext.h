@@ -7,6 +7,7 @@ namespace engine
 {
 	namespace graphics
 	{
+		class RasterizerState;
 		class SwapChain;
 		class VertexBuffer;
 		class ConstantBuffer;
@@ -44,7 +45,7 @@ namespace engine
 
 			void setConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer);
 			void setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer);
-			void setRasterizerState(Rasterizer* rasterizer);
+			void setRasterizerState(RasterizerState* rasterizer_state);
 
 
 			bool release();

@@ -44,13 +44,18 @@ void AppWindow::onUpdate()
 
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexBuffer(m_vb);*/
 
-	for (Viewport* vp : viewPorts)
+	for (int i = 0; i < viewPorts.size(); i++)
 	{
-		GraphicsEngine::getInstance()->getImmediateDeviceContext()->setViewport(vp);
+		GraphicsEngine::getInstance()->getImmediateDeviceContext()->setViewport(viewPorts[i]);
+		if (i % 2 == 1)
+			viewPorts[i]->setRasterizerWireframeState();
+		else
+			viewPorts[i]->setRasterizerSolidState();
+		
 
-		for (int i = 0; i < objectList.size(); i++) {
-			objectList[i]->update(EngineTime::getDeltaTime());
-			objectList[i]->draw(m_cb);
+		for (GameObject* obj : objectList) {
+			obj->update(EngineTime::getDeltaTime());
+			obj->draw(m_cb);
 		}
 	}
 	
@@ -113,12 +118,12 @@ void AppWindow::initializeEngine()
 		gameObject->onCreate();
 	}
 
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
+	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
 
-	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
-	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
-	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, height / 2, width / 2, height / 2, 0.0f, 1.0f));
-	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));
+	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
+	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
+	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, height / 2, width / 2, height / 2, 0.0f, 1.0f));
+	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));
 }
 
 void AppWindow::updateQuadPosition()
