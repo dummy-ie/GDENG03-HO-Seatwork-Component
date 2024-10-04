@@ -1,10 +1,11 @@
-#include "Quad.h"
+#include "OtherQuad.h"
 
 #include "EngineTime.h"
+#include "Quad.h"
 
 using namespace engine;
 
-Quad::Quad(vec3 position, vec3 scale, vec3 color) : GameObject(position, scale)
+OtherQuad::OtherQuad(vec3 position, vec3 scale, vec3 color) : GameObject(position, scale)
 {
 	m_vb = nullptr;
 	m_vs = nullptr;
@@ -12,11 +13,11 @@ Quad::Quad(vec3 position, vec3 scale, vec3 color) : GameObject(position, scale)
 	this->color = color;
 }
 
-Quad::~Quad()
+OtherQuad::~OtherQuad()
 {
 }
 
-void Quad::onCreate()
+void OtherQuad::onCreate()
 {
 	// Initialize Constant Position and Colors (White)
 	//this->list[0] = { -0.5f,-0.5f,0.0f,    -0.32f,-0.11f,0.0f,   0,0,0, 0,1,0 };
@@ -25,9 +26,9 @@ void Quad::onCreate()
 	//this->list[3] = { 0.5f,0.5f,0.0f,     0.88f,0.77f,0.0f,    1,1,1, 0,0,1 };
 
 	this->list[0] = { -0.66f,-0.78f,0.0f,    -0.32f,-0.11f,0.0f,   0,0,0, 0,1,0 };
-	this->list[1] = { -0.8f,0.2f,0.0f,     -0.11f,0.78f,0.0f,   1,1,0, 0,1,1 };
-	this->list[2] = { 0.3f,-0.3f,0.0f,     0.75f,-0.73f,0.0f, 0,0,1,  1,0,0 };
-	this->list[3] = { 0.2f,0.23f,0.0f,     0.88f,0.77f,0.0f,    1,1,1, 0,0,1 };
+	this->list[1] = { -0.8f,0.2f,0.0f,     -0.1f,0.84f,0.0f,   1,1,0, 0,1,1 };
+	this->list[2] = { 0.88f,-0.3f,0.0f,     0.0f,-0.73f,0.0f, 0,0,1,  1,0,0 };
+	this->list[3] = { -0.66f,-0.78f,0.0f,     0.88f,0.8f,0.0f,    1,1,1, 0,0,1 };
 
 	this->setPosition(position);
 	this->setScale(scale);
@@ -56,11 +57,9 @@ void Quad::onCreate()
 	GraphicsEngine::getInstance()->releaseCompiledShader();
 }
 
-void Quad::update()
+void OtherQuad::update()
 {
-	m_delta_speed += EngineTime::getDeltaTime() / 5.0f;
-
-	m_angle += ((sin(m_delta_speed) * 5.0f + 7.0f)) * EngineTime::getDeltaTime();
+	m_angle += 1.57 * EngineTime::getDeltaTime();
 
 	constant cc;
 	cc.m_angle = m_angle;
@@ -69,7 +68,7 @@ void Quad::update()
 }
 
 // Sets shaders and draws afterwards
-void Quad::draw()
+void OtherQuad::draw()
 {
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_vs, m_cb);
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_ps, m_cb);
@@ -79,7 +78,7 @@ void Quad::draw()
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->drawTriangleStrip(m_vb->getSizeVertexList(), 0);
 }
 
-void Quad::onDestroy()
+void OtherQuad::onDestroy()
 {
 	m_cb->release();
 	m_vb->release();
@@ -87,7 +86,7 @@ void Quad::onDestroy()
 	m_ps->release();
 }
 
-void Quad::setPosition(vec3 position)
+void OtherQuad::setPosition(vec3 position)
 {
 	GameObject::setPosition(position);
 
@@ -103,7 +102,7 @@ void Quad::setPosition(vec3 position)
 }
 
 // Too lazy to create a matrix
-void Quad::setScale(vec3 scale)
+void OtherQuad::setScale(vec3 scale)
 {
 	GameObject::setScale(scale);
 	for (int i = 0; i < 4; i++)
@@ -135,12 +134,12 @@ void Quad::setScale(vec3 scale)
 	}
 }
 
-void Quad::setColor(vec3 color)
+void OtherQuad::setColor(vec3 color)
 {
 	for (int i = 0; i < 4; i++)
 	{
 		this->list[i].color = color;
 		this->list[i].color1 = color;
 	}
-} 
+}
 

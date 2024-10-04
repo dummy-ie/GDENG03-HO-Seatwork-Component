@@ -24,8 +24,14 @@ namespace application
 	private:
 		SwapChain* m_swap_chain;
 
+		ConstantBuffer* m_cb;
+
 		std::vector<Viewport*> viewPorts;
 		std::vector<GameObject*> objectList;
+
+		float m_angle = 0.0f;
+
+		float m_delta_speed = 0.0f;
 
 	public:
 		virtual void onCreate() override;

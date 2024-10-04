@@ -1,4 +1,7 @@
 #pragma once
+#include "ConstantBuffer.h"
+
+using namespace engine::graphics;
 
 struct vec3
 {
@@ -24,7 +27,7 @@ public:
 	~GameObject();
 
 public:
-	virtual void update(float deltaTime);
+	virtual void update();
 	virtual void draw();
 	virtual void setPosition(vec3 position);
 	virtual void setScale(vec3 scale);

@@ -10,13 +10,7 @@
 
 using namespace engine::graphics;
 
-__declspec(align(16))
-struct constant
-{
-	float m_angle;
-};
-
-class Quad : public GameObject
+class OtherQuad : public GameObject
 {
 private:
 	vertex list[4];
@@ -31,8 +25,8 @@ private:
 	float m_delta_speed = 0;
 
 public:
-	Quad(vec3 position, vec3 scale, vec3 color);
-	~Quad();
+	OtherQuad(vec3 position, vec3 scale, vec3 color);
+	~OtherQuad();
 
 public:
 	void onCreate() override;
