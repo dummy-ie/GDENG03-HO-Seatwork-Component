@@ -6,6 +6,7 @@
 #include "Quad.h"
 #include "EngineTime.h"
 #include "Vector3D.h"
+#include "InputSystem.h"
 
 using namespace application;
 
@@ -27,6 +28,8 @@ void AppWindow::onCreate()
 void AppWindow::onUpdate()
 {
 	Window::onUpdate();
+
+	InputSystem::getInstance()->update();
 
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 
 		0.3, 0.3, 0.6, 1);
@@ -68,6 +71,8 @@ void AppWindow::onDestroy()
 {
 	Window::onDestroy();
 
+	InputSystem::getInstance()->removeListener(this);
+
 	for (int i = 0; i > objectList.size(); i++) {
 		objectList[i]->onDestroy();
 	}
@@ -86,8 +91,37 @@ void AppWindow::onDestroy()
 	GraphicsEngine::destroy();
 }
 
+void AppWindow::onKeyDown(int key)
+{
+	if (key == 'W')
+	{
+		m_rot_x += 3.14f * EngineTime::getDeltaTime();
+	}
+	else if (key == 'S')
+	{
+		m_rot_x -= 3.14f * EngineTime::getDeltaTime();
+	}
+	else if (key == 'A')
+	{
+		m_rot_y += 3.14f * EngineTime::getDeltaTime();
+	}
+	else if (key == 'D')
+	{
+		m_rot_y -= 3.14f * EngineTime::getDeltaTime();
+	}
+}
+
+void AppWindow::onKeyUp(int key)
+{
+	
+}
+
 void AppWindow::initializeEngine()
 {
+	InputSystem::initialize();
+
+	InputSystem::getInstance()->addListener(this);
+
 	GraphicsEngine::initialize();
 
 	m_swap_chain = GraphicsEngine::getInstance()->createSwapChain();
@@ -149,15 +183,15 @@ void AppWindow::updateQuadPosition()
 	cc.m_world.setScale(Vector3D(1, 1, 1));
 
 	temp.setIdentity();
-	temp.setRotationZ(m_delta_scale);
+	temp.setRotationZ(0.0f);
 	cc.m_world *= temp;
 
 	temp.setIdentity();
-	temp.setRotationY(m_delta_scale);
+	temp.setRotationY(m_rot_y);
 	cc.m_world *= temp;
 
 	temp.setIdentity();
-	temp.setRotationX(m_delta_scale);
+	temp.setRotationX(m_rot_x);
 	cc.m_world *= temp;
 
 	cc.m_view.setIdentity();
