@@ -78,9 +78,9 @@ void AppWindow::initializeEngine()
 	//objectList.push_back(new Quad({0,0,0},  {0.25f, 0.25f, 0.25f }, {0, 1, 0}));
 	//objectList.push_back(new Quad({-0.6,-0.6,0}, { 0.25f, 0.25f, 0.25f }, {0, 0, 1}));
 
-	//objectList.push_back(new Quad({ -0.5f, 0.0f, 0.0f }, { 0.5f, 0.5f, 0.5f }, { 1, 0, 0 }));
-	//objectList.push_back(new OtherQuad({ 0.5f, 0.0f, 0.0f }, { 0.5f, 0.5f, 0.5f }, { 1, 0, 0 }));
-	objectList.push_back(new OtherQuad({ 0.0, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1, 0, 0 }));
+	objectList.push_back(new Quad({ -0.5f, 0.0f, 0.0f }, { 0.5f, 0.5f, 0.5f }, { 1, 0, 0 }));
+	objectList.push_back(new OtherQuad({ 0.5f, 0.0f, 0.0f }, { 0.5f, 0.5f, 0.5f }, { 1, 0, 0 }));
+	//objectList.push_back(new OtherQuad({ 0.0, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1, 0, 0 }));
 
 	for (GameObject* gameObject : objectList) {
 		gameObject->onCreate();
