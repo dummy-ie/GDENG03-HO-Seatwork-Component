@@ -26,7 +26,7 @@ public:
 
 public:
 	virtual void update(float deltaTime);
-	virtual void draw(ConstantBuffer* cb);
+	virtual void draw();
 	virtual void setPosition(Vector3D position);
 	virtual void setScale(Vector3D scale);
 

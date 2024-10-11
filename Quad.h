@@ -16,8 +16,13 @@ private:
 	Vector3D color;
 
 	VertexBuffer* m_vb;
+	ConstantBuffer* m_cb;
 	VertexShader* m_vs;
 	PixelShader* m_ps;
+
+	float m_delta_pos;
+	float m_delta_scale;
+	float m_angle;
 
 public:
 	Quad(Vector3D position, Vector3D scale, Vector3D color);
@@ -26,7 +31,7 @@ public:
 public:
 	void onCreate() override;
 	void update(float deltaTime) override;
-	void draw(ConstantBuffer* cb) override;
+	void draw() override;
 	void onDestroy() override;
 
 	void setPosition(Vector3D position) override;

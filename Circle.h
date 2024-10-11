@@ -1,5 +1,8 @@
 #pragma once
 
+#include <vector>
+#include <cmath>
+
 #include "GameObject.h"
 #include "GraphicsEngine.h"
 #include "VertexBuffer.h"
@@ -7,40 +10,38 @@
 #include "VertexShader.h"
 #include "PixelShader.h"
 #include "ConstantBuffer.h"
-#include "InputListener.h"
 
 using namespace engine::graphics;
 
-class Cube : public GameObject, public InputListener
+class Circle : public GameObject
 {
 private:
-	vertex vertex_list[8];
+	float radius;
+	float sides;
+
+	std::vector<vertex> list;
+	std::vector<unsigned int> indices;
 	Vector3D color;
 
 	VertexBuffer* m_vb;
-	ConstantBuffer* m_cb;
 	IndexBuffer* m_ib;
+	ConstantBuffer* m_cb;
 	VertexShader* m_vs;
 	PixelShader* m_ps;
 
-	float m_delta_pos;
-	float m_angle;
-
-	float m_rot_x = 0.0f;
-	float m_rot_y = 0.0f;
+	float m_speed;
+	Vector3D m_direction;
+	Vector3D direction;
 
 public:
-	Cube(Vector3D position, Vector3D scale, Vector3D color);
-	~Cube();
+	Circle(float radius, int sides, Vector3D position, Vector3D scale, Vector3D color);
+	~Circle();
 
 public:
 	void onCreate() override;
 	void update(float deltaTime) override;
 	void draw() override;
 	void onDestroy() override;
-
-	virtual void onKeyDown(int key);
-	virtual void onKeyUp(int key);
 
 	void setPosition(Vector3D position) override;
 	void setScale(Vector3D scale) override;

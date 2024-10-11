@@ -31,17 +31,11 @@
     <Filter Include="App\GameObjects">
       <UniqueIdentifier>{efd294fc-4a06-4714-a320-f18243e62a3b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="App\GameObjects\Quad">
-      <UniqueIdentifier>{e87dbee9-5ccf-4b99-9708-44e7a535bd56}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine\GraphicsEngine\ConstantBuffer">
       <UniqueIdentifier>{2944137e-871e-477e-98b9-69b8f19ac886}</UniqueIdentifier>
     </Filter>
     <Filter Include="GameEngine\GraphicsEngine\Viewport">
       <UniqueIdentifier>{094d8b1c-3d1d-4cb0-8d61-f38f4c054f24}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="App\GameObjects\Cube">
-      <UniqueIdentifier>{fbd6c00f-6bf1-422f-b2c6-033bdda412b6}</UniqueIdentifier>
     </Filter>
     <Filter Include="GameEngine\TimeSystem">
       <UniqueIdentifier>{5b069f66-58e7-4b15-a736-816846cebee1}</UniqueIdentifier>
@@ -57,6 +51,18 @@
     </Filter>
     <Filter Include="GameEngine\InputSystem">
       <UniqueIdentifier>{c81437c2-dd4c-40ce-bcf4-391a4b46439c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\GameObjects\Circle">
+      <UniqueIdentifier>{4146831e-8052-4d8c-9d36-158624c3952c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\GameObjects\Cube">
+      <UniqueIdentifier>{fbd6c00f-6bf1-422f-b2c6-033bdda412b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\GameObjects\Quad">
+      <UniqueIdentifier>{6fc7811b-7d6e-4569-b6e8-5c4970c14ae8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Random">
+      <UniqueIdentifier>{2fb7c529-6760-456c-bf67-5f373aa9f3ca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -90,9 +96,6 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>App\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Quad.cpp">
-      <Filter>App\GameObjects\Quad</Filter>
-    </ClCompile>
     <ClCompile Include="ConstantBuffer.cpp">
       <Filter>GameEngine\GraphicsEngine\ConstantBuffer</Filter>
     </ClCompile>
@@ -113,6 +116,15 @@
     </ClCompile>
     <ClCompile Include="InputSystem.cpp">
       <Filter>GameEngine\InputSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Quad.cpp">
+      <Filter>App\GameObjects\Quad</Filter>
+    </ClCompile>
+    <ClCompile Include="Circle.cpp">
+      <Filter>App\GameObjects\Circle</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>GameEngine\Random</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -143,9 +155,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>App\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Quad.h">
-      <Filter>App\GameObjects\Quad</Filter>
-    </ClInclude>
     <ClInclude Include="ConstantBuffer.h">
       <Filter>GameEngine\GraphicsEngine\ConstantBuffer</Filter>
     </ClInclude>
@@ -175,6 +184,15 @@
     </ClInclude>
     <ClInclude Include="InputListener.h">
       <Filter>GameEngine\InputSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Quad.h">
+      <Filter>App\GameObjects\Quad</Filter>
+    </ClInclude>
+    <ClInclude Include="Circle.h">
+      <Filter>App\GameObjects\Circle</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>GameEngine\Random</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

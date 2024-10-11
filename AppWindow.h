@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <stack>
 
 #include "Window.h"
 #include "GraphicsEngine.h"
@@ -13,6 +14,16 @@
 #include "GameObject.h"
 #include "InputListener.h"
 
+__declspec(align(16))
+struct constant
+{
+	Matrix4x4 m_world;
+	Matrix4x4 m_view;
+	Matrix4x4 m_proj;
+	float m_angle;
+};
+
+
 namespace application
 {
 	using namespace engine;
@@ -22,18 +33,11 @@ namespace application
 	private:
 		SwapChain* m_swap_chain;
 
-		ConstantBuffer* m_cb;
-
 		std::vector<Viewport*> viewPorts;
 		std::vector<GameObject*> objectList;
-
-		float m_angle = 0;
-		float m_delta_pos;
-		float m_delta_scale;
-
-		float m_rot_x = 0.0f;
-		float m_rot_y = 0.0f;
-
+		std::stack<GameObject*> objectStack;
+		//std::stack<GameObject*> objectList;
+		ConstantBuffer* m_cb;
 	public:
 		virtual void onCreate() override;
 		virtual void onUpdate() override;

@@ -23,5 +23,32 @@ namespace math
 
 			return v;
 		}
+		Vector3D& operator+=(const Vector3D& vec)
+		{
+			m_x += vec.m_x;
+			m_y += vec.m_y;
+			m_z += vec.m_z;
+			return *this;
+		}
+
+		Vector3D operator+(Vector3D vec) const {
+			return Vector3D(m_x + vec.m_x, m_y + vec.m_y, m_z + vec.m_z);
+		}
+
+		Vector3D operator*(double num) const {
+			return Vector3D(m_x * num, m_y * num, m_z * num);
+		}
+
+		Vector3D operator/(double num) const {
+			return Vector3D(m_x / num, m_y / num, m_z / num);
+		}
+
+		float getMagnitude() {
+			return sqrt(pow(m_x, 2) + pow(m_y, 2) + pow(m_z, 2));
+		}
+		Vector3D normalize() {
+			Vector3D CVector = Vector3D(m_x / getMagnitude(), m_y / getMagnitude(), m_z / getMagnitude());
+			return CVector;
+		}
 	};
 }

@@ -18,7 +18,7 @@ void GameObject::update(float deltaTime)
 {
 }
 
-void GameObject::draw(ConstantBuffer* cb)
+void GameObject::draw()
 {
 }
 

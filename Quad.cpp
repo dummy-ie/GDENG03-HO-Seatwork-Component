@@ -1,4 +1,9 @@
 #include "Quad.h"
+#include "AppWindow.h"
+#include "EngineTime.h"
+
+using namespace engine;
+using namespace application;
 
 Quad::Quad(Vector3D position, Vector3D scale, Vector3D color) : GameObject(position, scale)
 {
@@ -34,8 +39,14 @@ void Quad::onCreate()
 	void* shader_byte_code = nullptr;
 	size_t size_shader = 0;
 
-	m_vb = GraphicsEngine::getInstance()->createVertexBuffer();
+	constant cc;
+	cc.m_angle = 0.0f;
 
+	m_cb = GraphicsEngine::getInstance()->createConstantBuffer();
+	m_cb->load(&cc, sizeof(constant));
+
+	m_vb = GraphicsEngine::getInstance()->createVertexBuffer();
+	
 	GraphicsEngine::getInstance()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
 	m_vs = GraphicsEngine::getInstance()->createVertexShader(shader_byte_code, size_shader);
 	m_vb->load(list, sizeof(vertex), size_list, shader_byte_code, size_shader);
@@ -48,14 +59,42 @@ void Quad::onCreate()
 
 void Quad::update(float deltaTime)
 {
+	m_angle += 1.57f * EngineTime::getDeltaTime();
+
+	constant cc;
+	cc.m_angle = m_angle;
 	
+	m_delta_pos += EngineTime::getDeltaTime() / 10.0f;
+	m_delta_scale += EngineTime::getDeltaTime() / 1.0f;
+
+	if (m_delta_pos > 1.0f)
+		m_delta_pos = 0;
+
+	Matrix4x4 temp;
+
+	
+	cc.m_world.setScale(Vector3D::lerp(Vector3D(0.5f, 0.5, 0), Vector3D(1, 1, 0), (sin(m_delta_scale) + 1.0f) / 2.0f));
+	//cc.m_world.setScale(Vector3D(1, 1, 1));
+	temp.setTranslation(Vector3D::lerp(Vector3D(0.1f, -1.5f, 0), Vector3D(1.5f, 1.5f, 0), m_delta_pos));
+	cc.m_world *= temp;
+
+	cc.m_view.setIdentity();
+
+	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
+
+	FLOAT width = windowRect.right - windowRect.left;
+	FLOAT height = windowRect.bottom - windowRect.top;
+
+	cc.m_proj.setOrthoLH(width / 300.0f, height / 300.0f, -4.0f, 4.0f);
+
+	m_cb->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cc);
 }
 
 // Sets shaders and draws afterwards
-void Quad::draw(ConstantBuffer* cb)
+void Quad::draw()
 {
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_vs, cb);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_ps, cb);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_vs, m_cb);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_ps, m_cb);
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexShader(m_vs);
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setPixelShader(m_ps);
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexBuffer(m_vb);
@@ -64,6 +103,7 @@ void Quad::draw(ConstantBuffer* cb)
 
 void Quad::onDestroy()
 {
+	m_cb->release();
 	m_vb->release();
 	m_vs->release();
 	m_ps->release();

@@ -3,21 +3,15 @@
 #include <Windows.h>
 
 #include "Cube.h"
+#include "Circle.h"
 #include "Quad.h"
 #include "EngineTime.h"
 #include "Vector3D.h"
 #include "InputSystem.h"
+#include "Random.h"
 
 using namespace application;
 
-__declspec(align(16))
-struct constant
-{
-	Matrix4x4 m_world;
-	Matrix4x4 m_view;
-	Matrix4x4 m_proj;
-	float m_angle;
-};
 
 void AppWindow::onCreate()
 {
@@ -32,12 +26,12 @@ void AppWindow::onUpdate()
 	InputSystem::getInstance()->update();
 
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 
-		0.3, 0.3, 0.6, 1);
+		1.0, 0.0, 0.0, 1);
 
 	//RECT rc = this->getClientWindowRect();
 	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top, 0);
 
-	updateQuadPosition();
+	//updateQuadPosition();
 
 	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_vs, m_cb);
 	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_ps, m_cb);
@@ -58,7 +52,7 @@ void AppWindow::onUpdate()
 
 		for (GameObject* obj : objectList) {
 			obj->update(EngineTime::getDeltaTime());
-			obj->draw(m_cb);
+			obj->draw();
 		}
 	}
 	
@@ -77,13 +71,11 @@ void AppWindow::onDestroy()
 		objectList[i]->onDestroy();
 	}
 
-	m_cb->release();
-
 	for (auto vp : viewPorts)
 	{
 		vp->release();
 	}
-
+	m_cb->release();
 	viewPorts.clear();
 	objectList.clear();
 	m_swap_chain->release();
@@ -95,30 +87,47 @@ void AppWindow::onKeyDown(int key)
 {
 	if (key == 'W')
 	{
-		m_rot_x += 3.14f * EngineTime::getDeltaTime();
+		//m_rot_x += 3.14f * EngineTime::getDeltaTime();
 	}
 	else if (key == 'S')
 	{
-		m_rot_x -= 3.14f * EngineTime::getDeltaTime();
+		//m_rot_x -= 3.14f * EngineTime::getDeltaTime();
 	}
 	else if (key == 'A')
 	{
-		m_rot_y += 3.14f * EngineTime::getDeltaTime();
+		//m_rot_y += 3.14f * EngineTime::getDeltaTime();
 	}
 	else if (key == 'D')
 	{
-		m_rot_y -= 3.14f * EngineTime::getDeltaTime();
+		//m_rot_y -= 3.14f * EngineTime::getDeltaTime();
 	}
+	
 }
 
 void AppWindow::onKeyUp(int key)
 {
-	
+	if (key == VK_ESCAPE) {
+		m_is_running = false;
+	}
+	else if (key == VK_BACK) {
+		if (!objectList.empty())
+		{
+			objectList.back()->onDestroy();
+			objectList.pop_back();
+		}
+	}
+	else if (key == VK_SPACE) {
+		Circle* circle = new Circle(100.0f, 100, { 0.0f, 0.0f, 0.0f }, { 0.25f, 0.25f, 0.25f }, { 1, 0, 0 });
+		circle->onCreate();
+		objectList.push_back(circle);
+		objectStack.push(circle);
+	}
 }
 
 void AppWindow::initializeEngine()
 {
 	InputSystem::initialize();
+	Random::initialize();
 
 	InputSystem::getInstance()->addListener(this);
 
@@ -132,13 +141,8 @@ void AppWindow::initializeEngine()
 	FLOAT height = windowRect.bottom - windowRect.top;
 
 	m_swap_chain->init(this->m_hwnd, width, height);
-	
-	constant cc;
-	cc.m_angle = 0.0f;
 
 	m_cb = GraphicsEngine::getInstance()->createConstantBuffer();
-	m_cb->load(&cc, sizeof(constant));
-
 	// Quads added to object list
 	/*objectList.push_back(new Quad({0.6f, 0.6f, 0 }, {0.25f, 0.25f, 0.25f }, {1, 0, 0}));
 	objectList.push_back(new Quad({0,0,0},  {0.25f, 0.25f, 0.25f }, {0, 1, 0}));
@@ -146,57 +150,26 @@ void AppWindow::initializeEngine()
 
 	//objectList.push_back(new Quad({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1, 0, 0 }));
 
-	objectList.push_back(new Cube({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1, 0, 0 }));
+	//objectList.push_back(new Cube({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1, 0, 0 }));
+	//objectList.push_back(new Circle(0.5f, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1, 0, 0 }));
 
 	for (GameObject* gameObject : objectList) {
 		gameObject->onCreate();
 	}
 
-	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
+	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
 
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
+	/*viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, height / 2, width / 2, height / 2, 0.0f, 1.0f));
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));
+	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));*/
 }
 
 void AppWindow::updateQuadPosition()
 {
-	m_angle += 1.57f * EngineTime::getDeltaTime();
-
 	constant cc;
-	cc.m_angle = m_angle;
 
-	m_delta_pos += EngineTime::getDeltaTime() / 10.0f;
-	m_delta_scale += EngineTime::getDeltaTime() / 1.0f;
-
-	if (m_delta_pos > 1.0f)
-		m_delta_pos = 0;
-	
-	Matrix4x4 temp;
-
-	//cc.m_world.setScale(Vector3D::lerp(Vector3D(0.5f, 0.5, 0), Vector3D(1, 1, 0), (sin(m_delta_scale) + 1.0f) / 2.0f));
-
-	//temp.setTranslation(Vector3D::lerp(Vector3D(-1.5f, -1.5f, 0), Vector3D(1.5f, 1.5f, 0), m_delta_pos));
-	//cc.m_world *= temp;
-
-	cc.m_world.setScale(Vector3D(1, 1, 1));
-
-	temp.setIdentity();
-	temp.setRotationZ(0.0f);
-	cc.m_world *= temp;
-
-	temp.setIdentity();
-	temp.setRotationY(m_rot_y);
-	cc.m_world *= temp;
-
-	temp.setIdentity();
-	temp.setRotationX(m_rot_x);
-	cc.m_world *= temp;
-
-	cc.m_view.setIdentity();
-
-	RECT windowRect = this->getClientWindowRect();
+	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 
 	FLOAT width = windowRect.right - windowRect.left;
 	FLOAT height = windowRect.bottom - windowRect.top;
