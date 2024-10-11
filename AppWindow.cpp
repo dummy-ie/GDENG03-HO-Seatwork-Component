@@ -29,19 +29,6 @@ void AppWindow::onUpdate()
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->clearRenderTargetColor(this->swapChain, 
 		0.0, 0.0, 0.0, 1);
 
-	//RECT rc = this->getClientWindowRect();
-	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top, 0);
-
-	//updateQuadPosition();
-
-	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_vs, m_cb);
-	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_ps, m_cb);
-
-	/*GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexShader(m_vs);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setPixelShader(m_ps);
-
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexBuffer(m_vb);*/
-
 	for (int i = 0; i < viewPorts.size(); i++)
 	{
 		GraphicsEngine::getInstance()->getImmediateDeviceContext()->setViewport(viewPorts[i]);
@@ -53,14 +40,8 @@ void AppWindow::onUpdate()
 		GameObjectManager::getInstance()->update(EngineTime::getDeltaTime());
 		GameObjectManager::getInstance()->draw(this, vertexShader, pixelShader);
 	}
-	
-	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top, 1);
-	//int frames = 1 / EngineTime::getDeltaTime();
-	//std::string title = "[CABLAYAN] DirectXApplication | FPS : " + std::to_string(frames);
-	//SetWindowTextA(m_hwnd, title.c_str());
-	swapChain->present(true);
 
-	
+	swapChain->present(true);
 }
 
 void AppWindow::onDestroy()
@@ -68,6 +49,7 @@ void AppWindow::onDestroy()
 	Window::onDestroy();
 
 	InputSystem::getInstance()->removeListener(this);
+	InputSystem::destroy();
 
 	GameObjectManager::getInstance()->deleteAllObjects();
 
@@ -123,7 +105,8 @@ void AppWindow::initializeEngine()
 	FLOAT height = windowRect.bottom - windowRect.top;
 
 	swapChain->init(this->m_hwnd, width, height);
-
+	
+	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
 
 	void* shaderByteCode = nullptr;
@@ -132,8 +115,17 @@ void AppWindow::initializeEngine()
 	GraphicsEngine::getInstance()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
 	vertexShader = GraphicsEngine::getInstance()->createVertexShader(shaderByteCode, sizeShader);
 
-	Cube* cube = new Cube("Cube", shaderByteCode, sizeShader);
-	GameObjectManager::getInstance()->addObject(cube);
+	for (int i = 0; i < 100; i++)
+	{
+		float x = Random::range(-0.75f, 0.75f);
+		float y = Random::range(-0.75f, 0.75f);
+
+		Cube* cube = new Cube("Cube", shaderByteCode, sizeShader);
+		cube->setSpeed(Random::range(-3.75f, 3.75f));
+		cube->setPosition(x, y, 0.0f);
+		cube->setScale(0.25f, 0.25f, 0.25f);
+		GameObjectManager::getInstance()->addObject(cube);
+	}
 
 	GraphicsEngine::getInstance()->releaseCompiledShader();
 

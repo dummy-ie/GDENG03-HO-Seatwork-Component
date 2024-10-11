@@ -15,11 +15,11 @@ Quad::Quad(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 		{ Vector3D(0.5f,0.5f,0.0f),    Vector3D(1,1,1), Vector3D(0,0,1) }
 	};
 
-	constant cc;
-	cc.m_angle = 0.0f;
+	CBData cc;
+	cc.time = 0.0f;
 
 	constantBuffer = GraphicsEngine::getInstance()->createConstantBuffer();
-	constantBuffer->load(&cc, sizeof(constant));
+	constantBuffer->load(&cc, sizeof(CBData));
 
 	UINT sizeList = ARRAYSIZE(list);
 
@@ -40,8 +40,8 @@ void Quad::update(float deltaTime)
 {
 	angle += 1.57f * EngineTime::getDeltaTime();
 
-	constant cc;
-	cc.m_angle = angle;
+	CBData cc;
+	cc.time = angle;
 	
 	deltaPosition += EngineTime::getDeltaTime() / 10.0f;
 	deltaScale += EngineTime::getDeltaTime() / 1.0f;
@@ -51,18 +51,18 @@ void Quad::update(float deltaTime)
 
 	Matrix4x4 temp;
 	
-	cc.m_world.setScale(Vector3D::lerp(Vector3D(0.5f, 0.5, 0), Vector3D(1, 1, 0), (sin(deltaScale) + 1.0f) / 2.0f));
+	cc.worldMatrix.setScale(Vector3D::lerp(Vector3D(0.5f, 0.5, 0), Vector3D(1, 1, 0), (sin(deltaScale) + 1.0f) / 2.0f));
 	temp.setTranslation(Vector3D::lerp(Vector3D(0.1f, -1.5f, 0), Vector3D(1.5f, 1.5f, 0), deltaPosition));
-	cc.m_world *= temp;
+	cc.worldMatrix *= temp;
 
-	cc.m_view.setIdentity();
+	cc.viewMatrix.setIdentity();
 
 	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 
 	FLOAT width = windowRect.right - windowRect.left;
 	FLOAT height = windowRect.bottom - windowRect.top;
 
-	cc.m_proj.setOrthoLH(width / 300.0f, height / 300.0f, -4.0f, 4.0f);
+	cc.projMatrix.setOrthoLH(width / 300.0f, height / 300.0f, -4.0f, 4.0f);
 
 	constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cc);
 }

@@ -14,16 +14,6 @@
 #include "GameObject.h"
 #include "InputListener.h"
 
-__declspec(align(16))
-struct constant
-{
-	Matrix4x4 m_world;
-	Matrix4x4 m_view;
-	Matrix4x4 m_proj;
-	float m_angle;
-};
-
-
 namespace application
 {
 	using namespace engine;

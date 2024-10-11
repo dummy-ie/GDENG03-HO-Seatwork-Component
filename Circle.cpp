@@ -32,10 +32,10 @@ Circle::Circle(std::string name, float radius, int sides, void* shaderByteCode, 
 		list.push_back({ Vector3D(cos(theta + deltaTheta) * radius, sin(theta + deltaTheta) * radius, 0.0f), Vector3D(1,i % 2,1), Vector3D(0,0,1) });
 	}
 
-	constant cc;
+	CBData cc;
 
 	constantBuffer = GraphicsEngine::getInstance()->createConstantBuffer();
-	constantBuffer->load(&cc, sizeof(constant));
+	constantBuffer->load(&cc, sizeof(CBData));
 
 	UINT size_list = list.size();
 
@@ -60,7 +60,7 @@ void Circle::onCreate()
 
 void Circle::update(float deltaTime)
 {
-	constant cc;
+	CBData cc;
 
 	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 
@@ -97,11 +97,11 @@ void Circle::update(float deltaTime)
 
 	localPosition += direction * speed * EngineTime::getDeltaTime();
 
-	cc.m_world.setTranslation(localPosition);
+	cc.worldMatrix.setTranslation(localPosition);
 
-	cc.m_view.setIdentity();
+	cc.viewMatrix.setIdentity();
 
-	cc.m_proj.setOrthoLH(orthoWidth, orthoHeight, -4.0f, 4.0f);
+	cc.projMatrix.setOrthoLH(orthoWidth, orthoHeight, -4.0f, 4.0f);
 
 	constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cc);
 }

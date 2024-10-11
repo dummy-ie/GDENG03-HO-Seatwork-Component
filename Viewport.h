@@ -12,8 +12,8 @@ namespace engine
 		{
 		private:
 			D3D11_VIEWPORT vp;
-			RasterizerState* solid_rasterizer_state;
-			RasterizerState* wireframe_rasterizer_state;
+			RasterizerState* solidState;
+			RasterizerState* wireframeState;
 
 		private:
 			friend class DeviceContext;

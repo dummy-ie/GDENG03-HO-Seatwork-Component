@@ -2,20 +2,9 @@
 
 #include <string>
 
-#include "ConstantBuffer.h"
+#include "VertexShader.h"
 #include "Matrix4x4.h"
 #include "Vector3D.h"
-
-using namespace math;
-using namespace engine;
-using namespace engine::graphics;
-
-struct vertex
-{
-	Vector3D position;
-	Vector3D color;
-	Vector3D color1;
-};
 
 namespace engine
 {
@@ -27,6 +16,10 @@ namespace engine
 	}
 }
 
+using namespace math;
+using namespace engine;
+using namespace engine::graphics;
+
 class GameObject
 {
 protected:
@@ -34,6 +27,7 @@ protected:
 	Vector3D localPosition;
 	Vector3D localScale;
 	Vector3D localRotation;
+	Matrix4x4 localMatrix;
 	bool active;
 
 public:
@@ -41,8 +35,8 @@ public:
 	~GameObject();
 
 public:
-	virtual void update(float deltaTime);
-	virtual void draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader);
+	virtual void update(float deltaTime) = 0;
+	virtual void draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader) = 0;
 
 public:
 	void setPosition(float x, float y, float z);
@@ -61,6 +55,22 @@ public:
 
 	bool isActive();
 	void setActive(bool active);
+
+	struct vertex
+	{
+		Vector3D position;
+		Vector3D color;
+		Vector3D color2;
+	};
+
+	__declspec(align(16))
+	struct CBData
+	{
+		Matrix4x4 worldMatrix;
+		Matrix4x4 viewMatrix;
+		Matrix4x4 projMatrix;
+		float time;
+	};
 public:
 	virtual void onCreate();
 	virtual void onDestroy();

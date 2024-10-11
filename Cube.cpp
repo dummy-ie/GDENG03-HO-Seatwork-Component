@@ -21,7 +21,7 @@ Cube::Cube(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 	this->vertex_list[7] = { Vector3D(-0.5f, -0.5f, 0.5f), Vector3D(0, 1, 0), Vector3D(0, 0.2f, 0) };
 	*/
 
-	vertex vertex_list[] =
+	vertex vertexList[] =
 	{
 		{Vector3D(-0.5f,-0.5f,-0.5f),Vector3D(1, 0, 0), Vector3D(0.2f, 0, 0) },
 		{Vector3D(-0.5f,0.5f, -0.5f),Vector3D(1, 1, 0), Vector3D(0.2f, 0.2f, 0) },
@@ -35,10 +35,9 @@ Cube::Cube(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 	};
 
 	vertexBuffer = GraphicsEngine::getInstance()->createVertexBuffer();
-	UINT size_vertex_list = ARRAYSIZE(vertex_list);
-	vertexBuffer->load(vertex_list, sizeof(vertex), size_vertex_list, shaderByteCode, sizeShader);
+	vertexBuffer->load(vertexList, sizeof(vertex), ARRAYSIZE(vertexList), shaderByteCode, sizeShader);
 
-	unsigned int index_list[] = {
+	unsigned int indexList[] = {
 		0,1,2,
 		2,3,0,
 
@@ -59,15 +58,13 @@ Cube::Cube(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 	};
 
 	indexBuffer = GraphicsEngine::getInstance()->createIndexBuffer();
-	UINT size_index_list = ARRAYSIZE(index_list);
+	indexBuffer->load(indexList, ARRAYSIZE(indexList));
 
-	indexBuffer->load(index_list, size_index_list);
-
-	constant cc;
-	cc.m_angle = 0.0f;
+	CBData cbData;
+	cbData.time = 0.0f;
 
 	constantBuffer = GraphicsEngine::getInstance()->createConstantBuffer();
-	constantBuffer->load(&cc, sizeof(constant));
+	constantBuffer->load(&cbData, sizeof(CBData));
 
 	InputSystem::getInstance()->addListener(this);
 
@@ -80,31 +77,12 @@ Cube::~Cube()
 
 void Cube::onCreate()
 {
-	// Initialize Constant Position and Colors (White)
-	/*this->list[0] = { Vector3D(- 1.0f, -1.0f, 0.0f) , Vector3D( - 0.64f, -0.22f,  0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1)};
-	this->list[1] = { Vector3D(-1.0f,  1.0f, 0.0f), Vector3D(-0.22f, 1.56f, 0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1)};
-	this->list[2] = { Vector3D(1.0f, -1.0f, 0.0f), Vector3D(1.5f, -1.46f, 0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1) };
-	this->list[3] = { Vector3D(1.0f,  1.0f, 0.0f), Vector3D(1.76f, 1.54f, 0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1) };*/
-
-	
-	
 
 }
 
 void Cube::update(float deltaTime)
 {
-	//m_angle += 1.57f * EngineTime::getDeltaTime();
-
-	constant cc;
-	/*cc.m_angle = m_angle;
-
-	m_delta_pos += EngineTime::getDeltaTime() / 10.0f;
-	m_delta_scale += EngineTime::getDeltaTime() / 1.0f;
-
-	if (m_delta_pos > 1.0f)
-		m_delta_pos = 0;*/
-
-	//this->localPosition.x = m_delta_pos;
+	CBData cbData;
 
 	deltaRotation += EngineTime::getDeltaTime() * speed;
 
@@ -113,9 +91,11 @@ void Cube::update(float deltaTime)
 	Matrix4x4 transform;
 	Matrix4x4 temp;
 
+	// Scale
 	transform.setIdentity();
 	transform.setScale(this->localScale);
 
+	// Scale * Rotation
 	temp.setIdentity();
 	temp.setRotationZ(this->localRotation.z);
 	transform *= temp;
@@ -128,22 +108,23 @@ void Cube::update(float deltaTime)
 	temp.setRotationX(this->localRotation.x);
 	transform *= temp;
 
+	// Scale * Rotation * Translation
 	temp.setIdentity();
 	temp.setTranslation(this->localPosition);
 	transform *= temp;
 
-	cc.m_world.setMatrix(transform);
+	cbData.worldMatrix.setMatrix(transform);
 
-	cc.m_view.setIdentity();
+	cbData.viewMatrix.setIdentity();
 
 	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 
 	FLOAT width = windowRect.right - windowRect.left;
 	FLOAT height = windowRect.bottom - windowRect.top;
 
-	cc.m_proj.setOrthoLH(width / 300.0f, height / 300.0f, -4.0f, 4.0f);
+	cbData.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
 
-	constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cc);
+	constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cbData);
 }
 
 // Sets shaders and draws afterwards

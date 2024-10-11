@@ -11,7 +11,7 @@ namespace engine
 		class VertexShader
 		{
 		private:
-			ID3D11VertexShader* m_vs;
+			ID3D11VertexShader* vertexShader;
 
 		private:
 			friend class GraphicsEngine;
@@ -22,7 +22,7 @@ namespace engine
 			~VertexShader();
 
 		private:
-			bool init(const void* shader_byte_code, size_t byte_code_size);
+			bool init(const void* shaderByteCode, size_t byteCodeSize);
 
 		public:
 			void release();

@@ -90,7 +90,7 @@ void DeviceContext::setViewport(Viewport* vp)
 
 void DeviceContext::setVertexShader(VertexShader* vertex_shader)
 {
-	m_device_context->VSSetShader(vertex_shader->m_vs, nullptr, 0);
+	m_device_context->VSSetShader(vertex_shader->vertexShader, nullptr, 0);
 }
 
 void DeviceContext::setPixelShader(PixelShader* pixel_shader)
