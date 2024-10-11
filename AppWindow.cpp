@@ -106,12 +106,6 @@ void AppWindow::onKeyDown(int key)
 	{
 		//m_rot_y -= 3.14f * EngineTime::getDeltaTime();
 	}
-	else if (key == VK_SPACE) {
-		Circle* circle = new Circle(50.0f, 100, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1, 0, 0 });
-		circle->onCreate();
-		objectList.push_back(circle);
-		objectStack.push(circle);
-	}
 }
 
 void AppWindow::onKeyUp(int key)
