@@ -58,9 +58,9 @@ void AppWindow::onUpdate()
 	}
 	
 	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top, 1);
-	int frames = 1 / EngineTime::getDeltaTime();
-	std::string title = "[CABLAYAN] DirectXApplication | FPS : " + std::to_string(frames);
-	SetWindowTextA(m_hwnd, title.c_str());
+	//int frames = 1 / EngineTime::getDeltaTime();
+	//std::string title = "[CABLAYAN] DirectXApplication | FPS : " + std::to_string(frames);
+	//SetWindowTextA(m_hwnd, title.c_str());
 	m_swap_chain->present(true);
 
 	
