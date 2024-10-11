@@ -7,6 +7,7 @@
 #include "Circle.h"
 #include "Quad.h"
 #include "EngineTime.h"
+#include "GameObjectManager.h"
 #include "Vector3D.h"
 #include "InputSystem.h"
 #include "Random.h"
@@ -23,10 +24,9 @@ void AppWindow::onCreate()
 void AppWindow::onUpdate()
 {
 	Window::onUpdate();
-
 	InputSystem::getInstance()->update();
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->clearRenderTargetColor(this->swapChain, 
 		0.0, 0.0, 0.0, 1);
 
 	//RECT rc = this->getClientWindowRect();
@@ -50,18 +50,15 @@ void AppWindow::onUpdate()
 		else
 			viewPorts[i]->setRasterizerSolidState();
 		
-
-		for (GameObject* obj : objectList) {
-			obj->update(EngineTime::getDeltaTime());
-			obj->draw();
-		}
+		GameObjectManager::getInstance()->update(EngineTime::getDeltaTime());
+		GameObjectManager::getInstance()->draw(this, vertexShader, pixelShader);
 	}
 	
 	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top, 1);
 	//int frames = 1 / EngineTime::getDeltaTime();
 	//std::string title = "[CABLAYAN] DirectXApplication | FPS : " + std::to_string(frames);
 	//SetWindowTextA(m_hwnd, title.c_str());
-	m_swap_chain->present(true);
+	swapChain->present(true);
 
 	
 }
@@ -72,68 +69,40 @@ void AppWindow::onDestroy()
 
 	InputSystem::getInstance()->removeListener(this);
 
-	for (int i = 0; i > objectList.size(); i++) {
-		objectList[i]->onDestroy();
-	}
+	GameObjectManager::getInstance()->deleteAllObjects();
 
 	for (auto vp : viewPorts)
 	{
 		vp->release();
 	}
-	m_cb->release();
+
 	viewPorts.clear();
-	objectList.clear();
-	m_swap_chain->release();
+	swapChain->release();
 	
 	GraphicsEngine::destroy();
+	GameObjectManager::destroy();
 }
 
 void AppWindow::onKeyDown(int key)
 {
-	if (key == 'W')
-	{
-		//m_rot_x += 3.14f * EngineTime::getDeltaTime();
-	}
-	else if (key == 'S')
-	{
-		//m_rot_x -= 3.14f * EngineTime::getDeltaTime();
-	}
-	else if (key == 'A')
-	{
-		//m_rot_y += 3.14f * EngineTime::getDeltaTime();
-	}
-	else if (key == 'D')
-	{
-		//m_rot_y -= 3.14f * EngineTime::getDeltaTime();
-	}
+	
 }
 
 void AppWindow::onKeyUp(int key)
 {
 	if (key == VK_ESCAPE) {
-		m_is_running = false;
+		//m_is_running = false;
 	}
 	else if (key == VK_BACK) {
-		if (!objectList.empty())
-		{
-			objectList.back()->onDestroy();
-			objectList.pop_back();
-		}
+		//GameObjectManager::getInstance()->deleteLastObject();
 	}
 	else if (key == VK_SPACE) {
-		Circle* circle = new Circle(50.0f, 100, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f}, { 1, 0, 0 });
-		circle->onCreate();
-		objectList.push_back(circle);
-		objectStack.push(circle);
+		//Circle* circle = new Circle(50.0f, 100);
+		//GameObjectManager::getInstance()->addObject(circle);
 	}
 	else if (key == VK_DELETE)
 	{
-		if (!objectList.empty())
-		{
-			for (GameObject* object : objectList)
-				object->onDestroy();
-			objectList.clear();
-		}
+		//GameObjectManager::getInstance()->deleteAllObjects();
 	}
 }
 
@@ -146,50 +115,37 @@ void AppWindow::initializeEngine()
 
 	GraphicsEngine::initialize();
 
-	m_swap_chain = GraphicsEngine::getInstance()->createSwapChain();
+	swapChain = GraphicsEngine::getInstance()->createSwapChain();
 
 	RECT windowRect = this->getClientWindowRect();
 
 	FLOAT width = windowRect.right - windowRect.left;
 	FLOAT height = windowRect.bottom - windowRect.top;
 
-	m_swap_chain->init(this->m_hwnd, width, height);
-
-	m_cb = GraphicsEngine::getInstance()->createConstantBuffer();
-	// Quads added to object list
-	/*objectList.push_back(new Quad({0.6f, 0.6f, 0 }, {0.25f, 0.25f, 0.25f }, {1, 0, 0}));
-	objectList.push_back(new Quad({0,0,0},  {0.25f, 0.25f, 0.25f }, {0, 1, 0}));
-	objectList.push_back(new Quad({-0.6,-0.6,0}, { 0.25f, 0.25f, 0.25f }, {0, 0, 1}));*/
-
-	//objectList.push_back(new Quad({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1, 0, 0 }));
-
-	//objectList.push_back(new Cube({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1, 0, 0 }));
-	//objectList.push_back(new Circle(0.5f, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1, 0, 0 }));
-
-	for (GameObject* gameObject : objectList) {
-		gameObject->onCreate();
-	}
+	swapChain->init(this->m_hwnd, width, height);
 
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
 
+	void* shaderByteCode = nullptr;
+	size_t sizeShader = 0;
+
+	GraphicsEngine::getInstance()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
+	vertexShader = GraphicsEngine::getInstance()->createVertexShader(shaderByteCode, sizeShader);
+
+	Cube* cube = new Cube("Cube", shaderByteCode, sizeShader);
+	GameObjectManager::getInstance()->addObject(cube);
+
+	GraphicsEngine::getInstance()->releaseCompiledShader();
+
+	GraphicsEngine::getInstance()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shaderByteCode, &sizeShader);
+	pixelShader = GraphicsEngine::getInstance()->createPixelShader(shaderByteCode, sizeShader);
+	GraphicsEngine::getInstance()->releaseCompiledShader();
+
+	
 	/*viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, height / 2, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));*/
-}
-
-void AppWindow::updateQuadPosition()
-{
-	constant cc;
-
-	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
-
-	FLOAT width = windowRect.right - windowRect.left;
-	FLOAT height = windowRect.bottom - windowRect.top;
-
-	cc.m_proj.setOrthoLH(width / 300.0f, height / 300.0f, -4.0f, 4.0f);
-
-	m_cb->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cc);
 }
 
 AppWindow* AppWindow::P_SHARED_INSTANCE = NULL;

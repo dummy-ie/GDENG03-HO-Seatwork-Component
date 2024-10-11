@@ -14,36 +14,28 @@ using namespace engine::graphics;
 class Cube : public GameObject, public InputListener
 {
 private:
-	vertex vertex_list[8];
-	Vector3D color;
+	//vertex vertex_list[8];
+	//Vector3D color;
 
-	VertexBuffer* m_vb;
-	ConstantBuffer* m_cb;
-	IndexBuffer* m_ib;
-	VertexShader* m_vs;
-	PixelShader* m_ps;
+	VertexBuffer* vertexBuffer;
+	ConstantBuffer* constantBuffer;
+	IndexBuffer* indexBuffer;
 
-	float m_delta_pos;
-	float m_angle;
-
-	float m_rot_x = 0.0f;
-	float m_rot_y = 0.0f;
-
+	float deltaRotation;
+	float speed = 1.0f;
 public:
-	Cube(Vector3D position, Vector3D scale, Vector3D color);
+	Cube(std::string name, void* shaderByteCode, size_t sizeShader);
 	~Cube();
 
 public:
 	void onCreate() override;
 	void update(float deltaTime) override;
-	void draw() override;
+	void draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader) override;
 	void onDestroy() override;
 
-	virtual void onKeyDown(int key);
-	virtual void onKeyUp(int key);
+	virtual void onKeyDown(int key) override;
+	virtual void onKeyUp(int key) override;
 
-	void setPosition(Vector3D position) override;
-	void setScale(Vector3D scale) override;
-	void setColor(Vector3D color);
+	void setSpeed(float speed);
 };
 

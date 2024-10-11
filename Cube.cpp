@@ -7,29 +7,11 @@
 using namespace engine;
 using namespace application;
 
-Cube::Cube(Vector3D position, Vector3D scale, Vector3D color) : GameObject(position, scale)
+Cube::Cube(std::string name, void* shaderByteCode, size_t sizeShader) : GameObject(name)
 {
-	m_vb = nullptr;
-	m_vs = nullptr;
-	m_ps = nullptr;
-	this->color = color;
-}
-
-Cube::~Cube()
-{
-}
-
-void Cube::onCreate()
-{
-	// Initialize Constant Position and Colors (White)
-	/*this->list[0] = { Vector3D(- 1.0f, -1.0f, 0.0f) , Vector3D( - 0.64f, -0.22f,  0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1)};
-	this->list[1] = { Vector3D(-1.0f,  1.0f, 0.0f), Vector3D(-0.22f, 1.56f, 0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1)};
-	this->list[2] = { Vector3D(1.0f, -1.0f, 0.0f), Vector3D(1.5f, -1.46f, 0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1) };
-	this->list[3] = { Vector3D(1.0f,  1.0f, 0.0f), Vector3D(1.76f, 1.54f, 0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1) };*/
-
-	
+	/*
 	this->vertex_list[0] = { Vector3D(-0.5f,-0.5f,-0.5f),    Vector3D(1,0,0),  Vector3D(0.2f,0,0) };
-	this->vertex_list[1] = {Vector3D(-0.5f, 0.5f, -0.5f), Vector3D(1, 1, 0), Vector3D(0.2f, 0.2f, 0) };
+	this->vertex_list[1] = { Vector3D(-0.5f, 0.5f, -0.5f), Vector3D(1, 1, 0), Vector3D(0.2f, 0.2f, 0) };
 	this->vertex_list[2] = { Vector3D(0.5f, 0.5f, -0.5f), Vector3D(1, 1, 0), Vector3D(0.2f, 0.2f, 0) };
 	this->vertex_list[3] = { Vector3D(0.5f, -0.5f, -0.5f), Vector3D(1, 0, 0), Vector3D(0.2f, 0, 0) };
 
@@ -37,9 +19,24 @@ void Cube::onCreate()
 	this->vertex_list[5] = { Vector3D(0.5f, 0.5f, 0.5f), Vector3D(0, 1, 1), Vector3D(0, 0.2f, 0.2f) };
 	this->vertex_list[6] = { Vector3D(-0.5f, 0.5f, 0.5f), Vector3D(0, 1, 1), Vector3D(0, 0.2f, 0.2f) };
 	this->vertex_list[7] = { Vector3D(-0.5f, -0.5f, 0.5f), Vector3D(0, 1, 0), Vector3D(0, 0.2f, 0) };
+	*/
 
-	m_vb = GraphicsEngine::getInstance()->createVertexBuffer();
+	vertex vertex_list[] =
+	{
+		{Vector3D(-0.5f,-0.5f,-0.5f),Vector3D(1, 0, 0), Vector3D(0.2f, 0, 0) },
+		{Vector3D(-0.5f,0.5f, -0.5f),Vector3D(1, 1, 0), Vector3D(0.2f, 0.2f, 0) },
+		{Vector3D(0.5f, 0.5f, -0.5f),Vector3D(1, 1, 0), Vector3D(0.2f, 0.2f, 0) },
+		{Vector3D(0.5f, -0.5f,-0.5f),Vector3D(1, 0, 0), Vector3D(0.2f, 0, 0) },
+
+		{Vector3D(0.5f, -0.5f,0.5f), Vector3D(0, 1, 0), Vector3D(0, 0.2f, 0) },
+		{Vector3D(0.5f, 0.5f, 0.5f), Vector3D(0, 1, 1), Vector3D(0, 0.2f, 0.2f) },
+		{Vector3D(-0.5f,0.5f, 0.5f), Vector3D(0, 1, 1), Vector3D(0, 0.2f, 0.2f) },
+		{Vector3D(-0.5f,-0.5f,0.5f), Vector3D(0, 1, 0), Vector3D(0, 0.2f, 0) }
+	};
+
+	vertexBuffer = GraphicsEngine::getInstance()->createVertexBuffer();
 	UINT size_vertex_list = ARRAYSIZE(vertex_list);
+	vertexBuffer->load(vertex_list, sizeof(vertex), size_vertex_list, shaderByteCode, sizeShader);
 
 	unsigned int index_list[] = {
 		0,1,2,
@@ -61,59 +58,81 @@ void Cube::onCreate()
 		1,0,7
 	};
 
-	m_ib = GraphicsEngine::getInstance()->createIndexBuffer();
+	indexBuffer = GraphicsEngine::getInstance()->createIndexBuffer();
 	UINT size_index_list = ARRAYSIZE(index_list);
 
-	m_ib->load(index_list, size_index_list);
+	indexBuffer->load(index_list, size_index_list);
 
-	void* shader_byte_code = nullptr;
-	size_t size_shader = 0;
+	constant cc;
+	cc.m_angle = 0.0f;
 
-	GraphicsEngine::getInstance()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
-	m_vs = GraphicsEngine::getInstance()->createVertexShader(shader_byte_code, size_shader);
-	m_vb->load(vertex_list, sizeof(vertex), size_vertex_list, shader_byte_code, size_shader);
-	GraphicsEngine::getInstance()->releaseCompiledShader();
+	constantBuffer = GraphicsEngine::getInstance()->createConstantBuffer();
+	constantBuffer->load(&cc, sizeof(constant));
 
-	GraphicsEngine::getInstance()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
-	m_ps = GraphicsEngine::getInstance()->createPixelShader(shader_byte_code, size_shader);
-	GraphicsEngine::getInstance()->releaseCompiledShader();
+	InputSystem::getInstance()->addListener(this);
 
-	//this->setPosition(position);
-	//this->setScale(scale);
+	speed = 0.0f;
+}
+
+Cube::~Cube()
+{
+}
+
+void Cube::onCreate()
+{
+	// Initialize Constant Position and Colors (White)
+	/*this->list[0] = { Vector3D(- 1.0f, -1.0f, 0.0f) , Vector3D( - 0.64f, -0.22f,  0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1)};
+	this->list[1] = { Vector3D(-1.0f,  1.0f, 0.0f), Vector3D(-0.22f, 1.56f, 0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1)};
+	this->list[2] = { Vector3D(1.0f, -1.0f, 0.0f), Vector3D(1.5f, -1.46f, 0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1) };
+	this->list[3] = { Vector3D(1.0f,  1.0f, 0.0f), Vector3D(1.76f, 1.54f, 0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1) };*/
+
+	
+	
+
 }
 
 void Cube::update(float deltaTime)
 {
-	m_angle += 1.57f * EngineTime::getDeltaTime();
+	//m_angle += 1.57f * EngineTime::getDeltaTime();
 
 	constant cc;
-	cc.m_angle = m_angle;
+	/*cc.m_angle = m_angle;
 
 	m_delta_pos += EngineTime::getDeltaTime() / 10.0f;
-	//m_delta_scale += EngineTime::getDeltaTime() / 1.0f;
+	m_delta_scale += EngineTime::getDeltaTime() / 1.0f;
 
 	if (m_delta_pos > 1.0f)
-		m_delta_pos = 0;
+		m_delta_pos = 0;*/
 
+	//this->localPosition.x = m_delta_pos;
+
+	deltaRotation += EngineTime::getDeltaTime() * speed;
+
+	setRotation(deltaRotation, deltaRotation, deltaRotation);
+
+	Matrix4x4 transform;
 	Matrix4x4 temp;
 
-
-	//cc.m_world.setScale(Vector3D::lerp(Vector3D(0.5f, 0.5, 0), Vector3D(1, 1, 0), (sin(m_delta_scale) + 1.0f) / 2.0f));
-	cc.m_world.setScale(Vector3D(1, 1, 1));
-	//temp.setTranslation(Vector3D::lerp(Vector3D(0.1f, -1.5f, 0), Vector3D(1.5f, 1.5f, 0), m_delta_pos));
-	//cc.m_world *= temp;
+	transform.setIdentity();
+	transform.setScale(this->localScale);
 
 	temp.setIdentity();
-	temp.setRotationZ(0.0f);
-	cc.m_world *= temp;
+	temp.setRotationZ(this->localRotation.z);
+	transform *= temp;
 
 	temp.setIdentity();
-	temp.setRotationY(m_rot_y);
-	cc.m_world *= temp;
+	temp.setRotationY(this->localRotation.y);
+	transform *= temp;
 
 	temp.setIdentity();
-	temp.setRotationX(m_rot_x);
-	cc.m_world *= temp;
+	temp.setRotationX(this->localRotation.x);
+	transform *= temp;
+
+	temp.setIdentity();
+	temp.setTranslation(this->localPosition);
+	transform *= temp;
+
+	cc.m_world.setMatrix(transform);
 
 	cc.m_view.setIdentity();
 
@@ -124,84 +143,57 @@ void Cube::update(float deltaTime)
 
 	cc.m_proj.setOrthoLH(width / 300.0f, height / 300.0f, -4.0f, 4.0f);
 
-	m_cb->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cc);
+	constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cc);
 }
 
 // Sets shaders and draws afterwards
-void Cube::draw()
+void Cube::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader)
 {
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_vs, m_cb);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_ps, m_cb);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexShader(m_vs);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setPixelShader(m_ps);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexShader(vertexShader);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setPixelShader(pixelShader);
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexBuffer(m_vb);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setIndexBuffer(m_ib);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setIndexBuffer(indexBuffer);
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(),0,0);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->drawIndexedTriangleList(indexBuffer->getSizeIndexList(),0,0);
 }
 
 void Cube::onDestroy()
 {
 	InputSystem::getInstance()->removeListener(this);
-	m_vb->release();
-	m_ib->release();
-	m_cb->release();
-	m_vs->release();
-	m_ps->release();
+	vertexBuffer->release();
+	indexBuffer->release();
+	constantBuffer->release();
 }
 
 void Cube::onKeyDown(int key)
 {
+	if (key == 'W')
+	{
+		this->localRotation.x += atan(1) * 4 * EngineTime::getDeltaTime();
+	}
+	else if (key == 'S')
+	{
+		this->localRotation.x -= atan(1) * 4 * EngineTime::getDeltaTime();
+	}
+	else if (key == 'A')
+	{
+		this->localRotation.y += atan(1) * 4 * EngineTime::getDeltaTime();
+	}
+	else if (key == 'D')
+	{
+		this->localRotation.y -= atan(1) * 4 * EngineTime::getDeltaTime();
+	}
 }
 
 void Cube::onKeyUp(int key)
 {
 }
 
-void Cube::setPosition(Vector3D position)
+void Cube::setSpeed(float speed)
 {
-	GameObject::setPosition(position);
-
-	for (int i = 0; i < 8; i++)
-	{
-		this->vertex_list[i].position.m_x += position.m_x;
-		this->vertex_list[i].position.m_y += position.m_y;
-		this->vertex_list[i].position.m_z += position.m_z;
-	}
+	this->speed = speed;
 }
-
-// Too lazy to create a matrix
-void Cube::setScale(Vector3D scale)
-{
-	GameObject::setScale(scale);
-	for (int i = 0; i < 4; i++)
-	{
-		this->vertex_list[i].position.m_x -= position.m_x;
-		this->vertex_list[i].position.m_y -= position.m_y;
-		this->vertex_list[i].position.m_z -= position.m_z;
-	}
-	for (int i = 0; i < 4; i++)
-	{
-		this->vertex_list[i].position.m_x *= scale.m_x;
-		this->vertex_list[i].position.m_y *= scale.m_y;
-		this->vertex_list[i].position.m_z *= scale.m_z;
-	}
-	for (int i = 0; i < 4; i++)
-	{
-		this->vertex_list[i].position.m_x += position.m_x;
-		this->vertex_list[i].position.m_y += position.m_y;
-		this->vertex_list[i].position.m_z += position.m_z;
-	}
-}
-
-void Cube::setColor(Vector3D color)
-{
-	for (int i = 0; i < 4; i++)
-	{
-		this->vertex_list[i].color = color;
-		this->vertex_list[i].color1 = color;
-	}
-}
-

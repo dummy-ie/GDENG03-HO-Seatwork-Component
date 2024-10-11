@@ -22,26 +22,20 @@ private:
 	std::vector<vertex> list;
 	Vector3D color;
 
-	VertexBuffer* m_vb;
-	ConstantBuffer* m_cb;
-	VertexShader* m_vs;
-	PixelShader* m_ps;
+	VertexBuffer* vertexBuffer;
+	ConstantBuffer* constantBuffer;
 
-	float m_speed;
-	Vector3D m_direction;
+	float speed;
+	Vector3D direction;
 
 public:
-	Circle(float radius, int sides, Vector3D position, Vector3D scale, Vector3D color);
+	Circle(std::string name, float radius, int sides, void* shaderByteCode, size_t sizeShader);
 	~Circle();
 
 public:
 	void onCreate() override;
 	void update(float deltaTime) override;
-	void draw() override;
+	void draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader) override;
 	void onDestroy() override;
-
-	void setPosition(Vector3D position) override;
-	void setScale(Vector3D scale) override;
-	void setColor(Vector3D color);
 };
 

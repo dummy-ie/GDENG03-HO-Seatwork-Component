@@ -5,12 +5,26 @@
 using namespace engine;
 using namespace application;
 
-Quad::Quad(Vector3D position, Vector3D scale, Vector3D color) : GameObject(position, scale)
+Quad::Quad(std::string name, void* shaderByteCode, size_t sizeShader) : GameObject(name)
 {
-	m_vb = nullptr;
-	m_vs = nullptr;
-	m_ps = nullptr;
-	this->color = color;
+	vertex list[] =
+	{
+		{ Vector3D(-0.5f,-0.5f,0.0f),   Vector3D(0,0,0), Vector3D(0,1,0) },
+		{ Vector3D(-0.5f,0.5f,0.0f),   Vector3D(1,1,0), Vector3D(0,1,1) },
+		{ Vector3D(0.5f,-0.5f,0.0f), Vector3D(0,0,1),  Vector3D(1,0,0) },
+		{ Vector3D(0.5f,0.5f,0.0f),    Vector3D(1,1,1), Vector3D(0,0,1) }
+	};
+
+	constant cc;
+	cc.m_angle = 0.0f;
+
+	constantBuffer = GraphicsEngine::getInstance()->createConstantBuffer();
+	constantBuffer->load(&cc, sizeof(constant));
+
+	UINT sizeList = ARRAYSIZE(list);
+
+	vertexBuffer = GraphicsEngine::getInstance()->createVertexBuffer();
+	vertexBuffer->load(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
 }
 
 Quad::~Quad()
@@ -19,63 +33,26 @@ Quad::~Quad()
 
 void Quad::onCreate()
 {
-	// Initialize Constant Position and Colors (White)
-	/*this->list[0] = { Vector3D(- 1.0f, -1.0f, 0.0f) , Vector3D( - 0.64f, -0.22f,  0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1)};
-	this->list[1] = { Vector3D(-1.0f,  1.0f, 0.0f), Vector3D(-0.22f, 1.56f, 0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1)};
-	this->list[2] = { Vector3D(1.0f, -1.0f, 0.0f), Vector3D(1.5f, -1.46f, 0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1) };
-	this->list[3] = { Vector3D(1.0f,  1.0f, 0.0f), Vector3D(1.76f, 1.54f, 0.0f), Vector3D(1, 1, 1), Vector3D(1, 1, 1) };*/
-
-	this->list[0] = { Vector3D(-0.5f,-0.5f,0.0f),   Vector3D(0,0,0), Vector3D(0,1,0) };
-	this->list[1] = { Vector3D(-0.5f,0.5f,0.0f),   Vector3D(1,1,0), Vector3D(0,1,1) };
-	this->list[2] = { Vector3D(0.5f,-0.5f,0.0f), Vector3D(0,0,1),  Vector3D(1,0,0) };
-	this->list[3] = { Vector3D(0.5f,0.5f,0.0f),    Vector3D(1,1,1), Vector3D(0,0,1) };
-
-	this->setPosition(position);
-	this->setScale(scale);
-	//this->setColor(color);
-
-	UINT size_list = ARRAYSIZE(list);
-
-	void* shader_byte_code = nullptr;
-	size_t size_shader = 0;
-
-	constant cc;
-	cc.m_angle = 0.0f;
-
-	m_cb = GraphicsEngine::getInstance()->createConstantBuffer();
-	m_cb->load(&cc, sizeof(constant));
-
-	m_vb = GraphicsEngine::getInstance()->createVertexBuffer();
-	
-	GraphicsEngine::getInstance()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
-	m_vs = GraphicsEngine::getInstance()->createVertexShader(shader_byte_code, size_shader);
-	m_vb->load(list, sizeof(vertex), size_list, shader_byte_code, size_shader);
-	GraphicsEngine::getInstance()->releaseCompiledShader();
-
-	GraphicsEngine::getInstance()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
-	m_ps = GraphicsEngine::getInstance()->createPixelShader(shader_byte_code, size_shader);
-	GraphicsEngine::getInstance()->releaseCompiledShader();
+	GameObject::onCreate();
 }
 
 void Quad::update(float deltaTime)
 {
-	m_angle += 1.57f * EngineTime::getDeltaTime();
+	angle += 1.57f * EngineTime::getDeltaTime();
 
 	constant cc;
-	cc.m_angle = m_angle;
+	cc.m_angle = angle;
 	
-	m_delta_pos += EngineTime::getDeltaTime() / 10.0f;
-	m_delta_scale += EngineTime::getDeltaTime() / 1.0f;
+	deltaPosition += EngineTime::getDeltaTime() / 10.0f;
+	deltaScale += EngineTime::getDeltaTime() / 1.0f;
 
-	if (m_delta_pos > 1.0f)
-		m_delta_pos = 0;
+	if (deltaPosition > 1.0f)
+		deltaPosition = 0;
 
 	Matrix4x4 temp;
-
 	
-	cc.m_world.setScale(Vector3D::lerp(Vector3D(0.5f, 0.5, 0), Vector3D(1, 1, 0), (sin(m_delta_scale) + 1.0f) / 2.0f));
-	//cc.m_world.setScale(Vector3D(1, 1, 1));
-	temp.setTranslation(Vector3D::lerp(Vector3D(0.1f, -1.5f, 0), Vector3D(1.5f, 1.5f, 0), m_delta_pos));
+	cc.m_world.setScale(Vector3D::lerp(Vector3D(0.5f, 0.5, 0), Vector3D(1, 1, 0), (sin(deltaScale) + 1.0f) / 2.0f));
+	temp.setTranslation(Vector3D::lerp(Vector3D(0.1f, -1.5f, 0), Vector3D(1.5f, 1.5f, 0), deltaPosition));
 	cc.m_world *= temp;
 
 	cc.m_view.setIdentity();
@@ -87,70 +64,25 @@ void Quad::update(float deltaTime)
 
 	cc.m_proj.setOrthoLH(width / 300.0f, height / 300.0f, -4.0f, 4.0f);
 
-	m_cb->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cc);
+	constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cc);
 }
 
 // Sets shaders and draws afterwards
-void Quad::draw()
+void Quad::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader)
 {
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_vs, m_cb);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_ps, m_cb);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexShader(m_vs);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setPixelShader(m_ps);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexBuffer(m_vb);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->drawTriangleStrip(m_vb->getSizeVertexList(), 0);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
+
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexShader(vertexShader);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setPixelShader(pixelShader);
+
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
+
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->drawTriangleStrip(vertexBuffer->getSizeVertexList(), 0);
 }
 
 void Quad::onDestroy()
 {
-	m_cb->release();
-	m_vb->release();
-	m_vs->release();
-	m_ps->release();
+	constantBuffer->release();
+	vertexBuffer->release();
 }
-
-void Quad::setPosition(Vector3D position)
-{
-	GameObject::setPosition(position);
-
-	for (int i = 0; i < 4; i++)
-	{
-		this->list[i].position.m_x += position.m_x;
-		this->list[i].position.m_y += position.m_y;
-		this->list[i].position.m_z += position.m_z;
-	}
-}
-
-// Too lazy to create a matrix
-void Quad::setScale(Vector3D scale)
-{
-	GameObject::setScale(scale);
-	for (int i = 0; i < 4; i++)
-	{
-		this->list[i].position.m_x -= position.m_x;
-		this->list[i].position.m_y -= position.m_y;
-		this->list[i].position.m_z -= position.m_z;
-	}
-	for (int i = 0; i < 4; i++)
-	{
-		this->list[i].position.m_x *= scale.m_x;
-		this->list[i].position.m_y *= scale.m_y;
-		this->list[i].position.m_z *= scale.m_z;
-	}
-	for (int i = 0; i < 4; i++)
-	{
-		this->list[i].position.m_x += position.m_x;
-		this->list[i].position.m_y += position.m_y;
-		this->list[i].position.m_z += position.m_z;
-	}
-}
-
-void Quad::setColor(Vector3D color)
-{
-	for (int i = 0; i < 4; i++)
-	{
-		this->list[i].color = color;
-		this->list[i].color1 = color;
-	}
-} 
-

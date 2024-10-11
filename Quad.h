@@ -12,30 +12,21 @@ using namespace engine::graphics;
 class Quad : public GameObject
 {
 private:
-	vertex list[4];
-	Vector3D color;
+	VertexBuffer* vertexBuffer;
+	ConstantBuffer* constantBuffer;
 
-	VertexBuffer* m_vb;
-	ConstantBuffer* m_cb;
-	VertexShader* m_vs;
-	PixelShader* m_ps;
-
-	float m_delta_pos;
-	float m_delta_scale;
-	float m_angle;
+	float deltaPosition;
+	float deltaScale;
+	float angle;
 
 public:
-	Quad(Vector3D position, Vector3D scale, Vector3D color);
+	Quad(std::string name, void* shaderByteCode, size_t sizeShader);
 	~Quad();
 
 public:
 	void onCreate() override;
 	void update(float deltaTime) override;
-	void draw() override;
+	void draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader) override;
 	void onDestroy() override;
-
-	void setPosition(Vector3D position) override;
-	void setScale(Vector3D scale) override;
-	void setColor(Vector3D color);
 };
 

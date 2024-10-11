@@ -7,22 +7,12 @@
 
 using namespace application;
 
-Circle::Circle(float radius, int sides, Vector3D position, Vector3D scale, Vector3D color) : GameObject(position, scale)
+Circle::Circle(std::string name, float radius, int sides, void* shaderByteCode, size_t sizeShader) : GameObject(name)
 {
 	this->radius = radius;
 	this->sides = sides;
-	m_vb = nullptr;
-	m_vs = nullptr;
-	m_ps = nullptr;
-	this->color = color;
-}
+	vertexBuffer = nullptr;
 
-Circle::~Circle()
-{
-}
-
-void Circle::onCreate()
-{
 	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 
 	FLOAT width = windowRect.right - windowRect.left;
@@ -42,38 +32,30 @@ void Circle::onCreate()
 		list.push_back({ Vector3D(cos(theta + deltaTheta) * radius, sin(theta + deltaTheta) * radius, 0.0f), Vector3D(1,i % 2,1), Vector3D(0,0,1) });
 	}
 
-	this->setPosition(position);
-	//this->setScale(scale);
-	//this->setColor(color);
-
 	constant cc;
 
-	m_cb = GraphicsEngine::getInstance()->createConstantBuffer();
-	m_cb->load(&cc, sizeof(constant));
+	constantBuffer = GraphicsEngine::getInstance()->createConstantBuffer();
+	constantBuffer->load(&cc, sizeof(constant));
 
 	UINT size_list = list.size();
 
-	void* shader_byte_code = nullptr;
-	size_t size_shader = 0;
+	vertexBuffer = GraphicsEngine::getInstance()->createVertexBuffer();
+	vertexBuffer->load(list.data(), sizeof(vertex), size_list, shaderByteCode, sizeShader);
+}
 
-	m_vb = GraphicsEngine::getInstance()->createVertexBuffer();
+Circle::~Circle()
+{
+}
 
-	GraphicsEngine::getInstance()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
-	m_vs = GraphicsEngine::getInstance()->createVertexShader(shader_byte_code, size_shader);
-	m_vb->load(list.data(), sizeof(vertex), size_list, shader_byte_code, size_shader);
-	GraphicsEngine::getInstance()->releaseCompiledShader();
-
-	GraphicsEngine::getInstance()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
-	m_ps = GraphicsEngine::getInstance()->createPixelShader(shader_byte_code, size_shader);
-	GraphicsEngine::getInstance()->releaseCompiledShader();
-
+void Circle::onCreate()
+{
 	//Vector3D direction
 	float xDirection = Random::range(-100, 100);
 	float yDirection = Random::range(-100, 100);
 
-	m_direction = Vector3D(xDirection, yDirection, 0.0f);
-	m_direction = m_direction.normalize();
-	m_speed = 1.0f;
+	direction = Vector3D(xDirection, yDirection, 0.0f);
+	direction = direction.normalize();
+	speed = 1.0f;
 }
 
 void Circle::update(float deltaTime)
@@ -88,107 +70,59 @@ void Circle::update(float deltaTime)
 	float orthoWidth = width / 300.0f;
 	float orthoHeight = height / 300.0f;
 
-	if (position.m_y + this->radius >= orthoHeight / 2)
+	if (localPosition.y + this->radius >= orthoHeight / 2)
 	{
-		m_direction.m_y = m_direction.m_y * -1.0f;
-		position.m_y = (orthoHeight / 2) - this->radius;
+		direction.y = direction.y * -1.0f;
+		localPosition.y = (orthoHeight / 2) - this->radius;
 	}
 		
-	if (position.m_y - this->radius <= -orthoHeight / 2)
+	if (localPosition.y - this->radius <= -orthoHeight / 2)
 	{
-		m_direction.m_y = m_direction.m_y * -1.0f;
-		position.m_y = -(orthoHeight / 2) + this->radius;
+		direction.y = direction.y * -1.0f;
+		localPosition.y = -(orthoHeight / 2) + this->radius;
 	}
 
-	if (position.m_x + this->radius >= orthoWidth / 2)
+	if (localPosition.x + this->radius >= orthoWidth / 2)
 	{
-		m_direction.m_x = m_direction.m_x * -1.0f;
-		position.m_x = (orthoWidth / 2) - this->radius;
-	}
-		
-	if (position.m_x - this->radius <= -orthoWidth / 2)
-	{
-		m_direction.m_x = m_direction.m_x * -1.0f;
-		position.m_x = -(orthoWidth / 2) + this->radius;
+		direction.x = direction.x * -1.0f;
+		localPosition.x = (orthoWidth / 2) - this->radius;
 	}
 		
+	if (localPosition.x - this->radius <= -orthoWidth / 2)
+	{
+		direction.x = direction.x * -1.0f;
+		localPosition.x = -(orthoWidth / 2) + this->radius;
+	}
+		
 
-	position += m_direction * m_speed * EngineTime::getDeltaTime();
+	localPosition += direction * speed * EngineTime::getDeltaTime();
 
-	cc.m_world.setTranslation(position);
+	cc.m_world.setTranslation(localPosition);
 
 	cc.m_view.setIdentity();
 
 	cc.m_proj.setOrthoLH(orthoWidth, orthoHeight, -4.0f, 4.0f);
 
-	m_cb->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cc);
+	constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cc);
 }
 
 // Sets shaders and draws afterwards
-void Circle::draw()
+void Circle::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader)
 {
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_vs, m_cb);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(m_ps, m_cb);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexShader(m_vs);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setPixelShader(m_ps);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexShader(vertexShader);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setPixelShader(pixelShader);
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexBuffer(m_vb);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->drawTriangleStrip(m_vb->getSizeVertexList(), 0);
+	GraphicsEngine::getInstance()->getImmediateDeviceContext()->drawTriangleStrip(vertexBuffer->getSizeVertexList(), 0);
 }
 
 void Circle::onDestroy()
 {
-	m_vb->release();
-	m_cb->release();
-	m_vs->release();
-	m_ps->release();
+	vertexBuffer->release();
+	constantBuffer->release();
 	delete this;
 }
-
-void Circle::setPosition(Vector3D position)
-{
-	GameObject::setPosition(position);
-
-	for (int i = 0; i < list.size(); i++)
-	{
-		this->list[i].position.m_x += position.m_x;
-		this->list[i].position.m_y += position.m_y;
-		this->list[i].position.m_z += position.m_z;
-	}
-}
-
-// Too lazy to create a matrix
-void Circle::setScale(Vector3D scale)
-{
-	GameObject::setScale(scale);
-	for (int i = 0; i < list.size(); i++)
-	{
-		this->list[i].position.m_x -= position.m_x;
-		this->list[i].position.m_y -= position.m_y;
-		this->list[i].position.m_z -= position.m_z;
-	}
-	for (int i = 0; i < list.size(); i++)
-	{
-		this->list[i].position.m_x *= scale.m_x;
-		this->list[i].position.m_y *= scale.m_y;
-		this->list[i].position.m_z *= scale.m_z;
-	}
-	for (int i = 0; i < list.size(); i++)
-	{
-		this->list[i].position.m_x += position.m_x;
-		this->list[i].position.m_y += position.m_y;
-		this->list[i].position.m_z += position.m_z;
-	}
-}
-
-void Circle::setColor(Vector3D color)
-{
-	for (int i = 0; i < list.size(); i++)
-	{
-		this->list[i].color = color;
-		this->list[i].color1 = color;
-	}
-}
-

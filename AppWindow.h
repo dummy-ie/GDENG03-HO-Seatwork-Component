@@ -31,23 +31,21 @@ namespace application
 	class AppWindow : public Window, public InputListener
 	{
 	private:
-		SwapChain* m_swap_chain;
+		SwapChain* swapChain;
 
 		std::vector<Viewport*> viewPorts;
-		std::vector<GameObject*> objectList;
-		std::stack<GameObject*> objectStack;
-		//std::stack<GameObject*> objectList;
-		ConstantBuffer* m_cb;
+		
+		VertexShader* vertexShader;
+		PixelShader* pixelShader;
 	public:
 		virtual void onCreate() override;
 		virtual void onUpdate() override;
 		virtual void onDestroy() override;
 
-		virtual void onKeyDown(int key);
-		virtual void onKeyUp(int key);
+		virtual void onKeyDown(int key) override;
+		virtual void onKeyUp(int key) override;
 
 		void initializeEngine();
-		void updateQuadPosition();
 
 	private:
 		static AppWindow* P_SHARED_INSTANCE;
