@@ -30,8 +30,6 @@ private:
 	float m_speed;
 	Vector3D m_direction;
 
-	bool inLeft, inRight, inTop, inBottom = false;
-
 public:
 	Circle(float radius, int sides, Vector3D position, Vector3D scale, Vector3D color);
 	~Circle();

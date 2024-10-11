@@ -88,37 +88,29 @@ void Circle::update(float deltaTime)
 	float orthoWidth = width / 300.0f;
 	float orthoHeight = height / 300.0f;
 
-	if (position.m_y + this->radius >= orthoHeight / 2 && !inTop)
+	if (position.m_y + this->radius >= orthoHeight / 2)
 	{
-		inTop = true;
 		m_direction.m_y = m_direction.m_y * -1.0f;
+		position.m_y = (orthoHeight / 2) - this->radius;
 	}
-	else
-		inTop = false;
 		
-	if (position.m_y - this->radius <= -orthoHeight / 2 && !inBottom)
+	if (position.m_y - this->radius <= -orthoHeight / 2)
 	{
-		inBottom = true;
 		m_direction.m_y = m_direction.m_y * -1.0f;
+		position.m_y = -(orthoHeight / 2) + this->radius;
 	}
-	else
-		inBottom = false;
 
-	if (position.m_x + this->radius >= orthoWidth / 2 && !inRight)
+	if (position.m_x + this->radius >= orthoWidth / 2)
 	{
-		inRight = true;
 		m_direction.m_x = m_direction.m_x * -1.0f;
+		position.m_x = (orthoWidth / 2) - this->radius;
 	}
-	else
-		inRight = false;
 		
-	if (position.m_x - this->radius <= -orthoWidth / 2 && !inLeft)
+	if (position.m_x - this->radius <= -orthoWidth / 2)
 	{
-		inLeft = true;
 		m_direction.m_x = m_direction.m_x * -1.0f;
+		position.m_x = -(orthoWidth / 2) + this->radius;
 	}
-	else
-		inLeft = false;
 		
 
 	position += m_direction * m_speed * EngineTime::getDeltaTime();
