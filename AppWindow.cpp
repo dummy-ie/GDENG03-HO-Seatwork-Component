@@ -126,6 +126,15 @@ void AppWindow::onKeyUp(int key)
 		objectList.push_back(circle);
 		objectStack.push(circle);
 	}
+	else if (key == VK_DELETE)
+	{
+		if (!objectList.empty())
+		{
+			for (GameObject* object : objectList)
+				object->onDestroy();
+			objectList.clear();
+		}
+	}
 }
 
 void AppWindow::initializeEngine()
