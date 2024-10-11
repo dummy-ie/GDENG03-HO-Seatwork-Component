@@ -20,18 +20,17 @@ private:
 	float sides;
 
 	std::vector<vertex> list;
-	std::vector<unsigned int> indices;
 	Vector3D color;
 
 	VertexBuffer* m_vb;
-	IndexBuffer* m_ib;
 	ConstantBuffer* m_cb;
 	VertexShader* m_vs;
 	PixelShader* m_ps;
 
 	float m_speed;
 	Vector3D m_direction;
-	Vector3D direction;
+
+	bool inLeft, inRight, inTop, inBottom = false;
 
 public:
 	Circle(float radius, int sides, Vector3D position, Vector3D scale, Vector3D color);

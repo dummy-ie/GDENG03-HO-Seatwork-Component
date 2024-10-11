@@ -1,5 +1,6 @@
 #include "AppWindow.h"
 
+#include <string>
 #include <Windows.h>
 
 #include "Cube.h"
@@ -26,7 +27,7 @@ void AppWindow::onUpdate()
 	InputSystem::getInstance()->update();
 
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 
-		1.0, 0.0, 0.0, 1);
+		0.0, 0.0, 0.0, 1);
 
 	//RECT rc = this->getClientWindowRect();
 	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top, 0);
@@ -57,8 +58,12 @@ void AppWindow::onUpdate()
 	}
 	
 	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top, 1);
+	int frames = 1 / EngineTime::getDeltaTime();
+	std::string title = "[CABLAYAN] DirectXApplication | FPS : " + std::to_string(frames);
+	SetWindowTextA(m_hwnd, title.c_str());
+	m_swap_chain->present(true);
 
-	m_swap_chain->present(false);
+	
 }
 
 void AppWindow::onDestroy()
@@ -101,7 +106,12 @@ void AppWindow::onKeyDown(int key)
 	{
 		//m_rot_y -= 3.14f * EngineTime::getDeltaTime();
 	}
-	
+	else if (key == VK_SPACE) {
+		Circle* circle = new Circle(50.0f, 100, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1, 0, 0 });
+		circle->onCreate();
+		objectList.push_back(circle);
+		objectStack.push(circle);
+	}
 }
 
 void AppWindow::onKeyUp(int key)
@@ -117,7 +127,7 @@ void AppWindow::onKeyUp(int key)
 		}
 	}
 	else if (key == VK_SPACE) {
-		Circle* circle = new Circle(100.0f, 100, { 0.0f, 0.0f, 0.0f }, { 0.25f, 0.25f, 0.25f }, { 1, 0, 0 });
+		Circle* circle = new Circle(50.0f, 100, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f}, { 1, 0, 0 });
 		circle->onCreate();
 		objectList.push_back(circle);
 		objectStack.push(circle);
