@@ -64,6 +64,9 @@
     <Filter Include="GameEngine\Random">
       <UniqueIdentifier>{2fb7c529-6760-456c-bf67-5f373aa9f3ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="App\GameObjects\Plane">
+      <UniqueIdentifier>{fcb2f4b6-6dec-4895-9ca4-3031911e8a47}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -125,6 +128,10 @@
     </ClCompile>
     <ClCompile Include="Random.cpp">
       <Filter>GameEngine\Random</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectManager.cpp" />
+    <ClCompile Include="Plane.cpp">
+      <Filter>App\GameObjects\Plane</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +200,10 @@
     </ClInclude>
     <ClInclude Include="Random.h">
       <Filter>GameEngine\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectManager.h" />
+    <ClInclude Include="Plane.h">
+      <Filter>App\GameObjects\Plane</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

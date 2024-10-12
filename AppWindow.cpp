@@ -10,6 +10,7 @@
 #include "GameObjectManager.h"
 #include "Vector3D.h"
 #include "InputSystem.h"
+#include "Plane.h"
 #include "Random.h"
 
 using namespace application;
@@ -114,7 +115,7 @@ void AppWindow::initializeEngine()
 	GraphicsEngine::getInstance()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
 	vertexShader = GraphicsEngine::getInstance()->createVertexShader(shaderByteCode, sizeShader);
 
-	for (int i = 0; i < 100; i++)
+	/*for (int i = 0; i < 100; i++)
 	{
 		float x = Random::range(-0.75f, 0.75f);
 		float y = Random::range(-0.75f, 0.75f);
@@ -124,8 +125,13 @@ void AppWindow::initializeEngine()
 		cube->setPosition(x, y, 0.0f);
 		cube->setScale(0.25f, 0.25f, 0.25f);
 		GameObjectManager::getInstance()->addObject(cube);
-	}
+	}*/
 
+	Plane* plane = new Plane("Plane", shaderByteCode, sizeShader);
+	plane->setPosition(0.0f, 0.0f, 0.0f);
+	plane->setRotation(1.5f, 0.0f, 0.0f);
+	GameObjectManager::getInstance()->addObject(plane);
+	
 	GraphicsEngine::getInstance()->releaseCompiledShader();
 
 	GraphicsEngine::getInstance()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shaderByteCode, &sizeShader);

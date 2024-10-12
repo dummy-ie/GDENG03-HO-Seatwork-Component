@@ -142,6 +142,7 @@
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PixelShader.cpp" />
+    <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="RasterizerState.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="PixelShader.h" />
+    <ClInclude Include="Plane.h" />
     <ClInclude Include="Quad.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="RasterizerState.h" />
