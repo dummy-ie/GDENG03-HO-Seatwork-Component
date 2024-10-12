@@ -36,7 +36,7 @@ public:
 
 public:
 	virtual void update(float deltaTime) = 0;
-	virtual void draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader) = 0;
+	virtual void draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader);
 
 public:
 	void setPosition(float x, float y, float z);

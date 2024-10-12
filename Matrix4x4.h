@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "Vector3D.h"
+#include "Vector4D.h"
 
 namespace math
 {
@@ -27,7 +28,6 @@ namespace math
 
 		void setTranslation(const Vector3D& translation)
 		{
-			setIdentity();
 			m_mat[3][0] = translation.x;
 			m_mat[3][1] = translation.y;
 			m_mat[3][2] = translation.z;
@@ -35,7 +35,6 @@ namespace math
 
 		void setScale(const Vector3D& scale)
 		{
-			setIdentity();
 			m_mat[0][0] = scale.x;
 			m_mat[1][1] = scale.y;
 			m_mat[2][2] = scale.z;
@@ -65,6 +64,56 @@ namespace math
 			m_mat[1][1] = cos(z);
 		}
 
+		float getDeterminant()
+		{
+			Vector4D minor, vec1, vec2, vec3;
+			float det;
+
+			vec1 = Vector4D(this->m_mat[0][0], this->m_mat[1][0], this->m_mat[2][0], this->m_mat[3][0]);
+			vec2 = Vector4D(this->m_mat[0][1], this->m_mat[1][1], this->m_mat[2][1], this->m_mat[3][1]);
+			vec3 = Vector4D(this->m_mat[0][2], this->m_mat[1][2], this->m_mat[2][2], this->m_mat[3][2]);
+
+
+			minor.cross(vec1, vec2, vec3);
+			det = -(this->m_mat[0][3] * minor.x + this->m_mat[1][3] * minor.y + this->m_mat[2][3] * minor.z +
+				this->m_mat[3][3] * minor.w);
+			return det;
+		}
+
+		void inverse()
+		{
+			int a, i, j;
+			Matrix4x4 out;
+			Vector4D v, vec[3];
+			float det = 0.0f;
+
+			det = this->getDeterminant();
+			if (!det) return;
+			for (i = 0; i < 4; i++)
+			{
+				for (j = 0; j < 4; j++)
+				{
+					if (j != i)
+					{
+						a = j;
+						if (j > i) a = a - 1;
+						vec[a].x = (this->m_mat[j][0]);
+						vec[a].y = (this->m_mat[j][1]);
+						vec[a].z = (this->m_mat[j][2]);
+						vec[a].w = (this->m_mat[j][3]);
+					}
+				}
+				v.cross(vec[0], vec[1], vec[2]);
+
+				out.m_mat[0][i] = pow(-1.0f, i) * v.x / det;
+				out.m_mat[1][i] = pow(-1.0f, i) * v.y / det;
+				out.m_mat[2][i] = pow(-1.0f, i) * v.z / det;
+				out.m_mat[3][i] = pow(-1.0f, i) * v.w / det;
+			}
+
+			this->setMatrix(out);
+		}
+
 		void operator *=(const Matrix4x4& matrix)
 		{
 			Matrix4x4 out;
@@ -83,6 +132,17 @@ namespace math
 		void setMatrix(const Matrix4x4& matrix)
 		{
 			::memcpy(m_mat, matrix.m_mat, sizeof(float) * 16);
+		}
+
+		void setPerspectiveFovLH(float fov, float aspect, float z_near, float z_far)
+		{
+			float yScale = 1.0f / tan(fov / 2.0f);
+			float xScale = yScale / aspect;
+			m_mat[0][0] = xScale;
+			m_mat[1][1] = yScale;
+			m_mat[2][2] = z_far / (z_far - z_near);
+			m_mat[2][3] = 1.0f;
+			m_mat[3][2] = (-z_near * z_far) / (z_far - z_near);
 		}
 
 		void setOrthoLH(float width, float height, float near_plane, float far_plane)

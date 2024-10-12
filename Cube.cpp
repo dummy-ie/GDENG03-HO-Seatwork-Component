@@ -1,6 +1,7 @@
 #include "Cube.h"
 
 #include "AppWindow.h"
+#include "Camera.h"
 #include "EngineTime.h"
 #include "InputSystem.h"
 
@@ -91,6 +92,10 @@ void Cube::update(float deltaTime)
 	cbData.time = 0.0f;
 	//setRotation(deltaRotation, deltaRotation, deltaRotation);
 
+	elapsedTime += EngineTime::getDeltaTime();
+
+	this->localPosition = Vector3D::lerp(Vector3D(0.0f, 0.25f, 0.0f), Vector3D(0.0f, -1.25f, 0.0f), (sin(elapsedTime) + 1.0f) / 2.0f);
+
 	Matrix4x4 transform;
 	Matrix4x4 temp;
 
@@ -100,15 +105,15 @@ void Cube::update(float deltaTime)
 
 	// Scale * Rotation
 	temp.setIdentity();
-	temp.setRotationZ(this->localRotation.z);
+	temp.setRotationZ(0.0f);
 	transform *= temp;
 
 	temp.setIdentity();
-	temp.setRotationY(this->localRotation.y);
+	temp.setRotationY(0.0f);
 	transform *= temp;
 
 	temp.setIdentity();
-	temp.setRotationX(this->localRotation.x);
+	temp.setRotationX(0.0f);
 	transform *= temp;
 
 	// Scale * Rotation * Translation
@@ -118,14 +123,32 @@ void Cube::update(float deltaTime)
 
 	cbData.worldMatrix.setMatrix(transform);
 
-	cbData.viewMatrix.setIdentity();
+	//cbData.worldMatrix.setIdentity();
+
+	Matrix4x4 worldCam;
+	worldCam.setIdentity();
+
+	temp.setIdentity();
+	temp.setRotationX(Camera::main->getLocalRotation().x);
+	worldCam *= temp;
+
+	temp.setIdentity();
+	temp.setRotationY(Camera::main->getLocalRotation().y);
+	worldCam *= temp;
+
+	worldCam.setTranslation(Camera::main->getLocalPosition());
+
+	worldCam.inverse();
+	cbData.viewMatrix = worldCam;
 
 	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 
 	FLOAT width = windowRect.right - windowRect.left;
 	FLOAT height = windowRect.bottom - windowRect.top;
 
-	cbData.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
+	//cbData.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
+
+	cbData.projMatrix.setPerspectiveFovLH(1.57f, width / height, 0.1f, 100.0f);
 
 	constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cbData);
 }
@@ -172,6 +195,7 @@ void Cube::onKeyDown(int key)
 	{
 		this->localRotation.y -= atan(1) * 4 * EngineTime::getDeltaTime();
 	}*/
+
 }
 
 void Cube::onKeyUp(int key)
@@ -186,22 +210,22 @@ void Cube::onMouseMove(const Vector2D& deltaMousePosition)
 
 void Cube::onLeftMouseDown(const Vector2D& mousePosition)
 {
-	this->localScale = Vector3D(0.5f, 0.5f, 0.5f);
+	//this->localScale = Vector3D(0.5f, 0.5f, 0.5f);
 }
 
 void Cube::onLeftMouseUp(const Vector2D& mousePosition)
 {
-	this->localScale = Vector3D(1.0f, 1.0f, 1.0f);
+	//this->localScale = Vector3D(1.0f, 1.0f, 1.0f);
 }
 
 void Cube::onRightMouseDown(const Vector2D& mousePosition)
 {
-	this->localScale = Vector3D(2.0f, 2.0f, 2.0f);
+	//this->localScale = Vector3D(2.0f, 2.0f, 2.0f);
 }
 
 void Cube::onRightMouseUp(const Vector2D& mousePosition)
 {
-	this->localScale = Vector3D(1.0f, 1.0f, 1.0f);
+	//this->localScale = Vector3D(1.0f, 1.0f, 1.0f);
 }
 
 void Cube::setSpeed(float speed)

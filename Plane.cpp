@@ -1,5 +1,6 @@
 #include "Plane.h"
 #include "AppWindow.h"
+#include "Camera.h"
 #include "EngineTime.h"
 #include "InputSystem.h"
 
@@ -10,10 +11,10 @@ Plane::Plane(std::string name, void* shaderByteCode, size_t sizeShader) : GameOb
 {
 	vertex list[] =
 	{
-		{ Vector3D(-0.5f,0.0f,-0.5f),   Vector3D(1,1,1), Vector3D(1,1,1) },
-		{ Vector3D(-0.5f,0.0f,0.5f),   Vector3D(1,1,1), Vector3D(1,1,1) },
-		{ Vector3D(0.5f,0.0f,-0.5f), Vector3D(1,1,1),  Vector3D(1,1,1) },
-		{ Vector3D(0.5f,0.0f,0.5f),    Vector3D(1,1,1), Vector3D(1,1,1) }
+		{ Vector3D(-1.0f,0.0f,-1.0f),   Vector3D(1,1,1), Vector3D(1,1,1) },
+		{ Vector3D(-1.0f,0.0f,1.0f),   Vector3D(1,1,1), Vector3D(1,1,1) },
+		{ Vector3D(1.0f,0.0f,-1.0f), Vector3D(1,1,1),  Vector3D(1,1,1) },
+		{ Vector3D(1.0f,0.0f,1.0f),    Vector3D(1,1,1), Vector3D(1,1,1) }
 	};
 
 	/*vertex list[] =
@@ -78,14 +79,30 @@ void Plane::update(float deltaTime)
 
 	cbData.worldMatrix.setMatrix(transform);
 
-	cbData.viewMatrix.setIdentity();
+	Matrix4x4 worldCam;
+	worldCam.setIdentity();
+
+	temp.setIdentity();
+	temp.setRotationX(Camera::main->getLocalRotation().x);
+	worldCam *= temp;
+
+	temp.setIdentity();
+	temp.setRotationY(Camera::main->getLocalRotation().y);
+	worldCam *= temp;
+
+	worldCam.setTranslation(Camera::main->getLocalPosition());
+
+	worldCam.inverse();
+	cbData.viewMatrix = worldCam;
 
 	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 
 	FLOAT width = windowRect.right - windowRect.left;
 	FLOAT height = windowRect.bottom - windowRect.top;
 
-	cbData.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
+	//cbData.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
+
+	cbData.projMatrix.setPerspectiveFovLH(1.57f, width / height, 0.1f, 100.0f);
 
 	constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cbData);
 }

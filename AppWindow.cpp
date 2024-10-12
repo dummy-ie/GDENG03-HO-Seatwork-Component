@@ -3,6 +3,7 @@
 #include <string>
 #include <Windows.h>
 
+#include "Camera.h"
 #include "Cube.h"
 #include "Circle.h"
 #include "Quad.h"
@@ -158,12 +159,19 @@ void AppWindow::initializeEngine()
 		GameObjectManager::getInstance()->addObject(cube);
 	}*/
 
+	Camera* camera = new Camera("main");
+	Camera::main = camera;
+	camera->setPosition(0, 0, -2);
+	GameObjectManager::getInstance()->addObject(camera);
+
 	Cube* cube = new Cube("Cube", shaderByteCode, sizeShader);
+	cube->setPosition(0.0f, -0.5f, 0.0f);
+	cube->setScale(0.25f, 0.25f, 0.25f);
 	GameObjectManager::getInstance()->addObject(cube);
 
 	Plane* plane = new Plane("Plane", shaderByteCode, sizeShader);
-	plane->setPosition(0.0f, 0.0f, 0.0f);
-	plane->setRotation(1.5f, 0.0f, 0.0f);
+	plane->setPosition(0.0f, -0.5f, 0.0f);
+	//plane->setRotation(1.5f, 0.0f, 0.0f);
 	GameObjectManager::getInstance()->addObject(plane);
 	
 	GraphicsEngine::getInstance()->releaseCompiledShader();
@@ -178,6 +186,10 @@ void AppWindow::initializeEngine()
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, height / 2, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));*/
+}
+
+void AppWindow::update()
+{
 }
 
 AppWindow* AppWindow::P_SHARED_INSTANCE = NULL;

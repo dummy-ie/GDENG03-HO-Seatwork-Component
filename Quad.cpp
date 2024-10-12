@@ -50,8 +50,12 @@ void Quad::update(float deltaTime)
 		deltaPosition = 0;
 
 	Matrix4x4 temp;
-	
+
+	cc.worldMatrix.setIdentity();
+
 	cc.worldMatrix.setScale(Vector3D::lerp(Vector3D(0.5f, 0.5, 0), Vector3D(1, 1, 0), (sin(deltaScale) + 1.0f) / 2.0f));
+
+	temp.setIdentity();
 	temp.setTranslation(Vector3D::lerp(Vector3D(0.1f, -1.5f, 0), Vector3D(1.5f, 1.5f, 0), deltaPosition));
 	cc.worldMatrix *= temp;
 

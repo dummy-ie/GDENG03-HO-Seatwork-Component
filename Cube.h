@@ -25,6 +25,7 @@ private:
 	float angle;
 	float speed = 1.0f;
 	bool startRotate = false;
+	float elapsedTime = 0.0f;
 
 public:
 	Cube(std::string name, void* shaderByteCode, size_t sizeShader);

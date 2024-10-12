@@ -46,11 +46,11 @@ namespace math
 			return Vector3D(x + vec.x, y + vec.y, z + vec.z);
 		}
 
-		Vector3D operator*(double num) const {
+		Vector3D operator*(float num) const {
 			return Vector3D(x * num, y * num, z * num);
 		}
 
-		Vector3D operator/(double num) const {
+		Vector3D operator/(float num) const {
 			return Vector3D(x / num, y / num, z / num);
 		}
 

@@ -47,6 +47,9 @@ namespace application
 		void initializeEngine();
 
 	private:
+		void update();
+
+	private:
 		static AppWindow* P_SHARED_INSTANCE;
 
 	private:
