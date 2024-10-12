@@ -66,6 +66,18 @@ void AppWindow::onDestroy()
 	GameObjectManager::destroy();
 }
 
+void AppWindow::onFocus()
+{
+	Window::onFocus();
+	InputSystem::getInstance()->startUpdate();
+}
+
+void AppWindow::onKillFocus()
+{
+	Window::onKillFocus();
+	InputSystem::getInstance()->stopUpdate();
+}
+
 void AppWindow::onKeyDown(int key)
 {
 	
@@ -89,9 +101,28 @@ void AppWindow::onKeyUp(int key)
 	}
 }
 
+void AppWindow::onMouseMove(const Vector2D& deltaMousePosition)
+{
+}
+
+void AppWindow::onLeftMouseDown(const Vector2D& mousePosition)
+{
+}
+
+void AppWindow::onLeftMouseUp(const Vector2D& mousePosition)
+{
+}
+
+void AppWindow::onRightMouseDown(const Vector2D& mousePosition)
+{
+}
+
+void AppWindow::onRightMouseUp(const Vector2D& mousePosition)
+{
+}
+
 void AppWindow::initializeEngine()
 {
-	InputSystem::initialize();
 	Random::initialize();
 
 	InputSystem::getInstance()->addListener(this);
@@ -126,6 +157,9 @@ void AppWindow::initializeEngine()
 		cube->setScale(0.25f, 0.25f, 0.25f);
 		GameObjectManager::getInstance()->addObject(cube);
 	}*/
+
+	Cube* cube = new Cube("Cube", shaderByteCode, sizeShader);
+	GameObjectManager::getInstance()->addObject(cube);
 
 	Plane* plane = new Plane("Plane", shaderByteCode, sizeShader);
 	plane->setPosition(0.0f, 0.0f, 0.0f);

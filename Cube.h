@@ -38,6 +38,13 @@ public:
 
 	virtual void onKeyDown(int key) override;
 	virtual void onKeyUp(int key) override;
+	virtual void onMouseMove(const Vector2D& deltaMousePosition) override;
+
+	virtual void onLeftMouseDown(const Vector2D& mousePosition) override;
+	virtual void onLeftMouseUp(const Vector2D& mousePosition) override;
+
+	virtual void onRightMouseDown(const Vector2D& mousePosition) override;
+	virtual void onRightMouseUp(const Vector2D& mousePosition) override;
 
 	void setSpeed(float speed);
 };

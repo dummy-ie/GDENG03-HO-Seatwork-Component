@@ -31,9 +31,18 @@ namespace application
 		virtual void onCreate() override;
 		virtual void onUpdate() override;
 		virtual void onDestroy() override;
+		virtual void onFocus() override;
+		virtual void onKillFocus() override;
 
 		virtual void onKeyDown(int key) override;
 		virtual void onKeyUp(int key) override;
+		virtual void onMouseMove(const Vector2D& deltaMousePosition) override;
+
+		virtual void onLeftMouseDown(const Vector2D& mousePosition) override;
+		virtual void onLeftMouseUp(const Vector2D& mousePosition) override;
+
+		virtual void onRightMouseDown(const Vector2D& mousePosition) override;
+		virtual void onRightMouseUp(const Vector2D& mousePosition) override;
 
 		void initializeEngine();
 

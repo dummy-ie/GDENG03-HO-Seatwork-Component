@@ -85,11 +85,11 @@ void Cube::update(float deltaTime)
 {
 	CBData cbData;
 
-	if (startRotate)
-		deltaRotation += EngineTime::getDeltaTime() * speed;
+	//if (startRotate)
+	//	deltaRotation += EngineTime::getDeltaTime() * speed;
 
 	cbData.time = 0.0f;
-	setRotation(deltaRotation, deltaRotation, deltaRotation);
+	//setRotation(deltaRotation, deltaRotation, deltaRotation);
 
 	Matrix4x4 transform;
 	Matrix4x4 temp;
@@ -155,7 +155,7 @@ void Cube::onDestroy()
 
 void Cube::onKeyDown(int key)
 {
-	if (key == 'W')
+	/*if (key == 'W')
 	{
 		this->startRotate = true;
 		this->localRotation.x += atan(1) * 4 * EngineTime::getDeltaTime();
@@ -171,11 +171,37 @@ void Cube::onKeyDown(int key)
 	else if (key == 'D')
 	{
 		this->localRotation.y -= atan(1) * 4 * EngineTime::getDeltaTime();
-	}
+	}*/
 }
 
 void Cube::onKeyUp(int key)
 {
+}
+
+void Cube::onMouseMove(const Vector2D& deltaMousePosition)
+{
+	localRotation.x -= deltaMousePosition.y * EngineTime::getDeltaTime();
+	localRotation.y -= deltaMousePosition.x * EngineTime::getDeltaTime();
+}
+
+void Cube::onLeftMouseDown(const Vector2D& mousePosition)
+{
+	this->localScale = Vector3D(0.5f, 0.5f, 0.5f);
+}
+
+void Cube::onLeftMouseUp(const Vector2D& mousePosition)
+{
+	this->localScale = Vector3D(1.0f, 1.0f, 1.0f);
+}
+
+void Cube::onRightMouseDown(const Vector2D& mousePosition)
+{
+	this->localScale = Vector3D(2.0f, 2.0f, 2.0f);
+}
+
+void Cube::onRightMouseUp(const Vector2D& mousePosition)
+{
+	this->localScale = Vector3D(1.0f, 1.0f, 1.0f);
 }
 
 void Cube::setSpeed(float speed)

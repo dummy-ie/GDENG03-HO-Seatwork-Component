@@ -7,46 +7,96 @@ InputSystem* InputSystem::P_SHARED_INSTANCE = nullptr;
 
 void InputSystem::update()
 {
-	if (::GetKeyboardState(m_keys_state))
+	if (shouldUpdate)
 	{
-		for (unsigned int i = 0; i < 256; i++)
-		{
-			// Key is down
-			if (m_keys_state[i] & 0x80)
-			{
-				std::unordered_set<InputListener*>::iterator it = m_set_listeners.begin();
-				while (it != m_set_listeners.end()) {
-					(*it)->onKeyDown(i);
-					++it;
-				}
-			}
-			else // Key is up
-			{
-				if (m_keys_state[i] != m_old_keys_state[i])
-				{
-					std::unordered_set<InputListener*>::iterator it = m_set_listeners.begin();
+		POINT currentMousePosition = {};
+		::GetCursorPos(&currentMousePosition);
 
-					while (it != m_set_listeners.end())
-					{
-						(*it)->onKeyUp(i);
+		if (firstTime)
+		{
+			firstTime = false;
+			oldMousePosition = Vector2D(currentMousePosition.x, currentMousePosition.y);
+		}
+
+		if (currentMousePosition.x != oldMousePosition.x || currentMousePosition.y != oldMousePosition.y)
+		{
+			std::unordered_set<InputListener*>::iterator it = setListeners.begin();
+			while (it != setListeners.end()) {
+				(*it)->onMouseMove(Vector2D(currentMousePosition.x - oldMousePosition.x, currentMousePosition.y - oldMousePosition.y));
+				++it;
+			}
+		}
+
+		oldMousePosition = Vector2D(currentMousePosition.x, currentMousePosition.y);
+
+		if (::GetKeyboardState(keysState))
+		{
+			for (unsigned int i = 0; i < 256; i++)
+			{
+				// Key is down
+				if (keysState[i] & 0x80)
+				{
+					std::unordered_set<InputListener*>::iterator it = setListeners.begin();
+					while (it != setListeners.end()) {
+						if (i == VK_LBUTTON)
+						{
+							if (keysState[i] != oldKeysState[i])
+								(*it)->onLeftMouseDown(Vector2D(currentMousePosition.x, currentMousePosition.y));
+						}
+						else if (i == VK_RBUTTON)
+						{
+							if (keysState[i] != oldKeysState[i])
+								(*it)->onRightMouseDown(Vector2D(currentMousePosition.x, currentMousePosition.y));
+						}
+						else
+							(*it)->onKeyDown(i);
+
 						++it;
 					}
 				}
+				else // Key is up
+				{
+					if (keysState[i] != oldKeysState[i])
+					{
+						std::unordered_set<InputListener*>::iterator it = setListeners.begin();
+
+						while (it != setListeners.end())
+						{
+							if (i == VK_LBUTTON)
+								(*it)->onLeftMouseUp(Vector2D(currentMousePosition.x, currentMousePosition.y));
+							else if (i == VK_RBUTTON)
+								(*it)->onRightMouseUp(Vector2D(currentMousePosition.x, currentMousePosition.y));
+							else
+							(*it)->onKeyUp(i);
+							++it;
+						}
+					}
+				}
 			}
+			// Store current key state to old key state
+			::memcpy(oldKeysState, keysState, sizeof(unsigned char) * 256);
 		}
-		// Store current key state to old key state
-		::memcpy(m_old_keys_state, m_keys_state, sizeof(unsigned char) * 256);
 	}
+}
+
+void InputSystem::stopUpdate()
+{
+	shouldUpdate = false;
+}
+
+void InputSystem::startUpdate()
+{
+	shouldUpdate = true;
 }
 
 void InputSystem::addListener(InputListener* listener)
 {
-	m_set_listeners.insert(listener);
+	setListeners.insert(listener);
 }
 
 void InputSystem::removeListener(InputListener* listener)
 {
-	m_set_listeners.erase(listener);
+	setListeners.erase(listener);
 }
 
 InputSystem::InputSystem() {}
