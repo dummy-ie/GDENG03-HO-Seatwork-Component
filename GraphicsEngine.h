@@ -49,6 +49,7 @@ namespace engine
 		public:
 			SwapChain* createSwapChain();
 			DeviceContext* getImmediateDeviceContext();
+			IDXGIFactory* getDirectXFactory();
 			VertexBuffer* createVertexBuffer();
 			IndexBuffer* createIndexBuffer();
 			ConstantBuffer* createConstantBuffer();

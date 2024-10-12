@@ -22,7 +22,10 @@ private:
 	IndexBuffer* indexBuffer;
 
 	float deltaRotation;
+	float angle;
 	float speed = 1.0f;
+	bool startRotate = false;
+
 public:
 	Cube(std::string name, void* shaderByteCode, size_t sizeShader);
 	~Cube();

@@ -27,7 +27,7 @@ void AppWindow::onUpdate()
 	InputSystem::getInstance()->update();
 
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->clearRenderTargetColor(this->swapChain, 
-		0.0, 0.0, 0.0, 1);
+		0.3, 0.3, 0.6, 1);
 
 	for (int i = 0; i < viewPorts.size(); i++)
 	{
@@ -41,7 +41,7 @@ void AppWindow::onUpdate()
 		GameObjectManager::getInstance()->draw(this, vertexShader, pixelShader);
 	}
 
-	swapChain->present(true);
+	swapChain->present(false);
 }
 
 void AppWindow::onDestroy()
@@ -106,8 +106,7 @@ void AppWindow::initializeEngine()
 
 	swapChain->init(this->m_hwnd, width, height);
 	
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
+	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
 
 	void* shaderByteCode = nullptr;
 	size_t sizeShader = 0;
@@ -133,6 +132,7 @@ void AppWindow::initializeEngine()
 	pixelShader = GraphicsEngine::getInstance()->createPixelShader(shaderByteCode, sizeShader);
 	GraphicsEngine::getInstance()->releaseCompiledShader();
 
+	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
 	
 	/*viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, 0.0f, width / 2, height / 2, 0.0f, 1.0f));

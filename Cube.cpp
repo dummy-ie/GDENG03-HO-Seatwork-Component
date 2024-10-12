@@ -61,7 +61,8 @@ Cube::Cube(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 	indexBuffer->load(indexList, ARRAYSIZE(indexList));
 
 	CBData cbData;
-	cbData.time = 0.0f;
+	angle = 0.0f;
+	cbData.time = angle;
 
 	constantBuffer = GraphicsEngine::getInstance()->createConstantBuffer();
 	constantBuffer->load(&cbData, sizeof(CBData));
@@ -84,8 +85,10 @@ void Cube::update(float deltaTime)
 {
 	CBData cbData;
 
-	deltaRotation += EngineTime::getDeltaTime() * speed;
+	if (startRotate)
+		deltaRotation += EngineTime::getDeltaTime() * speed;
 
+	cbData.time = 0.0f;
 	setRotation(deltaRotation, deltaRotation, deltaRotation);
 
 	Matrix4x4 transform;
@@ -154,6 +157,7 @@ void Cube::onKeyDown(int key)
 {
 	if (key == 'W')
 	{
+		this->startRotate = true;
 		this->localRotation.x += atan(1) * 4 * EngineTime::getDeltaTime();
 	}
 	else if (key == 'S')
