@@ -13,7 +13,14 @@ cbuffer constant : register(b0)
     float time;
 };
 
+cbuffer editor : register(b1)
+{
+    bool wireframe;
+}
+
 float4 psmain(PS_INPUT input) : SV_TARGET
 {
+    if (wireframe)
+        return float4(0.0, 0.0, 0.0, 0.0);
     return float4(lerp(input.color, input.color1, (sin(time) + 1.0f) / 2.0f), 1.0f);
 }

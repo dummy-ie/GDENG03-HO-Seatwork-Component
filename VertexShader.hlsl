@@ -20,6 +20,11 @@ cbuffer constant : register(b0)
     float time;
 };
 
+cbuffer editor : register(b1)
+{
+    bool wireframe;
+}
+
 VS_OUTPUT vsmain(VS_INPUT input)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;

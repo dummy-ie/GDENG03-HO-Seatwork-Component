@@ -61,6 +61,13 @@ void DeviceContext::drawTriangleStrip(UINT vertex_count, UINT start_vertex_index
 	m_device_context->Draw(vertex_count, start_vertex_index);
 }
 
+void DeviceContext::drawLineStrip(UINT vertex_count, UINT start_vertex_index)
+{
+	m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+
+	m_device_context->Draw(vertex_count, start_vertex_index);
+}
+
 void DeviceContext::setViewport(Viewport* vp)
 {
 	m_device_context->RSSetViewports(1, &vp->vp);
@@ -99,14 +106,14 @@ void DeviceContext::setPixelShader(PixelShader* pixel_shader)
 	m_device_context->PSSetShader(pixel_shader->m_ps, nullptr, 0);
 }
 
-void DeviceContext::setConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer)
+void DeviceContext::setConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer, int index)
 {
-	m_device_context->VSSetConstantBuffers(0, 1, &buffer->m_buffer);
+	m_device_context->VSSetConstantBuffers(index, 1, &buffer->m_buffer);
 }
 
-void DeviceContext::setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer)
+void DeviceContext::setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer, int index)
 {
-	m_device_context->PSSetConstantBuffers(0, 1, &buffer->m_buffer);
+	m_device_context->PSSetConstantBuffers(index, 1, &buffer->m_buffer);
 }
 
 void DeviceContext::setRasterizerState(RasterizerState* rasterizer_state)

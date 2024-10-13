@@ -36,6 +36,7 @@ namespace engine
 			void drawTriangleList(UINT vertex_count, UINT start_vertex_index);
 			void drawIndexedTriangleList(UINT index_count, UINT start_vertex_index, UINT start_index_location);
 			void drawTriangleStrip(UINT vertex_count, UINT start_vertex_index);
+			void drawLineStrip(UINT vertex_count, UINT start_vertex_index);
 
 			//void setViewportSize(UINT width, UINT height, int index);
 			void setViewport(Viewport* vp);
@@ -43,8 +44,8 @@ namespace engine
 			void setVertexShader(VertexShader* vertex_shader);
 			void setPixelShader(PixelShader* pixel_shader);
 
-			void setConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer);
-			void setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer);
+			void setConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer, int index = 0);
+			void setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer, int index = 0);
 			void setRasterizerState(RasterizerState* rasterizer_state);
 
 

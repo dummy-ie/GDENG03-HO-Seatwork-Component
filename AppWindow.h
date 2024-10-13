@@ -27,6 +27,7 @@ namespace application
 		
 		VertexShader* vertexShader;
 		PixelShader* pixelShader;
+		ConstantBuffer* constantBuffer;
 	public:
 		virtual void onCreate() override;
 		virtual void onUpdate() override;

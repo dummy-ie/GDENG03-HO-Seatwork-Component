@@ -1,6 +1,7 @@
 #include "Plane.h"
 #include "AppWindow.h"
 #include "Camera.h"
+#include "CameraManager.h"
 #include "EngineTime.h"
 #include "InputSystem.h"
 
@@ -9,12 +10,18 @@ using namespace application;
 
 Plane::Plane(std::string name, void* shaderByteCode, size_t sizeShader) : GameObject(name)
 {
+
+	Vector3D color1 = Vector3D(255.0f / 255.0f, 227.0f / 255.0f, 222.0f / 255.0f);
+	Vector3D color2 = Vector3D(241.0f / 255.0f, 204.0f / 255.0f, 202.0f / 255.0f);
+	Vector3D color3 = Vector3D(226.0f / 255.0f, 180.0f / 255.0f, 181.0f / 255.0f);
+	Vector3D color4 = Vector3D(212.0f / 255.0f, 157.0f / 255.0f, 161.0f / 255.0f);
+
 	vertex list[] =
 	{
-		{ Vector3D(-1.0f,0.0f,-1.0f),   Vector3D(1,1,1), Vector3D(1,1,1) },
-		{ Vector3D(-1.0f,0.0f,1.0f),   Vector3D(1,1,1), Vector3D(1,1,1) },
-		{ Vector3D(1.0f,0.0f,-1.0f), Vector3D(1,1,1),  Vector3D(1,1,1) },
-		{ Vector3D(1.0f,0.0f,1.0f),    Vector3D(1,1,1), Vector3D(1,1,1) }
+		{ Vector3D(-1.0f,0.0f,-1.0f),   color1, color1 },
+		{ Vector3D(-1.0f,0.0f,1.0f),   color2, color2 },
+		{ Vector3D(1.0f,0.0f,-1.0f), color3,  color3 },
+		{ Vector3D(1.0f,0.0f,1.0f),    color4, color4 }
 	};
 
 	/*vertex list[] =
@@ -83,14 +90,14 @@ void Plane::update(float deltaTime)
 	worldCam.setIdentity();
 
 	temp.setIdentity();
-	temp.setRotationX(Camera::main->getLocalRotation().x);
+	temp.setRotationX(CameraManager::getInstance()->getMainCamera()->getLocalRotation().x);
 	worldCam *= temp;
 
 	temp.setIdentity();
-	temp.setRotationY(Camera::main->getLocalRotation().y);
+	temp.setRotationY(CameraManager::getInstance()->getMainCamera()->getLocalRotation().y);
 	worldCam *= temp;
 
-	worldCam.setTranslation(Camera::main->getLocalPosition());
+	worldCam.setTranslation(CameraManager::getInstance()->getMainCamera()->getLocalPosition());
 
 	worldCam.inverse();
 	cbData.viewMatrix = worldCam;

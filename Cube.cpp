@@ -2,6 +2,7 @@
 
 #include "AppWindow.h"
 #include "Camera.h"
+#include "CameraManager.h"
 #include "EngineTime.h"
 #include "InputSystem.h"
 
@@ -22,17 +23,22 @@ Cube::Cube(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 	this->vertex_list[7] = { Vector3D(-0.5f, -0.5f, 0.5f), Vector3D(0, 1, 0), Vector3D(0, 0.2f, 0) };
 	*/
 
+	Vector3D color1 = Vector3D(230.0f / 255.0f, 230.0f / 255.0f, 250.0f / 255.0f);
+	Vector3D color2 = Vector3D(214.0f / 255.0f, 209.0f / 255.0f, 236.0f / 255.0f);
+	Vector3D color3 = Vector3D(182.0f / 255.0f, 166.0f / 255.0f, 209.0f / 255.0f);
+	Vector3D color4 = Vector3D(150.0f / 255.0f, 123.0f / 255.0f, 182.0f / 255.0f);
+
 	vertex vertexList[] =
 	{
-		{Vector3D(-0.5f,-0.5f,-0.5f),Vector3D(1, 0, 0), Vector3D(0.2f, 0, 0) },
-		{Vector3D(-0.5f,0.5f, -0.5f),Vector3D(1, 1, 0), Vector3D(0.2f, 0.2f, 0) },
-		{Vector3D(0.5f, 0.5f, -0.5f),Vector3D(1, 1, 0), Vector3D(0.2f, 0.2f, 0) },
-		{Vector3D(0.5f, -0.5f,-0.5f),Vector3D(1, 0, 0), Vector3D(0.2f, 0, 0) },
-
-		{Vector3D(0.5f, -0.5f,0.5f), Vector3D(0, 1, 0), Vector3D(0, 0.2f, 0) },
-		{Vector3D(0.5f, 0.5f, 0.5f), Vector3D(0, 1, 1), Vector3D(0, 0.2f, 0.2f) },
-		{Vector3D(-0.5f,0.5f, 0.5f), Vector3D(0, 1, 1), Vector3D(0, 0.2f, 0.2f) },
-		{Vector3D(-0.5f,-0.5f,0.5f), Vector3D(0, 1, 0), Vector3D(0, 0.2f, 0) }
+		{Vector3D(-0.5f,-0.5f,-0.5f),color3, color3 },
+		{Vector3D(-0.5f,0.5f, -0.5f),color1, color1 },
+		{Vector3D(0.5f, 0.5f, -0.5f),color1, color1 },
+		{Vector3D(0.5f, -0.5f,-0.5f),color3, color3 },
+																									
+		{Vector3D(0.5f, -0.5f,0.5f), color4, color4 },
+		{Vector3D(0.5f, 0.5f, 0.5f), color2, color2 },
+		{Vector3D(-0.5f,0.5f, 0.5f), color2, color2 },
+		{Vector3D(-0.5f,-0.5f,0.5f), color4, color4 }
 	};
 
 	vertexBuffer = GraphicsEngine::getInstance()->createVertexBuffer();
@@ -92,7 +98,7 @@ void Cube::update(float deltaTime)
 	cbData.time = 0.0f;
 	//setRotation(deltaRotation, deltaRotation, deltaRotation);
 
-	elapsedTime += EngineTime::getDeltaTime();
+	elapsedTime += EngineTime::getDeltaTime() / 2.0f;
 
 	this->localPosition = Vector3D::lerp(Vector3D(0.0f, 0.25f, 0.0f), Vector3D(0.0f, -1.25f, 0.0f), (sin(elapsedTime) + 1.0f) / 2.0f);
 
@@ -129,14 +135,14 @@ void Cube::update(float deltaTime)
 	worldCam.setIdentity();
 
 	temp.setIdentity();
-	temp.setRotationX(Camera::main->getLocalRotation().x);
+	temp.setRotationX(CameraManager::getInstance()->getMainCamera()->getLocalRotation().x);
 	worldCam *= temp;
 
 	temp.setIdentity();
-	temp.setRotationY(Camera::main->getLocalRotation().y);
+	temp.setRotationY(CameraManager::getInstance()->getMainCamera()->getLocalRotation().y);
 	worldCam *= temp;
 
-	worldCam.setTranslation(Camera::main->getLocalPosition());
+	worldCam.setTranslation(CameraManager::getInstance()->getMainCamera()->getLocalPosition());
 
 	worldCam.inverse();
 	cbData.viewMatrix = worldCam;

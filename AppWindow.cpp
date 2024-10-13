@@ -3,7 +3,9 @@
 #include <string>
 #include <Windows.h>
 
+#include "Border.h"
 #include "Camera.h"
+#include "CameraManager.h"
 #include "Cube.h"
 #include "Circle.h"
 #include "Quad.h"
@@ -11,11 +13,17 @@
 #include "GameObjectManager.h"
 #include "Vector3D.h"
 #include "InputSystem.h"
+#include "OrbitCamera.h"
 #include "Plane.h"
 #include "Random.h"
 
 using namespace application;
 
+__declspec(align(16))
+struct CBEditor
+{
+	int32_t wireframe;
+};
 
 void AppWindow::onCreate()
 {
@@ -29,22 +37,27 @@ void AppWindow::onUpdate()
 	InputSystem::getInstance()->update();
 
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->clearRenderTargetColor(this->swapChain, 
-		0.3, 0.3, 0.6, 1);
-
-	if (InputSystem::getInstance()->getKey('A'))
-	{
-		std::cout << "A key is up" << std::endl;
-	}
+		0.83, 0.58, 0.895, 1);
 
 	for (int i = 0; i < viewPorts.size(); i++)
 	{
 		GraphicsEngine::getInstance()->getImmediateDeviceContext()->setViewport(viewPorts[i]);
-		if (i % 2 == 1)
+		CBEditor cbData;
+		cbData.wireframe = false;
+		viewPorts[i]->setRasterizerSolidState();
+		if (i == 1 || i == 2 || i ==4)
+		{
 			viewPorts[i]->setRasterizerWireframeState();
-		else
-			viewPorts[i]->setRasterizerSolidState();
-		
+			cbData.wireframe = true;
+		}
+
+		CameraManager::getInstance()->setMainCameraByIndex(i);
+
+		constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cbData);
+
 		GameObjectManager::getInstance()->update(EngineTime::getDeltaTime());
+		//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer, 1);
+		GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer, 1);
 		GameObjectManager::getInstance()->draw(this, vertexShader, pixelShader);
 	}
 
@@ -146,6 +159,12 @@ void AppWindow::initializeEngine()
 	
 	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
 
+	CBEditor cbData;
+	cbData.wireframe = false;
+
+	constantBuffer = GraphicsEngine::getInstance()->createConstantBuffer();
+	constantBuffer->load(&cbData, sizeof(CBEditor));
+
 	void* shaderByteCode = nullptr;
 	size_t sizeShader = 0;
 
@@ -164,11 +183,6 @@ void AppWindow::initializeEngine()
 		GameObjectManager::getInstance()->addObject(cube);
 	}*/
 
-	Camera* camera = new Camera("main");
-	Camera::main = camera;
-	camera->setPosition(0, 0, -2);
-	GameObjectManager::getInstance()->addObject(camera);
-
 	Cube* cube = new Cube("Cube", shaderByteCode, sizeShader);
 	cube->setPosition(0.0f, -0.5f, 0.0f);
 	cube->setScale(0.25f, 0.25f, 0.25f);
@@ -178,19 +192,59 @@ void AppWindow::initializeEngine()
 	plane->setPosition(0.0f, -0.5f, 0.0f);
 	//plane->setRotation(1.5f, 0.0f, 0.0f);
 	GameObjectManager::getInstance()->addObject(plane);
-	
+
+	Border* border = new Border("Border", shaderByteCode, sizeShader);
+	GameObjectManager::getInstance()->addObject(border);
+
+	OrbitCamera* camera1 = new OrbitCamera("Camera 1");
+	camera1->setPosition(0, 0, -2);
+	camera1->setObjectToOrbit(cube);
+	camera1->setSpeed(10.0f);
+	GameObjectManager::getInstance()->addObject(camera1);
+	CameraManager::getInstance()->addCamera(camera1);
+
+	OrbitCamera* camera2 = new OrbitCamera("Camera 2");
+	camera2->setPosition(0, 0, -2);
+	camera2->setObjectToOrbit(cube);
+	camera2->setSpeed(-10.0f);
+	GameObjectManager::getInstance()->addObject(camera2);
+	CameraManager::getInstance()->addCamera(camera2);
+
+	Camera* camera3 = new Camera("Camera 3");
+	camera3->setPosition(0, 0, -2);
+	GameObjectManager::getInstance()->addObject(camera3);
+	CameraManager::getInstance()->addCamera(camera3);
+
+	Camera* camera4 = new Camera("Camera 4");
+	camera4->setPosition(0, 0.75, -0.75f);
+	Vector3D newRotation = camera4->getLocalRotation();
+	newRotation.x = 45;
+	camera4->setRotation(newRotation);
+	GameObjectManager::getInstance()->addObject(camera4);
+	CameraManager::getInstance()->addCamera(camera4);
+
+
+	Camera* camera5 = new Camera("Camera 5");
+	camera5->setPosition(0, 0.75, -0.75f);
+	newRotation = camera5->getLocalRotation();
+	newRotation.x = 45;
+	camera5->setRotation(newRotation);
+	GameObjectManager::getInstance()->addObject(camera5);
+	CameraManager::getInstance()->addCamera(camera5);
+
 	GraphicsEngine::getInstance()->releaseCompiledShader();
 
 	GraphicsEngine::getInstance()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shaderByteCode, &sizeShader);
 	pixelShader = GraphicsEngine::getInstance()->createPixelShader(shaderByteCode, sizeShader);
 	GraphicsEngine::getInstance()->releaseCompiledShader();
 
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
+	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
 	
-	/*viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
+	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, height / 2, width / 2, height / 2, 0.0f, 1.0f));
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));*/
+	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));
+	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));
 }
 
 void AppWindow::update()
@@ -216,6 +270,7 @@ void AppWindow::destroy()
 {
 	if (P_SHARED_INSTANCE != NULL)
 	{
+		P_SHARED_INSTANCE->constantBuffer->release();
 		P_SHARED_INSTANCE->release();
 	}
 }

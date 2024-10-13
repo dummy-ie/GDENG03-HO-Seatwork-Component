@@ -24,6 +24,11 @@ namespace math
 			return vec;
 		}
 
+		static float distance(const Vector3D& vec1, const Vector3D& vec2)
+		{
+			return sqrt(pow(vec1.x - vec2.x,2) + pow(vec1.y - vec2.y,2) + pow(vec1.z - vec2.z,2));
+		}
+
 		static Vector3D zero()
 		{
 			return Vector3D(0, 0, 0);
