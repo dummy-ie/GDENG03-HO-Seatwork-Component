@@ -74,7 +74,7 @@ void InputSystem::update()
 				}
 			}
 			// Store current key state to old key state
-			::memcpy(oldKeysState, keysState, sizeof(unsigned char) * 256);
+			//::memcpy(oldKeysState, keysState, sizeof(unsigned char) * 256);
 		}
 	}
 }
@@ -97,6 +97,46 @@ void InputSystem::addListener(InputListener* listener)
 void InputSystem::removeListener(InputListener* listener)
 {
 	setListeners.erase(listener);
+}
+
+bool InputSystem::getKeyDown(int key)
+{
+	if (::GetKeyboardState(keysState))
+		if (keysState[key] & 0x80 && keysState[key] != oldKeysState[key])
+		{
+			::memcpy(oldKeysState, keysState, sizeof(unsigned char) * 256);
+			return true;
+		}
+	return false;
+}
+
+bool InputSystem::getKey(int key)
+{
+	if (::GetKeyboardState(keysState))
+		if (keysState[key] & 0x80)
+		{
+			::memcpy(oldKeysState, keysState, sizeof(unsigned char) * 256);
+			return true;
+		}
+	return false;
+}
+
+bool InputSystem::getKeyUp(int key)
+{
+	if (::GetKeyboardState(keysState))
+	{
+		if (keysState[key] & 0x80) {}
+
+		else
+		{
+			if (keysState[key] != oldKeysState[key])
+			{
+				::memcpy(oldKeysState, keysState, sizeof(unsigned char) * 256);
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 InputSystem::InputSystem() {}

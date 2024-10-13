@@ -31,6 +31,11 @@ void AppWindow::onUpdate()
 	GraphicsEngine::getInstance()->getImmediateDeviceContext()->clearRenderTargetColor(this->swapChain, 
 		0.3, 0.3, 0.6, 1);
 
+	if (InputSystem::getInstance()->getKey('A'))
+	{
+		std::cout << "A key is up" << std::endl;
+	}
+
 	for (int i = 0; i < viewPorts.size(); i++)
 	{
 		GraphicsEngine::getInstance()->getImmediateDeviceContext()->setViewport(viewPorts[i]);

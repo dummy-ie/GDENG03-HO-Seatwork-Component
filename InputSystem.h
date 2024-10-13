@@ -25,6 +25,10 @@ namespace engine
 		void addListener(InputListener* listener);
 		void removeListener(InputListener* listener);
 
+		bool getKeyDown(int key);
+		bool getKey(int key);
+		bool getKeyUp(int key);
+
 	private:
 		static InputSystem* P_SHARED_INSTANCE;
 
