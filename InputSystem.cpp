@@ -16,16 +16,21 @@ void InputSystem::update()
 		{
 			firstTime = false;
 			oldMousePosition = Vector2D(currentMousePosition.x, currentMousePosition.y);
+			deltaMousePosition = Vector2D::zero();
 		}
 
 		if (currentMousePosition.x != oldMousePosition.x || currentMousePosition.y != oldMousePosition.y)
 		{
 			std::unordered_set<InputListener*>::iterator it = setListeners.begin();
+			deltaMousePosition = Vector2D(currentMousePosition.x - oldMousePosition.x, currentMousePosition.y - oldMousePosition.y);
 			while (it != setListeners.end()) {
-				(*it)->onMouseMove(Vector2D(currentMousePosition.x - oldMousePosition.x, currentMousePosition.y - oldMousePosition.y));
+				//(*it)->onMouseMove(Vector2D(currentMousePosition.x - oldMousePosition.x, currentMousePosition.y - oldMousePosition.y));
+				(*it)->onMouseMove(Vector2D(currentMousePosition.x, currentMousePosition.y));
 				++it;
 			}
 		}
+		else
+			deltaMousePosition = Vector2D::zero();
 
 		oldMousePosition = Vector2D(currentMousePosition.x, currentMousePosition.y);
 
@@ -99,6 +104,16 @@ void InputSystem::removeListener(InputListener* listener)
 	setListeners.erase(listener);
 }
 
+void InputSystem::setCursorPosition(const Vector2D& position)
+{
+	::SetCursorPos(position.x, position.y);
+}
+
+void InputSystem::showCursor(bool show)
+{
+	::ShowCursor(show);
+}
+
 bool InputSystem::getKeyDown(int key)
 {
 	if (::GetKeyboardState(keysState))
@@ -137,6 +152,18 @@ bool InputSystem::getKeyUp(int key)
 		}
 	}
 	return false;
+}
+
+Vector2D InputSystem::getMousePosition()
+{
+	POINT currentMousePosition = {};
+	::GetCursorPos(&currentMousePosition);
+	return Vector2D(currentMousePosition.x, currentMousePosition.y);
+}
+
+Vector2D InputSystem::getDeltaMousePosition()
+{
+	return deltaMousePosition;
 }
 
 InputSystem::InputSystem() {}

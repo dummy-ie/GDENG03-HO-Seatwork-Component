@@ -159,6 +159,9 @@
     <ClCompile Include="OrbitCamera.cpp">
       <Filter>App\GameObjects\Camera\CustomCameras</Filter>
     </ClCompile>
+    <ClCompile Include="FirstPersonCamera.cpp">
+      <Filter>App\GameObjects\Camera\CustomCameras</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -249,6 +252,9 @@
       <Filter>App\Managers</Filter>
     </ClInclude>
     <ClInclude Include="OrbitCamera.h">
+      <Filter>App\GameObjects\Camera\CustomCameras</Filter>
+    </ClInclude>
+    <ClInclude Include="FirstPersonCamera.h">
       <Filter>App\GameObjects\Camera\CustomCameras</Filter>
     </ClInclude>
   </ItemGroup>

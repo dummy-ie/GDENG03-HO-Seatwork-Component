@@ -10,6 +10,7 @@
 #include "Circle.h"
 #include "Quad.h"
 #include "EngineTime.h"
+#include "FirstPersonCamera.h"
 #include "GameObjectManager.h"
 #include "Vector3D.h"
 #include "InputSystem.h"
@@ -215,22 +216,25 @@ void AppWindow::initializeEngine()
 	GameObjectManager::getInstance()->addObject(camera3);
 	CameraManager::getInstance()->addCamera(camera3);
 
-	Camera* camera4 = new Camera("Camera 4");
+	InputSystem::getInstance()->showCursor(false);
+
+	FirstPersonCamera* camera4 = new FirstPersonCamera("Camera 4");
 	camera4->setPosition(0, 0.75, -0.75f);
 	Vector3D newRotation = camera4->getLocalRotation();
 	newRotation.x = 45;
 	camera4->setRotation(newRotation);
 	GameObjectManager::getInstance()->addObject(camera4);
 	CameraManager::getInstance()->addCamera(camera4);
+	CameraManager::getInstance()->addCamera(camera4);
 
 
-	Camera* camera5 = new Camera("Camera 5");
+	/*FirstPersonCamera* camera5 = new FirstPersonCamera("Camera 5");
 	camera5->setPosition(0, 0.75, -0.75f);
 	newRotation = camera5->getLocalRotation();
 	newRotation.x = 45;
 	camera5->setRotation(newRotation);
 	GameObjectManager::getInstance()->addObject(camera5);
-	CameraManager::getInstance()->addCamera(camera5);
+	CameraManager::getInstance()->addCamera(camera5);*/
 
 	GraphicsEngine::getInstance()->releaseCompiledShader();
 

@@ -18,10 +18,10 @@ void Camera::onCreate()
 
 void Camera::update(float deltaTime)
 {
-	if (InputSystem::getInstance()->getKey('E'))
+	/*if (InputSystem::getInstance()->getKey('E'))
 		this->localPosition.y += 1.0f * EngineTime::getDeltaTime();
 	if (InputSystem::getInstance()->getKey('Q'))
-		this->localPosition.y -= 1.0f * EngineTime::getDeltaTime();
+		this->localPosition.y -= 1.0f * EngineTime::getDeltaTime();*/
 }
 
 void Camera::onDestroy()

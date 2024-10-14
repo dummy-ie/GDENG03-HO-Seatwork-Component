@@ -14,7 +14,10 @@ namespace engine
 		std::unordered_set<InputListener*> setListeners;
 		unsigned char keysState[256] = {};
 		unsigned char oldKeysState[256] = {};
+
 		Vector2D oldMousePosition;
+		Vector2D deltaMousePosition;
+
 		bool firstTime = true;
 		bool shouldUpdate = true;
 
@@ -24,10 +27,14 @@ namespace engine
 		void startUpdate();
 		void addListener(InputListener* listener);
 		void removeListener(InputListener* listener);
+		void setCursorPosition(const Vector2D& position);
+		void showCursor(bool show);
 
 		bool getKeyDown(int key);
 		bool getKey(int key);
 		bool getKeyUp(int key);
+		Vector2D getDeltaMousePosition();
+		Vector2D getMousePosition();
 
 	private:
 		static InputSystem* P_SHARED_INSTANCE;
