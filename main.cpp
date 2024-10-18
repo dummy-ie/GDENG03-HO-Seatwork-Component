@@ -6,7 +6,6 @@ using namespace engine;
 
 int main()
 {
-	InputSystem::initialize();
 	AppWindow::initialize();
 	AppWindow* runningApp = (AppWindow*)AppWindow::getInstance();
 	runningApp->initializeEngine();

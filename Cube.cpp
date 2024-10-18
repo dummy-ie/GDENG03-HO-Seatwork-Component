@@ -129,23 +129,7 @@ void Cube::update(float deltaTime)
 
 	cbData.worldMatrix.setMatrix(transform);
 
-	//cbData.worldMatrix.setIdentity();
-
-	Matrix4x4 worldCam;
-	worldCam.setIdentity();
-
-	temp.setIdentity();
-	temp.setRotationX(CameraManager::getInstance()->getMainCamera()->getLocalRotation().x);
-	worldCam *= temp;
-
-	temp.setIdentity();
-	temp.setRotationY(CameraManager::getInstance()->getMainCamera()->getLocalRotation().y);
-	worldCam *= temp;
-
-	worldCam.setTranslation(CameraManager::getInstance()->getMainCamera()->getLocalPosition());
-
-	worldCam.inverse();
-	cbData.viewMatrix = worldCam;
+	cbData.viewMatrix = CameraManager::getInstance()->getMainCameraViewMatrix();
 
 	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 

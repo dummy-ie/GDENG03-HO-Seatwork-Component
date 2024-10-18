@@ -2,11 +2,14 @@
 
 #include <iostream>
 
+#include "GameObjectManager.h"
+#include "SceneCamera.h"
+
 CameraManager* CameraManager::P_SHARED_INSTANCE = NULL;
 
-Camera* CameraManager::getMainCamera()
+Matrix4x4 CameraManager::getMainCameraViewMatrix()
 {
-	return mainCamera;
+	return this->mainCamera->getViewMatrix();
 }
 
 void CameraManager::setMainCamera(Camera* camera)
@@ -53,10 +56,15 @@ CameraManager::CameraManager() {}
 CameraManager::CameraManager(const CameraManager&) {}
 
 CameraManager* CameraManager::getInstance() {
-	if (P_SHARED_INSTANCE == NULL)
-		P_SHARED_INSTANCE = new CameraManager();
-
 	return P_SHARED_INSTANCE;
+}
+
+void CameraManager::initialize()
+{
+	P_SHARED_INSTANCE = new CameraManager();
+	P_SHARED_INSTANCE->mainCamera = new SceneCamera("Scene Camera");
+	GameObjectManager::getInstance()->addObject(P_SHARED_INSTANCE->mainCamera);
+	P_SHARED_INSTANCE->addCamera(P_SHARED_INSTANCE->mainCamera);
 }
 
 void CameraManager::destroy()

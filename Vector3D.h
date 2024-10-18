@@ -47,6 +47,14 @@ namespace math
 			return *this;
 		}
 
+		Vector3D& operator-=(const Vector3D& vec)
+		{
+			x -= vec.x;
+			y -= vec.y;
+			z -= vec.z;
+			return *this;
+		}
+
 		Vector3D operator+(Vector3D vec) const {
 			return Vector3D(x + vec.x, y + vec.y, z + vec.z);
 		}

@@ -28,9 +28,6 @@
     <Filter Include="GameEngine\GraphicsEngine\PixelShader">
       <UniqueIdentifier>{80e400aa-dbe0-4e6d-bcbf-9cba0612eb0a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="App\GameObjects">
-      <UniqueIdentifier>{efd294fc-4a06-4714-a320-f18243e62a3b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine\GraphicsEngine\ConstantBuffer">
       <UniqueIdentifier>{2944137e-871e-477e-98b9-69b8f19ac886}</UniqueIdentifier>
     </Filter>
@@ -52,32 +49,38 @@
     <Filter Include="GameEngine\InputSystem">
       <UniqueIdentifier>{c81437c2-dd4c-40ce-bcf4-391a4b46439c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="App\GameObjects\Circle">
-      <UniqueIdentifier>{4146831e-8052-4d8c-9d36-158624c3952c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="App\GameObjects\Cube">
-      <UniqueIdentifier>{fbd6c00f-6bf1-422f-b2c6-033bdda412b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="App\GameObjects\Quad">
-      <UniqueIdentifier>{6fc7811b-7d6e-4569-b6e8-5c4970c14ae8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine\Random">
       <UniqueIdentifier>{2fb7c529-6760-456c-bf67-5f373aa9f3ca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="App\GameObjects\Plane">
+    <Filter Include="GameEngine\Hierarchy">
+      <UniqueIdentifier>{9b65c35c-fc83-4854-80fb-8ccd42bb1d34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Primitives">
+      <UniqueIdentifier>{efd294fc-4a06-4714-a320-f18243e62a3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Primitives\Circle">
+      <UniqueIdentifier>{4146831e-8052-4d8c-9d36-158624c3952c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Primitives\Cube">
+      <UniqueIdentifier>{fbd6c00f-6bf1-422f-b2c6-033bdda412b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Primitives\Quad">
+      <UniqueIdentifier>{6fc7811b-7d6e-4569-b6e8-5c4970c14ae8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Primitives\Plane">
       <UniqueIdentifier>{fcb2f4b6-6dec-4895-9ca4-3031911e8a47}</UniqueIdentifier>
     </Filter>
-    <Filter Include="App\GameObjects\Border">
+    <Filter Include="GameEngine\Primitives\Border">
       <UniqueIdentifier>{c9f36f8a-6b73-41c9-b745-dffecefc8f37}</UniqueIdentifier>
     </Filter>
-    <Filter Include="App\GameObjects\Camera">
+    <Filter Include="GameEngine\Primitives\Camera">
       <UniqueIdentifier>{a60bd3a4-d532-4327-b5b4-4d6d1e113cb0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="App\Managers">
-      <UniqueIdentifier>{6a4237cc-03d8-49fa-9755-6faf0ab68ac5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="App\GameObjects\Camera\CustomCameras">
+    <Filter Include="GameEngine\Primitives\Camera\CustomCameras">
       <UniqueIdentifier>{3afbf534-0f89-45f4-9168-0cd1d51047bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Shaders">
+      <UniqueIdentifier>{9576ad71-5c72-4e0d-a62c-2c31d54ceae5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -109,7 +112,7 @@
       <Filter>GameEngine\GraphicsEngine\PixelShader</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>App\GameObjects</Filter>
+      <Filter>GameEngine\Primitives</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBuffer.cpp">
       <Filter>GameEngine\GraphicsEngine\ConstantBuffer</Filter>
@@ -121,7 +124,7 @@
       <Filter>GameEngine\GraphicsEngine\RasterizerState</Filter>
     </ClCompile>
     <ClCompile Include="Cube.cpp">
-      <Filter>App\GameObjects\Cube</Filter>
+      <Filter>GameEngine\Primitives\Cube</Filter>
     </ClCompile>
     <ClCompile Include="EngineTime.cpp">
       <Filter>GameEngine\TimeSystem</Filter>
@@ -133,34 +136,37 @@
       <Filter>GameEngine\InputSystem</Filter>
     </ClCompile>
     <ClCompile Include="Quad.cpp">
-      <Filter>App\GameObjects\Quad</Filter>
+      <Filter>GameEngine\Primitives\Quad</Filter>
     </ClCompile>
     <ClCompile Include="Circle.cpp">
-      <Filter>App\GameObjects\Circle</Filter>
+      <Filter>GameEngine\Primitives\Circle</Filter>
     </ClCompile>
     <ClCompile Include="Random.cpp">
       <Filter>GameEngine\Random</Filter>
     </ClCompile>
     <ClCompile Include="Plane.cpp">
-      <Filter>App\GameObjects\Plane</Filter>
+      <Filter>GameEngine\Primitives\Plane</Filter>
     </ClCompile>
     <ClCompile Include="Border.cpp">
-      <Filter>App\GameObjects\Border</Filter>
+      <Filter>GameEngine\Primitives\Border</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>App\GameObjects\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjectManager.cpp">
-      <Filter>App\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraManager.cpp">
-      <Filter>App\Managers</Filter>
+      <Filter>GameEngine\Primitives\Camera</Filter>
     </ClCompile>
     <ClCompile Include="OrbitCamera.cpp">
-      <Filter>App\GameObjects\Camera\CustomCameras</Filter>
+      <Filter>GameEngine\Primitives\Camera\CustomCameras</Filter>
     </ClCompile>
-    <ClCompile Include="FirstPersonCamera.cpp">
-      <Filter>App\GameObjects\Camera\CustomCameras</Filter>
+    <ClCompile Include="SceneCamera.cpp">
+      <Filter>GameEngine\Primitives\Camera\CustomCameras</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraManager.cpp">
+      <Filter>GameEngine\Hierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectManager.cpp">
+      <Filter>GameEngine\Hierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneCameraHandler.cpp">
+      <Filter>GameEngine\Hierarchy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -189,7 +195,7 @@
       <Filter>GameEngine\GraphicsEngine\PixelShader</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>App\GameObjects</Filter>
+      <Filter>GameEngine\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBuffer.h">
       <Filter>GameEngine\GraphicsEngine\ConstantBuffer</Filter>
@@ -201,7 +207,7 @@
       <Filter>GameEngine\GraphicsEngine\RasterizerState</Filter>
     </ClInclude>
     <ClInclude Include="Cube.h">
-      <Filter>App\GameObjects\Cube</Filter>
+      <Filter>GameEngine\Primitives\Cube</Filter>
     </ClInclude>
     <ClInclude Include="EngineTime.h">
       <Filter>GameEngine\TimeSystem</Filter>
@@ -222,25 +228,22 @@
       <Filter>GameEngine\InputSystem</Filter>
     </ClInclude>
     <ClInclude Include="Quad.h">
-      <Filter>App\GameObjects\Quad</Filter>
+      <Filter>GameEngine\Primitives\Quad</Filter>
     </ClInclude>
     <ClInclude Include="Circle.h">
-      <Filter>App\GameObjects\Circle</Filter>
+      <Filter>GameEngine\Primitives\Circle</Filter>
     </ClInclude>
     <ClInclude Include="Random.h">
       <Filter>GameEngine\Random</Filter>
     </ClInclude>
     <ClInclude Include="Plane.h">
-      <Filter>App\GameObjects\Plane</Filter>
+      <Filter>GameEngine\Primitives\Plane</Filter>
     </ClInclude>
     <ClInclude Include="Border.h">
-      <Filter>App\GameObjects\Border</Filter>
+      <Filter>GameEngine\Primitives\Border</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>App\GameObjects\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjectManager.h">
-      <Filter>App\Managers</Filter>
+      <Filter>GameEngine\Primitives\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Vector2D.h">
       <Filter>GameEngine\Math</Filter>
@@ -248,22 +251,28 @@
     <ClInclude Include="Vector4D.h">
       <Filter>GameEngine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="CameraManager.h">
-      <Filter>App\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="OrbitCamera.h">
-      <Filter>App\GameObjects\Camera\CustomCameras</Filter>
+      <Filter>GameEngine\Primitives\Camera\CustomCameras</Filter>
     </ClInclude>
-    <ClInclude Include="FirstPersonCamera.h">
-      <Filter>App\GameObjects\Camera\CustomCameras</Filter>
+    <ClInclude Include="SceneCamera.h">
+      <Filter>GameEngine\Primitives\Camera\CustomCameras</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>GameEngine\Hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectManager.h">
+      <Filter>GameEngine\Hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneCameraHandler.h">
+      <Filter>GameEngine\Hierarchy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VertexShader.hlsl">
-      <Filter>App</Filter>
-    </FxCompile>
     <FxCompile Include="PixelShader.hlsl">
-      <Filter>App</Filter>
+      <Filter>GameEngine\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>GameEngine\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -10,13 +10,14 @@
 #include "Circle.h"
 #include "Quad.h"
 #include "EngineTime.h"
-#include "FirstPersonCamera.h"
+#include "SceneCamera.h"
 #include "GameObjectManager.h"
 #include "Vector3D.h"
 #include "InputSystem.h"
 #include "OrbitCamera.h"
 #include "Plane.h"
 #include "Random.h"
+#include "SceneCameraHandler.h"
 
 using namespace application;
 
@@ -29,7 +30,7 @@ struct CBEditor
 void AppWindow::onCreate()
 {
 	Window::onCreate();
-	
+	InputSystem::initialize();
 }
 
 void AppWindow::onUpdate()
@@ -144,9 +145,8 @@ void AppWindow::onRightMouseUp(const Vector2D& mousePosition)
 void AppWindow::initializeEngine()
 {
 	Random::initialize();
-
 	InputSystem::getInstance()->addListener(this);
-
+	CameraManager::initialize();
 	GraphicsEngine::initialize();
 
 	swapChain = GraphicsEngine::getInstance()->createSwapChain();
@@ -191,13 +191,12 @@ void AppWindow::initializeEngine()
 
 	Plane* plane = new Plane("Plane", shaderByteCode, sizeShader);
 	plane->setPosition(0.0f, -0.5f, 0.0f);
-	//plane->setRotation(1.5f, 0.0f, 0.0f);
 	GameObjectManager::getInstance()->addObject(plane);
 
-	Border* border = new Border("Border", shaderByteCode, sizeShader);
-	GameObjectManager::getInstance()->addObject(border);
+	//Border* border = new Border("Border", shaderByteCode, sizeShader);
+	//GameObjectManager::getInstance()->addObject(border);
 
-	OrbitCamera* camera1 = new OrbitCamera("Camera 1");
+	/*OrbitCamera* camera1 = new OrbitCamera("Camera 1");
 	camera1->setPosition(0, 0, -2);
 	camera1->setObjectToOrbit(cube);
 	camera1->setSpeed(10.0f);
@@ -214,27 +213,18 @@ void AppWindow::initializeEngine()
 	Camera* camera3 = new Camera("Camera 3");
 	camera3->setPosition(0, 0, -2);
 	GameObjectManager::getInstance()->addObject(camera3);
-	CameraManager::getInstance()->addCamera(camera3);
+	CameraManager::getInstance()->addCamera(camera3);*/
 
-	InputSystem::getInstance()->showCursor(false);
+	//InputSystem::getInstance()->showCursor(false);
 
-	FirstPersonCamera* camera4 = new FirstPersonCamera("Camera 4");
+	/*SceneCamera* camera4 = new SceneCamera("Camera 4");
 	camera4->setPosition(0, 0.75, -0.75f);
 	Vector3D newRotation = camera4->getLocalRotation();
 	newRotation.x = 45;
 	camera4->setRotation(newRotation);
 	GameObjectManager::getInstance()->addObject(camera4);
-	CameraManager::getInstance()->addCamera(camera4);
-	CameraManager::getInstance()->addCamera(camera4);
-
-
-	/*FirstPersonCamera* camera5 = new FirstPersonCamera("Camera 5");
-	camera5->setPosition(0, 0.75, -0.75f);
-	newRotation = camera5->getLocalRotation();
-	newRotation.x = 45;
-	camera5->setRotation(newRotation);
-	GameObjectManager::getInstance()->addObject(camera5);
-	CameraManager::getInstance()->addCamera(camera5);*/
+	CameraManager::getInstance()->addCamera(camera4);*/
+	//CameraManager::getInstance()->addCamera(camera4);
 
 	GraphicsEngine::getInstance()->releaseCompiledShader();
 
@@ -242,13 +232,13 @@ void AppWindow::initializeEngine()
 	pixelShader = GraphicsEngine::getInstance()->createPixelShader(shaderByteCode, sizeShader);
 	GraphicsEngine::getInstance()->releaseCompiledShader();
 
-	//viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
+	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
 	
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
+	/*viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, height / 2, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));
+	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));*/
 }
 
 void AppWindow::update()

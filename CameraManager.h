@@ -11,7 +11,7 @@ private:
     std::vector<Camera*> cameras;
 
 public:
-    Camera* getMainCamera();
+    Matrix4x4 getMainCameraViewMatrix();
     void setMainCamera(Camera* camera);
     void setMainCameraByIndex(int index);
     void addCamera(Camera* camera);
@@ -27,5 +27,6 @@ private:
 
 public:
     static CameraManager* getInstance();
+    static void initialize();
     static void destroy();
 };

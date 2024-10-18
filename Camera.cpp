@@ -18,13 +18,39 @@ void Camera::onCreate()
 
 void Camera::update(float deltaTime)
 {
-	/*if (InputSystem::getInstance()->getKey('E'))
-		this->localPosition.y += 1.0f * EngineTime::getDeltaTime();
-	if (InputSystem::getInstance()->getKey('Q'))
-		this->localPosition.y -= 1.0f * EngineTime::getDeltaTime();*/
+	GameObject::update(deltaTime);
+	this->updateViewMatrix();
+}
+
+void Camera::updateViewMatrix()
+{
+	Matrix4x4 worldCam;
+	worldCam.setIdentity();
+
+	Matrix4x4 temp;
+
+	temp.setIdentity();
+	temp.setRotationX(this->localRotation.x);
+	worldCam *= temp;
+
+	temp.setIdentity();
+	temp.setRotationY(this->localRotation.y);
+	worldCam *= temp;
+
+	temp.setIdentity();
+	temp.setTranslation(this->localPosition);
+	worldCam *= temp;
+
+	worldCam.inverse();
+	this->localMatrix = worldCam;
 }
 
 void Camera::onDestroy()
 {
 	GameObject::onDestroy();
+}
+
+Matrix4x4 Camera::getViewMatrix()
+{
+	return this->localMatrix;
 }

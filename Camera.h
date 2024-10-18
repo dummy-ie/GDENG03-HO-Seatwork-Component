@@ -12,6 +12,9 @@ public:
 public:
 	void onCreate() override;
 	virtual void update(float deltaTime) override;
+	void updateViewMatrix();
 	void onDestroy() override;
+
+	Matrix4x4 getViewMatrix();
 };
 
