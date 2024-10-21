@@ -1,5 +1,7 @@
 #include "GameObjectManager.h"
 
+#include <iostream>
+
 GameObjectManager* GameObjectManager::P_SHARED_INSTANCE = NULL;
 
 void GameObjectManager::update(float deltaTime)
@@ -73,7 +75,10 @@ GameObjectManager::GameObjectManager(const GameObjectManager&) {}
 
 GameObjectManager* GameObjectManager::getInstance() {
 	if (P_SHARED_INSTANCE == NULL)
+	{
 		P_SHARED_INSTANCE = new GameObjectManager();
+		std::cout << "Game Object Manager Initialized" << std::endl;
+	}
 
 	return P_SHARED_INSTANCE;
 }

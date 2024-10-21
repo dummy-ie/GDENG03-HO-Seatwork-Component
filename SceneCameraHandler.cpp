@@ -1,5 +1,7 @@
 #include "SceneCameraHandler.h"
 
+#include <iostream>
+
 #include "CameraManager.h"
 #include "GameObjectManager.h"
 
@@ -13,6 +15,10 @@ Matrix4x4 SceneCameraHandler::getSceneCameraViewMatrix()
 SceneCameraHandler::SceneCameraHandler()
 {
 	this->sceneCamera = new SceneCamera("Scene Camera");
+	this->sceneCamera->setPosition(0, 0, -5);
+	this->sceneCamera->updateViewMatrix();
+	Vector3D position = sceneCamera->getLocalPosition();
+	std::cout << "Scene Camera Initialized at Position : (" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
 	GameObjectManager::getInstance()->addObject(sceneCamera);
 	CameraManager::getInstance()->addCamera(sceneCamera);
 }

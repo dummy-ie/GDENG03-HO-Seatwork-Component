@@ -172,26 +172,82 @@ void AppWindow::initializeEngine()
 	GraphicsEngine::getInstance()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
 	vertexShader = GraphicsEngine::getInstance()->createVertexShader(shaderByteCode, sizeShader);
 
-	/*for (int i = 0; i < 100; i++)
+	/*for (int i = 1; i <= 50; i++)
 	{
-		float x = Random::range(-0.75f, 0.75f);
-		float y = Random::range(-0.75f, 0.75f);
+		float x = Random::range(-1.5f, 1.5f);
+		float y = Random::range(-1.5f, 1.5f);
 
-		Cube* cube = new Cube("Cube", shaderByteCode, sizeShader);
+		Cube* cube = new Cube("Cube " + std::to_string(i), shaderByteCode, sizeShader);
 		cube->setSpeed(Random::range(-3.75f, 3.75f));
 		cube->setPosition(x, y, 0.0f);
-		cube->setScale(0.25f, 0.25f, 0.25f);
+		cube->setScale(0.5f, 0.5f, 0.5f);
 		GameObjectManager::getInstance()->addObject(cube);
 	}*/
 
-	Cube* cube = new Cube("Cube", shaderByteCode, sizeShader);
-	cube->setPosition(0.0f, -0.5f, 0.0f);
-	cube->setScale(0.25f, 0.25f, 0.25f);
+	//Cube* cube = new Cube("Cube", shaderByteCode, sizeShader);
+	//cube->setPosition(0.0f, -1.0f, 0.0f);
+	//cube->setScale(0.25f, 0.25f, 0.25f);
+	//GameObjectManager::getInstance()->addObject(cube);
+
+	// Test Case 6
+	/*Cube* cube = new Cube("Cube 1", shaderByteCode, sizeShader);
+	cube->setPosition(0.0f, 0.9f, 0.0f);
+	GameObjectManager::getInstance()->addObject(cube);
+
+	cube = new Cube("Cube 2", shaderByteCode, sizeShader);
+	cube->setPosition(-1.5f, 2.0f, 0.0f);
+	GameObjectManager::getInstance()->addObject(cube);
+
+	cube = new Cube("Cube 3", shaderByteCode, sizeShader);
+	cube->setPosition(-1.5f, 3.0f, -2.0f);
 	GameObjectManager::getInstance()->addObject(cube);
 
 	Plane* plane = new Plane("Plane", shaderByteCode, sizeShader);
-	plane->setPosition(0.0f, -0.5f, 0.0f);
-	GameObjectManager::getInstance()->addObject(plane);
+	plane->setPosition(0.0f, 0.0f, 0.0f);
+	plane->setScale(4.0f, 1.0f, 4.0f);
+	GameObjectManager::getInstance()->addObject(plane);*/
+
+	// Test Case 7
+	float xOffset = 0.8f;
+	float yOffset = 0.925f;
+	float startXPos = -0.6f;
+	float startYPos = 3.0f;
+	int rows = 3;
+	int spaces = rows + 4 - 1;
+	int cubeCount = 1;
+	for (int i = 1; i <= rows;i++)
+	{
+		int xSpaceOffset = 0;
+		for (int k = spaces; k >= 1; k--) {
+			xSpaceOffset += 1;
+		}
+		for (int j = 1; j <= i; j++)
+		{
+			Cube* cube = new Cube("Card " + std::to_string(cubeCount), shaderByteCode, sizeShader);
+			cube->setPosition(startXPos + xOffset * j + xSpaceOffset * 0.4f, startYPos - (yOffset * i), 0.0f);
+			cube->setScale(0.01f, 1.0f, 0.5f);
+			cube->setRotation(0.0f, 0.0f, -0.4f);
+			GameObjectManager::getInstance()->addObject(cube);
+			cubeCount++;
+
+			cube = new Cube("Card " + std::to_string(cubeCount), shaderByteCode, sizeShader);
+			cube->setPosition(startXPos + xOffset * j + 0.4f + xSpaceOffset * 0.4f, startYPos - (yOffset * i), 0.0f);
+			cube->setScale(0.01f, 1.0f, 0.5f);
+			cube->setRotation(0.0f, 0.0f, 0.4f);
+			GameObjectManager::getInstance()->addObject(cube);
+			cubeCount++;
+
+			if (i != rows) {
+				cube = new Cube("Card " + std::to_string(cubeCount), shaderByteCode, sizeShader);
+				cube->setPosition(startXPos + 1.0f * j + 0.4f * xSpaceOffset - 0.2f * (j - 1), (startYPos - 0.475f) - (yOffset * i), 0.0f);
+				cube->setScale(0.01f, 1.0f, 0.5f);
+				cube->setRotation(0.0f, 0.0f, 1.5708f);
+				GameObjectManager::getInstance()->addObject(cube);
+				cubeCount++;
+			}
+		}
+		spaces--;
+	}
 
 	//Border* border = new Border("Border", shaderByteCode, sizeShader);
 	//GameObjectManager::getInstance()->addObject(border);

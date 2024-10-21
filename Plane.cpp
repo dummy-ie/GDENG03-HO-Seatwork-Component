@@ -16,6 +16,11 @@ Plane::Plane(std::string name, void* shaderByteCode, size_t sizeShader) : GameOb
 	Vector3D color3 = Vector3D(226.0f / 255.0f, 180.0f / 255.0f, 181.0f / 255.0f);
 	Vector3D color4 = Vector3D(212.0f / 255.0f, 157.0f / 255.0f, 161.0f / 255.0f);
 
+	/*Vector3D color1 = Vector3D(1, 1, 1);
+	Vector3D color2 = Vector3D(1, 1, 1);
+	Vector3D color3 = Vector3D(1, 1, 1);
+	Vector3D color4 = Vector3D(1, 1, 1);*/
+
 	vertex list[] =
 	{
 		{ Vector3D(-1.0f,0.0f,-1.0f),   color1, color1 },

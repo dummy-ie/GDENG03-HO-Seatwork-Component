@@ -1,5 +1,7 @@
 #include "GameObject.h"
 
+#include <iostream>
+
 GameObject::GameObject(std::string name)
 {
 	this->name = name;
@@ -33,6 +35,7 @@ void GameObject::setPosition(Vector3D position)
 void GameObject::setPosition(float x, float y, float z)
 {
 	this->localPosition = Vector3D(x, y, z);
+	std::cout << name << " has Position set on (" << x << ", " << y << ", " << z << ")" << std::endl;
 }
 
 Vector3D GameObject::getLocalPosition()
@@ -43,6 +46,7 @@ Vector3D GameObject::getLocalPosition()
 void GameObject::setScale(float x, float y, float z)
 {
 	this->localScale = Vector3D(x, y, z);
+	std::cout << name << " has Scale set on (" << x << ", " << y << ", " << z << ")" << std::endl;
 }
 
 void GameObject::setScale(Vector3D scale)
@@ -58,6 +62,7 @@ Vector3D GameObject::getLocalScale()
 void GameObject::setRotation(float x, float y, float z)
 {
 	this->localRotation = Vector3D(x, y, z);
+	std::cout << name << " has Rotation set on (" << x << ", " << y << ", " << z << ")" << std::endl;
 }
 
 void GameObject::setRotation(Vector3D rotation)

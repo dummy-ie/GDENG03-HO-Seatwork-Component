@@ -61,8 +61,15 @@ CameraManager* CameraManager::getInstance() {
 
 void CameraManager::initialize()
 {
+	std::cout << "Camera Manager Initialized" << std::endl;
 	P_SHARED_INSTANCE = new CameraManager();
 	P_SHARED_INSTANCE->mainCamera = new SceneCamera("Scene Camera");
+	//P_SHARED_INSTANCE->mainCamera->setPosition(0, 0, -1);
+	P_SHARED_INSTANCE->mainCamera->setPosition(4, 2, -2);
+	P_SHARED_INSTANCE->mainCamera->setRotation(0.5, -0.75, 0);
+	P_SHARED_INSTANCE->mainCamera->updateViewMatrix();
+	Vector3D position = P_SHARED_INSTANCE->mainCamera->getLocalPosition();
+	//std::cout << "Scene Camera Initialized at Position : (" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
 	GameObjectManager::getInstance()->addObject(P_SHARED_INSTANCE->mainCamera);
 	P_SHARED_INSTANCE->addCamera(P_SHARED_INSTANCE->mainCamera);
 }
