@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "GameObjectManager.h"
+#include "Logger.h"
 #include "SceneCamera.h"
 
 CameraManager* CameraManager::P_SHARED_INSTANCE = NULL;
@@ -61,7 +62,6 @@ CameraManager* CameraManager::getInstance() {
 
 void CameraManager::initialize()
 {
-	std::cout << "Camera Manager Initialized" << std::endl;
 	P_SHARED_INSTANCE = new CameraManager();
 	P_SHARED_INSTANCE->mainCamera = new SceneCamera("Scene Camera");
 	//P_SHARED_INSTANCE->mainCamera->setPosition(0, 0, -1);
@@ -72,12 +72,14 @@ void CameraManager::initialize()
 	//std::cout << "Scene Camera Initialized at Position : (" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
 	GameObjectManager::getInstance()->addObject(P_SHARED_INSTANCE->mainCamera);
 	P_SHARED_INSTANCE->addCamera(P_SHARED_INSTANCE->mainCamera);
+	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
 }
 
 void CameraManager::destroy()
 {
 	if (P_SHARED_INSTANCE != NULL)
 	{
+		debug::Logger::log(P_SHARED_INSTANCE, "Released");
 		delete P_SHARED_INSTANCE;
 	}
 }

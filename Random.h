@@ -22,5 +22,6 @@ private:
 
 public:
 	static void initialize();
+	static void destroy();
 };
 

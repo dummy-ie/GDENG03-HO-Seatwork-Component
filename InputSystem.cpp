@@ -1,6 +1,8 @@
 #include "InputSystem.h"
 #include <Windows.h>
 
+#include "Logger.h"
+
 using namespace engine;
 
 InputSystem* InputSystem::P_SHARED_INSTANCE = nullptr;
@@ -177,6 +179,7 @@ InputSystem* InputSystem::getInstance() {
 void InputSystem::initialize()
 {
 	P_SHARED_INSTANCE = new InputSystem();
+	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
 	//P_SHARED_INSTANCE->init();
 }
 
@@ -184,6 +187,8 @@ void InputSystem::destroy()
 {
 	if (P_SHARED_INSTANCE != nullptr)
 	{
+		debug::Logger::log(P_SHARED_INSTANCE, "Released");
+		delete P_SHARED_INSTANCE;
 		//P_SHARED_INSTANCE->release();
 	}
 }

@@ -14,6 +14,7 @@
 #include "GameObjectManager.h"
 #include "Vector3D.h"
 #include "InputSystem.h"
+#include "Logger.h"
 #include "OrbitCamera.h"
 #include "Plane.h"
 #include "Random.h"
@@ -314,6 +315,7 @@ void AppWindow::initialize()
 {
 	P_SHARED_INSTANCE = new AppWindow();
 	P_SHARED_INSTANCE->init();
+	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
 }
 
 void AppWindow::destroy()

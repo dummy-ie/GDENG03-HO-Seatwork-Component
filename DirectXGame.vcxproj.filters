@@ -82,6 +82,9 @@
     <Filter Include="GameEngine\Shaders">
       <UniqueIdentifier>{9576ad71-5c72-4e0d-a62c-2c31d54ceae5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\Debug">
+      <UniqueIdentifier>{87477da3-eeb6-491f-a340-47036d83edba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="SceneCameraHandler.h">
       <Filter>GameEngine\Hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>GameEngine\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

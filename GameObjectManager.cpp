@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "Logger.h"
+
 GameObjectManager* GameObjectManager::P_SHARED_INSTANCE = NULL;
 
 void GameObjectManager::update(float deltaTime)
@@ -27,6 +29,7 @@ void GameObjectManager::addObject(GameObject* gameObject)
 	this->mapGameObject[gameObject->getName()] = gameObject;
 	this->gameObjects.push_back(gameObject);
 	gameObject->onCreate();
+	debug::Logger::log(gameObject->getName() + " added to hierarchy");
 }
 
 void GameObjectManager::deleteObject(GameObject* gameObject)
@@ -77,7 +80,7 @@ GameObjectManager* GameObjectManager::getInstance() {
 	if (P_SHARED_INSTANCE == NULL)
 	{
 		P_SHARED_INSTANCE = new GameObjectManager();
-		std::cout << "Game Object Manager Initialized" << std::endl;
+		debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
 	}
 
 	return P_SHARED_INSTANCE;
@@ -87,6 +90,7 @@ void GameObjectManager::destroy()
 {
 	if (P_SHARED_INSTANCE != NULL)
 	{
+		debug::Logger::log(P_SHARED_INSTANCE, "Released");
 		P_SHARED_INSTANCE->deleteAllObjects();
 		delete P_SHARED_INSTANCE;
 	}

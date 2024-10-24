@@ -1,5 +1,6 @@
 #include "SwapChain.h"
 #include "GraphicsEngine.h"
+#include "Logger.h"
 
 
 using namespace engine::graphics;
@@ -33,20 +34,17 @@ bool SwapChain::init(HWND hwnd, UINT width, UINT height)
 	// Create the swap chain for the window indicated by HWND parameter
 	HRESULT hr = GraphicsEngine::getInstance()->m_dxgi_factory->CreateSwapChain(device, &desc, &m_swap_chain);
 
-	if (FAILED(hr))
-		return false;
+	debug::Logger::log(this, hr);
 
 	ID3D11Texture2D* buffer = NULL;
 	hr = m_swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&buffer);
 
-	if (FAILED(hr))
-		return false;
+	debug::Logger::log(this, hr);
 
 	hr = device->CreateRenderTargetView(buffer, NULL, &m_rtv);
 	buffer->Release();
 
-	if (FAILED(hr))
-		return false;
+	debug::Logger::log(this, hr);
 
 	D3D11_TEXTURE2D_DESC texDesc = {};
 	texDesc.Width = width;
@@ -62,12 +60,10 @@ bool SwapChain::init(HWND hwnd, UINT width, UINT height)
 	texDesc.CPUAccessFlags = 0;
 
 	hr = device->CreateTexture2D(&texDesc, NULL, &buffer);
-	if (FAILED(hr))
-		return false;
+	debug::Logger::log(this, hr);
 
 	hr = device->CreateDepthStencilView(buffer, NULL, &m_dsv);
-	if (FAILED(hr))
-		return false;
+	debug::Logger::log(this, hr);
 
 	buffer->Release();
 	return true;

@@ -9,6 +9,8 @@
 
 #include <d3dcompiler.h>
 
+#include "Logger.h"
+
 using namespace engine::graphics;
 
 bool GraphicsEngine::init()
@@ -39,8 +41,7 @@ bool GraphicsEngine::init()
 		++driver_type_index;
 	}
 
-	if (FAILED(result))
-		return false;
+	debug::Logger::log(this, result);
 
 	m_imm_device_context = new DeviceContext(m_imm_context);
 
@@ -202,12 +203,14 @@ void GraphicsEngine::initialize()
 {
 	P_SHARED_INSTANCE = new GraphicsEngine();
 	P_SHARED_INSTANCE->init();
+	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
 }
 
 void GraphicsEngine::destroy()
 {
 	if (P_SHARED_INSTANCE != NULL)
 	{
+		debug::Logger::log(P_SHARED_INSTANCE, "Released");
 		P_SHARED_INSTANCE->release();
 	}
 }

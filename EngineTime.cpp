@@ -1,5 +1,7 @@
 #include "EngineTime.h"
 
+#include "Logger.h"
+
 using namespace engine;
 
 EngineTime* EngineTime::P_SHARED_INSTANCE = NULL;
@@ -11,6 +13,7 @@ EngineTime::EngineTime(EngineTime const&) {}
 void EngineTime::initialize()
 {
 	P_SHARED_INSTANCE = new EngineTime();
+	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
 }
 
 double EngineTime::getDeltaTime()

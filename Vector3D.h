@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ostream>
+
 namespace math
 {
 	class Vector3D
@@ -73,6 +75,11 @@ namespace math
 		Vector3D normalize() {
 			Vector3D vec = Vector3D(x / getMagnitude(), y / getMagnitude(), z / getMagnitude());
 			return vec;
+		}
+
+		std::string toString() const
+		{
+			return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")";
 		}
 	};
 }

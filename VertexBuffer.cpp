@@ -1,5 +1,6 @@
 #include "VertexBuffer.h"
 #include "GraphicsEngine.h"
+#include "Logger.h"
 
 using namespace engine::graphics;
 
@@ -45,8 +46,7 @@ bool VertexBuffer::load(void* list_vertices, UINT size_vertex, UINT size_list, v
 
 	UINT size_layout = ARRAYSIZE(layout);
 
-	if (FAILED(GraphicsEngine::getInstance()->m_d3d_device->CreateInputLayout(layout, size_layout, shader_byte_code, size_byte_shader, &m_layout)))
-		return false;
+	debug::Logger::log(this, GraphicsEngine::getInstance()->m_d3d_device->CreateInputLayout(layout, size_layout, shader_byte_code, size_byte_shader, &m_layout));
 
 	return true;
 }

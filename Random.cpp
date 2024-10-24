@@ -1,5 +1,7 @@
 #include "Random.h"
 
+#include "Logger.h"
+
 int Random::range(int minInclusive, int maxInclusive)
 {
 	std::uniform_int_distribution<int> randomizer(minInclusive, maxInclusive);
@@ -24,4 +26,14 @@ void Random::initialize()
 {
 	P_SHARED_INSTANCE = new Random();
 	P_SHARED_INSTANCE->mt.seed(::time(NULL));
+	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
+}
+
+void Random::destroy()
+{
+	if (P_SHARED_INSTANCE != NULL)
+	{
+		debug::Logger::log(P_SHARED_INSTANCE, "Released");
+		delete P_SHARED_INSTANCE;
+	}
 }

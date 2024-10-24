@@ -1,5 +1,6 @@
 #include "IndexBuffer.h"
 #include "GraphicsEngine.h"
+#include "Logger.h"
 
 using namespace engine::graphics;
 
@@ -28,8 +29,7 @@ bool IndexBuffer::load(void* list_indices, UINT size_list)
 
 	m_size_list = size_list;
 
-	if (FAILED(GraphicsEngine::getInstance()->m_d3d_device->CreateBuffer(&buff_desc, &init_data, &m_buffer)))
-		return false;
+	debug::Logger::log(this, GraphicsEngine::getInstance()->m_d3d_device->CreateBuffer(&buff_desc, &init_data, &m_buffer));
 
 	return true;
 }

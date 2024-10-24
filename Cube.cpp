@@ -5,6 +5,7 @@
 #include "CameraManager.h"
 #include "EngineTime.h"
 #include "InputSystem.h"
+#include "Logger.h"
 
 using namespace engine;
 using namespace application;
@@ -105,8 +106,6 @@ Cube::Cube(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 
 	speed = 1.0f;
 	deltaRotation = 0.0f;
-
-	std::cout << name << " Created" << std::endl;
 }
 
 Cube::~Cube()
@@ -115,7 +114,7 @@ Cube::~Cube()
 
 void Cube::onCreate()
 {
-
+	GameObject::onCreate();
 }
 
 void Cube::update(float deltaTime)
