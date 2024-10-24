@@ -29,6 +29,9 @@ namespace application
 		PixelShader* pixelShader;
 		ConstantBuffer* constantBuffer;
 
+		bool my_tool_active = true;
+		float my_color[4];
+		float count = 0;
 	public:
 		virtual void onCreate() override;
 		virtual void onUpdate() override;

@@ -50,6 +50,7 @@ namespace engine
 			SwapChain* createSwapChain();
 			DeviceContext* getImmediateDeviceContext();
 			IDXGIFactory* getDirectXFactory();
+			ID3D11Device* getDirectXDevice();
 			VertexBuffer* createVertexBuffer();
 			IndexBuffer* createIndexBuffer();
 			ConstantBuffer* createConstantBuffer();

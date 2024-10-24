@@ -21,5 +21,10 @@ namespace math
 			this->w = -(v1.x * (v2.y * v3.z - v3.y * v2.z) - v1.y * (v2.x * v3.z - v3.x * v2.z) + v1.z * (v2.x * v3.y - v3.x * v2.y));
 		}
 
+		std::string toString() const
+		{
+			return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + "," + std::to_string(w) + ")";
+		}
+
 	};
 }

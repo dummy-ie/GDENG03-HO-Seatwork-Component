@@ -20,6 +20,10 @@
 #include "Random.h"
 #include "SceneCameraHandler.h"
 
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
+
 using namespace application;
 
 __declspec(align(16))
@@ -64,6 +68,51 @@ void AppWindow::onUpdate()
 		GameObjectManager::getInstance()->draw(this, vertexShader, pixelShader);
 	}
 
+	float freq = 1.0f;
+	count += EngineTime::getDeltaTime();
+	Vector4D rainbow = Vector4D(
+		std::sin(freq * count + 0) * 127 + 128,
+		std::sin(freq * count + 2) * 127 + 128,
+		std::sin(freq * count + 4) * 127 + 128,
+		255);
+
+	Vector4D rainbow2 = Vector4D(
+		std::sin(freq * count + 2) * 127 + 128,
+		std::sin(freq * count + 0) * 127 + 128,
+		std::sin(freq * count + 4) * 127 + 128,
+		255);
+
+	Vector4D rainbow3 = Vector4D(
+		std::sin(freq * count + 4) * 127 + 128,
+		std::sin(freq * count + 2) * 127 + 128,
+		std::sin(freq * count + 0) * 127 + 128,
+		255);
+
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
+	if (my_tool_active)
+	{
+		ImGui::Begin("About", &my_tool_active);
+
+		ImVec4 vec4 = ImVec4(rainbow.x / 255.0f, rainbow.y / 255.0f, rainbow.z / 255.0f, rainbow.w / 255.0f);
+		ImVec4 vec4_2 = ImVec4(rainbow2.x / 255.0f, rainbow2.y / 255.0f, rainbow2.z / 255.0f, rainbow2.w / 255.0f);
+		ImVec4 vec4_3 = ImVec4(rainbow3.x / 255.0f, rainbow3.y / 255.0f, rainbow3.z / 255.0f, rainbow3.w / 255.0f);
+
+		ImGui::TextColored(vec4, "Scene Editor v0.01");
+		ImGui::TextColored(vec4_2, "Created by Shane Laurenze Cablayan");
+		ImGui::TextColored(vec4_3, "Soon with Ray Tracing");
+		if (ImGui::Button("Close"))
+		{
+			my_tool_active = false;
+		}
+		ImGui::End();
+	}
+
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
 	swapChain->present(false);
 }
 
@@ -72,7 +121,6 @@ void AppWindow::onDestroy()
 	Window::onDestroy();
 
 	InputSystem::getInstance()->removeListener(this);
-	InputSystem::destroy();
 
 	GameObjectManager::getInstance()->deleteAllObjects();
 
@@ -86,6 +134,7 @@ void AppWindow::onDestroy()
 	
 	GraphicsEngine::destroy();
 	GameObjectManager::destroy();
+	InputSystem::destroy();
 }
 
 void AppWindow::onFocus()
@@ -185,10 +234,13 @@ void AppWindow::initializeEngine()
 		GameObjectManager::getInstance()->addObject(cube);
 	}*/
 
-	//Cube* cube = new Cube("Cube", shaderByteCode, sizeShader);
-	//cube->setPosition(0.0f, -1.0f, 0.0f);
-	//cube->setScale(0.25f, 0.25f, 0.25f);
-	//GameObjectManager::getInstance()->addObject(cube);
+	Cube* cube = new Cube("Cube", shaderByteCode, sizeShader);
+	cube->setPosition(0.0f, 0.4f, 0.0f);
+	cube->setScale(0.25f, 0.25f, 0.25f);
+	GameObjectManager::getInstance()->addObject(cube);
+
+	Plane* plane = new Plane("Plane", shaderByteCode, sizeShader);
+	GameObjectManager::getInstance()->addObject(plane);
 
 	// Test Case 6
 	/*Cube* cube = new Cube("Cube 1", shaderByteCode, sizeShader);
@@ -209,7 +261,7 @@ void AppWindow::initializeEngine()
 	GameObjectManager::getInstance()->addObject(plane);*/
 
 	// Test Case 7
-	float xOffset = 0.8f;
+	/*float xOffset = 0.8f;
 	float yOffset = 0.925f;
 	float startXPos = -0.6f;
 	float startYPos = 3.0f;
@@ -248,7 +300,7 @@ void AppWindow::initializeEngine()
 			}
 		}
 		spaces--;
-	}
+	}*/
 
 	//Border* border = new Border("Border", shaderByteCode, sizeShader);
 	//GameObjectManager::getInstance()->addObject(border);
@@ -296,6 +348,18 @@ void AppWindow::initializeEngine()
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, height / 2, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));
 	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));*/
+
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplWin32_Init(m_hwnd);
+	ImGui_ImplDX11_Init(GraphicsEngine::getInstance()->getDirectXDevice(), GraphicsEngine::getInstance()->getImmediateDeviceContext()->getContext());
 }
 
 void AppWindow::update()

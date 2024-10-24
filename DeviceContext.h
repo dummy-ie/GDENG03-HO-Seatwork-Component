@@ -29,6 +29,8 @@ namespace engine
 			~DeviceContext();
 
 		public:
+			ID3D11DeviceContext* getContext();
+
 			void clearRenderTargetColor(SwapChain* swap_chain, float red, float green, float blue, float alpha);
 			void setVertexBuffer(VertexBuffer* vertex_buffer);
 			void setIndexBuffer(IndexBuffer* index_buffer);
