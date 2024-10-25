@@ -2,13 +2,27 @@
 
 #include <iostream>
 
+#include "Cube.h"
+#include "Plane.h"
 #include "Logger.h"
 
 GameObjectManager* GameObjectManager::P_SHARED_INSTANCE = NULL;
 
+void GameObjectManager::createCube(void* shaderByteCode, size_t sizeShader)
+{
+	Cube* cube = new Cube("Cube", shaderByteCode, sizeShader);
+	this->addObject(cube);
+}
+
+void GameObjectManager::createPlane(void* shaderByteCode, size_t sizeShader)
+{
+	Plane* plane = new Plane("Plane", shaderByteCode, sizeShader);
+	this->addObject(plane);
+}
+
 void GameObjectManager::update(float deltaTime)
 {
-	for (GameObject* gameObject : this->gameObjects)
+	for (GameObject* gameObject : this->listGameObjects)
 	{
 		if (gameObject->isActive())
 			gameObject->update(deltaTime);
@@ -17,73 +31,125 @@ void GameObjectManager::update(float deltaTime)
 
 void GameObjectManager::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader)
 {
-	for (GameObject* gameObject : this->gameObjects)
+	for (GameObject* gameObject : this->listGameObjects)
 	{
 		if (gameObject->isActive())
 			gameObject->draw(window, vertexShader, pixelShader);
 	}
 }
 
+std::vector<GameObject*> GameObjectManager::getAllObjects()
+{
+	return this->listGameObjects;
+}
+
+GameObject* GameObjectManager::findObjectByName(std::string name)
+{
+	if (this->mapGameObjects[name] != NULL)
+	{
+		return this->mapGameObjects[name];
+	}
+	else
+	{
+		debug::Logger::error(this, "Object " + name + " is not found");
+		return NULL;
+	}
+}
+
 void GameObjectManager::addObject(GameObject* gameObject)
 {
-	this->mapGameObject[gameObject->getName()] = gameObject;
-	this->gameObjects.push_back(gameObject);
+	if (this->mapGameObjects[gameObject->getName()] != NULL)
+	{
+		int count = 1;
+		std::string newName = gameObject->getName() + " " + std::to_string(count);
+
+		while (this->mapGameObjects[newName] != NULL)
+		{
+			count++;
+			newName = gameObject->getName() + " " + std::to_string(count);
+		}
+		gameObject->name = newName;
+		this->mapGameObjects[newName] = gameObject;
+	}
+	else
+	{
+		this->mapGameObjects[gameObject->getName()] = gameObject;
+	}
+
+	this->listGameObjects.push_back(gameObject);
 	gameObject->onCreate();
 	debug::Logger::log(gameObject->getName() + " added to hierarchy");
 }
 
 void GameObjectManager::deleteObject(GameObject* gameObject)
 {
-	std::string name = gameObject->getName();
 	int index = -1;
 
-	for (int i = 0; i < this->gameObjects.size() && index == -1; i++)
+	for (int i = 0; i < this->listGameObjects.size() && index == -1; i++)
 	{
-		if (this->gameObjects[i] == gameObject)
+		if (this->listGameObjects[i] == gameObject)
 			index = i;
 	}
 
 	if (index != -1)
 	{
-		this->gameObjects.erase(this->gameObjects.begin() + index);
-		this->mapGameObject.erase(this->gameObjects[index]->getName());
+		this->listGameObjects.erase(this->listGameObjects.begin() + index);
+		this->mapGameObjects.erase(this->listGameObjects[index]->getName());
 		gameObject->onDestroy();
 		delete gameObject;
 	}
 }
 
-void GameObjectManager::deleteLastObject()
+void GameObjectManager::deleteObjectByName(std::string name)
 {
-	if (!gameObjects.empty())
+	GameObject* object = this->findObjectByName(name);
+
+	if (object != NULL)
 	{
-		gameObjects.back()->onDestroy();
-		delete gameObjects.back();
-		gameObjects.pop_back();
+		this->deleteObject(object);
 	}
 }
 
 void GameObjectManager::deleteAllObjects()
 {
-	if (!this->gameObjects.empty())
+	if (!this->listGameObjects.empty())
 	{
-		for (GameObject* gameObject : this->gameObjects)
+		for (GameObject* gameObject : this->listGameObjects)
 			gameObject->onDestroy();
-		this->gameObjects.clear();
-		this->mapGameObject.clear();
+		this->listGameObjects.clear();
+		this->mapGameObjects.clear();
 	}
+}
+
+void GameObjectManager::setSelectedObject(std::string name)
+{
+	if (this->mapGameObjects[name] != NULL)
+	{
+		this->setSelectedObject(this->mapGameObjects[name]);
+	}
+}
+
+void GameObjectManager::setSelectedObject(GameObject* gameObject)
+{
+	this->selectedObject = gameObject;
+}
+
+GameObject* GameObjectManager::getSelectedObject()
+{
+	return this->selectedObject;
 }
 
 GameObjectManager::GameObjectManager() {}
 GameObjectManager::GameObjectManager(const GameObjectManager&) {}
 
 GameObjectManager* GameObjectManager::getInstance() {
-	if (P_SHARED_INSTANCE == NULL)
-	{
-		P_SHARED_INSTANCE = new GameObjectManager();
-		debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
-	}
-
 	return P_SHARED_INSTANCE;
+}
+
+void GameObjectManager::initialize()
+{
+	P_SHARED_INSTANCE = new GameObjectManager();
+	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
 }
 
 void GameObjectManager::destroy()

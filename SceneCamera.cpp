@@ -16,38 +16,41 @@ SceneCamera::~SceneCamera()
 
 void SceneCamera::update(float deltaTime)
 {
-	Vector3D newPosition = this->getLocalPosition();
+	if (isRightMouseDown)
+	{
+		Vector3D newPosition = this->getLocalPosition();
 
-	Matrix4x4 viewMatrix = this->localMatrix;
-	viewMatrix.inverse();
+		Matrix4x4 viewMatrix = this->localMatrix;
+		viewMatrix.inverse();
 
-	if (InputSystem::getInstance()->getKey('W'))
-	{
-		newPosition += viewMatrix.getZDirection() * (speed * deltaTime);
-	}
-	else if (InputSystem::getInstance()->getKey('S'))
-	{
-		newPosition -= viewMatrix.getZDirection() * (speed * deltaTime);
-	}
-	if (InputSystem::getInstance()->getKey('A'))
-	{
-		newPosition -= viewMatrix.getXDirection() * (speed * deltaTime);
-	}
-	else if (InputSystem::getInstance()->getKey('D'))
-	{
-		newPosition += viewMatrix.getXDirection() * (speed * deltaTime);
-	}
-	if (InputSystem::getInstance()->getKey('E'))
-	{
-		newPosition += viewMatrix.getYDirection() * (speed * deltaTime);
-	}
-	else if (InputSystem::getInstance()->getKey('Q'))
-	{
-		newPosition -= viewMatrix.getYDirection() * (speed * deltaTime);
-	}
+		if (InputSystem::getInstance()->getKey('W'))
+		{
+			newPosition += viewMatrix.getZDirection() * (speed * deltaTime);
+		}
+		else if (InputSystem::getInstance()->getKey('S'))
+		{
+			newPosition -= viewMatrix.getZDirection() * (speed * deltaTime);
+		}
+		if (InputSystem::getInstance()->getKey('A'))
+		{
+			newPosition -= viewMatrix.getXDirection() * (speed * deltaTime);
+		}
+		else if (InputSystem::getInstance()->getKey('D'))
+		{
+			newPosition += viewMatrix.getXDirection() * (speed * deltaTime);
+		}
+		if (InputSystem::getInstance()->getKey('E'))
+		{
+			newPosition += viewMatrix.getYDirection() * (speed * deltaTime);
+		}
+		else if (InputSystem::getInstance()->getKey('Q'))
+		{
+			newPosition -= viewMatrix.getYDirection() * (speed * deltaTime);
+		}
 
-	setPosition(newPosition);
-	this->updateViewMatrix();
+		setPosition(newPosition);
+		this->updateViewMatrix();
+	}
 }
 
 void SceneCamera::setSpeed(float speed)

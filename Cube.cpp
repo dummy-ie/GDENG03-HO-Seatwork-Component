@@ -184,7 +184,7 @@ void Cube::update(float deltaTime)
 
 	cbData.worldMatrix.setMatrix(transform);
 
-	cbData.viewMatrix = CameraManager::getInstance()->getMainCameraViewMatrix();
+	cbData.viewMatrix = CameraManager::getInstance()->getSceneCameraViewMatrix();
 
 	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 

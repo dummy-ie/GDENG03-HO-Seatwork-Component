@@ -13,6 +13,11 @@ Matrix4x4 CameraManager::getMainCameraViewMatrix()
 	return this->mainCamera->getViewMatrix();
 }
 
+Matrix4x4 CameraManager::getSceneCameraViewMatrix()
+{
+	return this->sceneCamera->getViewMatrix();
+}
+
 void CameraManager::setMainCamera(Camera* camera)
 {
 	mainCamera = camera;
@@ -26,6 +31,11 @@ void CameraManager::setMainCameraByIndex(int index)
 		return;
 	}
 	setMainCamera(cameras[index]);
+}
+
+void CameraManager::updateSceneCamera(float deltaTime)
+{
+	this->sceneCamera->update(deltaTime);
 }
 
 void CameraManager::addCamera(Camera* camera)
@@ -63,15 +73,10 @@ CameraManager* CameraManager::getInstance() {
 void CameraManager::initialize()
 {
 	P_SHARED_INSTANCE = new CameraManager();
-	P_SHARED_INSTANCE->mainCamera = new SceneCamera("Scene Camera");
-	//P_SHARED_INSTANCE->mainCamera->setPosition(0, 0, -1);
-	P_SHARED_INSTANCE->mainCamera->setPosition(4, 2, -2);
-	P_SHARED_INSTANCE->mainCamera->setRotation(0.5, -0.75, 0);
-	P_SHARED_INSTANCE->mainCamera->updateViewMatrix();
-	Vector3D position = P_SHARED_INSTANCE->mainCamera->getLocalPosition();
-	//std::cout << "Scene Camera Initialized at Position : (" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
-	GameObjectManager::getInstance()->addObject(P_SHARED_INSTANCE->mainCamera);
-	P_SHARED_INSTANCE->addCamera(P_SHARED_INSTANCE->mainCamera);
+	P_SHARED_INSTANCE->sceneCamera = new SceneCamera("Scene Camera");
+	P_SHARED_INSTANCE->sceneCamera->setPosition(0, 1, -8);
+	P_SHARED_INSTANCE->sceneCamera->updateViewMatrix();
+	P_SHARED_INSTANCE->addCamera(P_SHARED_INSTANCE->sceneCamera);
 	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
 }
 

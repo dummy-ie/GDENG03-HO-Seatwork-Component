@@ -3,17 +3,21 @@
 #include <vector>
 
 #include "Camera.h"
+#include "SceneCamera.h"
 
 class CameraManager
 {
 private:
+    SceneCamera* sceneCamera;
     Camera* mainCamera;
     std::vector<Camera*> cameras;
 
 public:
     Matrix4x4 getMainCameraViewMatrix();
+    Matrix4x4 getSceneCameraViewMatrix();
     void setMainCamera(Camera* camera);
     void setMainCameraByIndex(int index);
+    void updateSceneCamera(float deltaTime);
     void addCamera(Camera* camera);
     void removeCamera(Camera* camera);
 

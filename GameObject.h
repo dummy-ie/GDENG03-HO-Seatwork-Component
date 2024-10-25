@@ -30,6 +30,7 @@ protected:
 	Matrix4x4 localMatrix;
 	bool active;
 
+	friend class GameObjectManager;
 public:
 	GameObject(std::string name);
 	~GameObject();
@@ -51,6 +52,7 @@ public:
 	void setRotation(Vector3D rotation);
 	Vector3D getLocalRotation();
 
+	void setName(std::string name);
 	std::string getName();
 
 	bool isActive();

@@ -81,6 +81,11 @@ Vector3D GameObject::getLocalRotation()
 	return this->localRotation;
 }
 
+void GameObject::setName(std::string name)
+{
+	this->name = name;
+}
+
 std::string GameObject::getName()
 {
 	return this->name;

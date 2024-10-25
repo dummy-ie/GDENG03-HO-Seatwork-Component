@@ -23,10 +23,15 @@ Plane::Plane(std::string name, void* shaderByteCode, size_t sizeShader) : GameOb
 
 	vertex list[] =
 	{
-		{ Vector3D(-1.0f,0.0f,-1.0f),   color1, color1 },
-		{ Vector3D(-1.0f,0.0f,1.0f),   color2, color2 },
-		{ Vector3D(1.0f,0.0f,-1.0f), color3,  color3 },
-		{ Vector3D(1.0f,0.0f,1.0f),    color4, color4 }
+		{ Vector3D(-8.0f,0.0f,-8.0f),   color1, color1 },
+		{ Vector3D(-8.0f,0.0f,8.0f),   color2, color2 },
+		{ Vector3D(8.0f,0.0f,-8.0f), color3,  color3 },
+		{ Vector3D(8.0f,0.0f,8.0f),    color4, color4 },
+
+		{ Vector3D(-8.0f,0.0f,-8.0f),   color1, color1 },
+		{ Vector3D(-8.0f,0.0f,8.0f),   color2, color2 },
+		{ Vector3D(8.0f,0.0f,-8.0f), color3,  color3 },
+		{ Vector3D(8.0f,0.0f,8.0f),    color4, color4 }
 	};
 
 	/*vertex list[] =
@@ -91,7 +96,7 @@ void Plane::update(float deltaTime)
 
 	cbData.worldMatrix.setMatrix(transform);
 
-	cbData.viewMatrix = CameraManager::getInstance()->getMainCameraViewMatrix();
+	cbData.viewMatrix = CameraManager::getInstance()->getSceneCameraViewMatrix();
 
 	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 
