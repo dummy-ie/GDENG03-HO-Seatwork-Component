@@ -94,50 +94,91 @@ bool RenderSystem::release()
 
 SwapChain* RenderSystem::createSwapChain(HWND hwnd, UINT width, UINT height)
 {
-	return new SwapChain(this, hwnd, width, height);
+	SwapChain* swapChain = nullptr;
+	try
+	{
+		swapChain = new SwapChain(this, hwnd, width, height);
+	}
+	catch(...) {}
+	return swapChain;
 }
 
 VertexBuffer* RenderSystem::createVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader)
 {
-	return new VertexBuffer(this, list_vertices, size_vertex, size_list, shader_byte_code, size_byte_shader);
+	VertexBuffer* vertexBuffer = nullptr;
+	try
+	{
+		vertexBuffer = new VertexBuffer(this, list_vertices, size_vertex, size_list, shader_byte_code, size_byte_shader);
+	}
+	catch (...) {}
+	return vertexBuffer;
 }
 
 IndexBuffer* RenderSystem::createIndexBuffer(void* list_indices, UINT size_list)
 {
-	return new IndexBuffer(this, list_indices, size_list);
+	IndexBuffer* indexBuffer = nullptr;
+	try
+	{
+		indexBuffer = new IndexBuffer(this, list_indices, size_list);
+	}
+	catch (...) {}
+	return indexBuffer;
 }
 
 ConstantBuffer* RenderSystem::createConstantBuffer(void* buffer, UINT size_buffer)
 {
-	return new ConstantBuffer(this, buffer, size_buffer);
+	ConstantBuffer* constantBuffer = nullptr;
+	try
+	{
+		constantBuffer = new ConstantBuffer(this, buffer, size_buffer);
+	}
+	catch (...) {}
+	return constantBuffer;
 }
 
 VertexShader* RenderSystem::createVertexShader(const void* shader_byte_code, size_t byte_code_size)
 {
-	VertexShader* vs = new VertexShader(this, shader_byte_code, byte_code_size);
-
-	return vs;
+	VertexShader* vertexShader = nullptr;
+	try
+	{
+		vertexShader = new VertexShader(this, shader_byte_code, byte_code_size);
+	}
+	catch (...) {}
+	return vertexShader;
 }
 
 PixelShader* RenderSystem::createPixelShader(const void* shader_byte_code, size_t byte_code_size)
 {
-	PixelShader* ps = new PixelShader(this, shader_byte_code, byte_code_size);
-
-	return ps;
+	PixelShader* pixelShader = nullptr;
+	try
+	{
+		pixelShader = new PixelShader(this, shader_byte_code, byte_code_size);
+	}
+	catch (...) {}
+	return pixelShader;
 }
 
 Viewport* RenderSystem::createViewport(FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth,
 	FLOAT maxDepth)
 {
-	Viewport* vp = new Viewport(this, topLeftX, topLeftY, width, height, minDepth, maxDepth);
-
-	return vp;
+	Viewport* viewport = nullptr;
+	try
+	{
+		viewport = new Viewport(this, topLeftX, topLeftY, width, height, minDepth, maxDepth);
+	}
+	catch (...) {}
+	return viewport;
 }
 
 RasterizerState* RenderSystem::createRasterizerState(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode)
 {
-	RasterizerState* rasterizer_state = new RasterizerState(this, fillMode, cullMode);
-	return rasterizer_state;
+	RasterizerState* rasterizerState = nullptr;
+	try
+	{
+		rasterizerState = new RasterizerState(this, fillMode, cullMode);
+	}
+	catch (...) {}
+	return rasterizerState;
 }
 
 DeviceContext* RenderSystem::getImmediateDeviceContext()
