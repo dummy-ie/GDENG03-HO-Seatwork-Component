@@ -57,5 +57,10 @@ void InspectorScreen::updateInspector()
 		{
 			gameObject->setRotation(Vector3D(rotation[0], rotation[1], rotation[2]));
 		}
+		if (ImGui::Button("Delete", ImVec2(ImGui::GetWindowSize().x - 15, 20)))
+		{
+			GameObjectManager::getInstance()->setSelectedObject(nullptr);
+			GameObjectManager::getInstance()->deleteObject(gameObject);
+		}
 	}
 }

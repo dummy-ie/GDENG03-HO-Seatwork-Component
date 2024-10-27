@@ -51,6 +51,13 @@ void MenuScreen::draw()
 
                 }
                 if (ImGui::MenuItem("Quad")) {
+                    void* shaderByteCode = nullptr;
+                    size_t sizeShader = 0;
+
+                    renderSystem->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
+
+                    GameObjectManager::getInstance()->createQuad(shaderByteCode, sizeShader);
+
                 }
                 ImGui::EndMenu();
             }

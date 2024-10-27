@@ -100,9 +100,8 @@ void GameObjectManager::deleteObject(GameObject* gameObject)
 
 	if (index != -1)
 	{
-		this->listGameObjects.erase(this->listGameObjects.begin() + index);
 		this->mapGameObjects.erase(this->listGameObjects[index]->getName());
-
+		this->listGameObjects.erase(this->listGameObjects.begin() + index);
 		gameObject->onDestroy();
 		delete gameObject;
 	}
