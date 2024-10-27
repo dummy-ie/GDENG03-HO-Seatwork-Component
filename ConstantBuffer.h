@@ -15,12 +15,10 @@ namespace graphics
 		friend class DeviceContext;
 
 	public:
-		ConstantBuffer(RenderSystem* system);
+		ConstantBuffer(RenderSystem* system, void* buffer, UINT size_buffer);
 		~ConstantBuffer();
 
 	public:
-		bool load(void* buffer, UINT size_buffer);
 		void update(DeviceContext* context, void* buffer);
-		bool release();
 	};
 }

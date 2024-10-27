@@ -16,13 +16,7 @@ namespace graphics
 		friend class DeviceContext;
 
 	public:
-		VertexShader(RenderSystem* system);
+		VertexShader(RenderSystem* system, const void* shaderByteCode, size_t byteCodeSize);
 		~VertexShader();
-
-	private:
-		bool init(const void* shaderByteCode, size_t byteCodeSize);
-
-	public:
-		void release();
 	};
 }

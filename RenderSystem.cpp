@@ -1,6 +1,6 @@
 #include "RenderSystem.h"
 
-
+#include <exception>
 #include <d3dcompiler.h>
 
 #include "SwapChain.h"
@@ -63,8 +63,7 @@ bool RenderSystem::init()
 	m_dxgi_adapter->GetParent(__uuidof(IDXGIFactory), (void**)&m_dxgi_factory);
 
 	debug::Logger::log(this, "Initialized");
-	if (m_dxgi_factory == NULL)
-		debug::Logger::log("Device null");
+
 	return true;
 }
 
@@ -84,7 +83,7 @@ bool RenderSystem::release()
 	m_dxgi_adapter->Release();
 	m_dxgi_factory->Release();
 
-	m_imm_device_context->release();
+	delete m_imm_device_context;
 
 	m_d3d_device->Release();
 
@@ -93,9 +92,52 @@ bool RenderSystem::release()
 	return true;
 }
 
-SwapChain* RenderSystem::createSwapChain()
+SwapChain* RenderSystem::createSwapChain(HWND hwnd, UINT width, UINT height)
 {
-	return new SwapChain(this);
+	return new SwapChain(this, hwnd, width, height);
+}
+
+VertexBuffer* RenderSystem::createVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader)
+{
+	return new VertexBuffer(this, list_vertices, size_vertex, size_list, shader_byte_code, size_byte_shader);
+}
+
+IndexBuffer* RenderSystem::createIndexBuffer(void* list_indices, UINT size_list)
+{
+	return new IndexBuffer(this, list_indices, size_list);
+}
+
+ConstantBuffer* RenderSystem::createConstantBuffer(void* buffer, UINT size_buffer)
+{
+	return new ConstantBuffer(this, buffer, size_buffer);
+}
+
+VertexShader* RenderSystem::createVertexShader(const void* shader_byte_code, size_t byte_code_size)
+{
+	VertexShader* vs = new VertexShader(this, shader_byte_code, byte_code_size);
+
+	return vs;
+}
+
+PixelShader* RenderSystem::createPixelShader(const void* shader_byte_code, size_t byte_code_size)
+{
+	PixelShader* ps = new PixelShader(this, shader_byte_code, byte_code_size);
+
+	return ps;
+}
+
+Viewport* RenderSystem::createViewport(FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth,
+	FLOAT maxDepth)
+{
+	Viewport* vp = new Viewport(this, topLeftX, topLeftY, width, height, minDepth, maxDepth);
+
+	return vp;
+}
+
+RasterizerState* RenderSystem::createRasterizerState(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode)
+{
+	RasterizerState* rasterizer_state = new RasterizerState(this, fillMode, cullMode);
+	return rasterizer_state;
 }
 
 DeviceContext* RenderSystem::getImmediateDeviceContext()
@@ -111,66 +153,6 @@ IDXGIFactory* RenderSystem::getDirectXFactory()
 ID3D11Device* RenderSystem::getDirectXDevice()
 {
 	return this->m_d3d_device;
-}
-
-VertexBuffer* RenderSystem::createVertexBuffer()
-{
-	return new VertexBuffer(this);
-}
-
-IndexBuffer* RenderSystem::createIndexBuffer()
-{
-	return new IndexBuffer(this);
-}
-
-ConstantBuffer* RenderSystem::createConstantBuffer()
-{
-	return new ConstantBuffer(this);
-}
-
-VertexShader* RenderSystem::createVertexShader(const void* shader_byte_code, size_t byte_code_size)
-{
-	VertexShader* vs = new VertexShader(this);
-
-	if (!vs->init(shader_byte_code, byte_code_size))
-	{
-		vs->release();
-		return nullptr;
-	}
-
-	return vs;
-}
-
-PixelShader* RenderSystem::createPixelShader(const void* shader_byte_code, size_t byte_code_size)
-{
-	PixelShader* ps = new PixelShader(this);
-
-	if (!ps->init(shader_byte_code, byte_code_size))
-	{
-		ps->release();
-		return nullptr;
-	}
-
-	return ps;
-}
-
-Viewport* RenderSystem::createViewport(FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth,
-	FLOAT maxDepth)
-{
-	Viewport* vp = new Viewport(this);
-
-	vp->init(topLeftX, topLeftY, width, height, minDepth, maxDepth);
-
-	return vp;
-}
-
-RasterizerState* RenderSystem::createRasterizerState(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode)
-{
-	RasterizerState* rasterizer_state = new RasterizerState(this);
-
-	rasterizer_state->init(fillMode, cullMode);
-
-	return rasterizer_state;
 }
 
 bool RenderSystem::compileVertexShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size)

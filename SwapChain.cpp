@@ -1,19 +1,13 @@
 #include "SwapChain.h"
 
+#include <exception>
+
 #include "RenderSystem.h"
 #include "Logger.h"
 
 using namespace graphics;
 
-SwapChain::SwapChain(RenderSystem* system) : system(system)
-{
-}
-
-SwapChain::~SwapChain()
-{
-}
-
-bool SwapChain::init(HWND hwnd, UINT width, UINT height)
+SwapChain::SwapChain(RenderSystem* system, HWND hwnd, UINT width, UINT height) : system(system)
 {
 	ID3D11Device* device = this->system->m_d3d_device;
 
@@ -35,19 +29,19 @@ bool SwapChain::init(HWND hwnd, UINT width, UINT height)
 	HRESULT hr = this->system->m_dxgi_factory->CreateSwapChain(device, &desc, &m_swap_chain);
 
 	if (!debug::Logger::log(this, hr))
-		return false;
+		throw std::exception("SwapChain not created successfully");
 
 	ID3D11Texture2D* buffer = NULL;
 	hr = m_swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&buffer);
 
 	if (!debug::Logger::log(this, hr))
-		return false;
+		throw std::exception("SwapChain not created successfully");
 
 	hr = device->CreateRenderTargetView(buffer, NULL, &m_rtv);
 	buffer->Release();
 
 	if (!debug::Logger::log(this, hr))
-		return false;
+		throw std::exception("Render Target View not created successfully");
 
 	D3D11_TEXTURE2D_DESC texDesc = {};
 	texDesc.Width = width;
@@ -63,26 +57,27 @@ bool SwapChain::init(HWND hwnd, UINT width, UINT height)
 	texDesc.CPUAccessFlags = 0;
 
 	hr = device->CreateTexture2D(&texDesc, NULL, &buffer);
+
 	if (!debug::Logger::log(this, hr))
-		return false;
+		throw std::exception("Texture2D not created successfully");
 
 	hr = device->CreateDepthStencilView(buffer, NULL, &m_dsv);
-	if (!debug::Logger::log(this, hr))
-		return false;
-
 	buffer->Release();
-	return true;
+
+	if (!debug::Logger::log(this, hr))
+		throw std::exception("Depth Stencil View not created successfully");
+
+}
+
+SwapChain::~SwapChain()
+{
+	m_dsv->Release();
+	m_rtv->Release();
+	m_swap_chain->Release();
 }
 
 bool SwapChain::present(bool vsync)
 {
 	m_swap_chain->Present(vsync, NULL);
-	return false;
-}
-
-bool SwapChain::release()
-{
-	m_swap_chain->Release();
-	delete this;
 	return true;
 }

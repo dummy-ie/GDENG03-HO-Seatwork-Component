@@ -1,24 +1,13 @@
 #include "RasterizerState.h"
 
+#include <exception>
+
 #include "RenderSystem.h"
 #include "Logger.h"
 
 using namespace graphics;
 
-RasterizerState::RasterizerState(RenderSystem* system) : system(system)
-{
-}
-
-RasterizerState::~RasterizerState()
-{
-}
-
-void RasterizerState::updateState()
-{
-	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setRasterizerState(this);
-}
-
-bool RasterizerState::init(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode)
+RasterizerState::RasterizerState(RenderSystem* system, D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode) : system(system)
 {
 	D3D11_RASTERIZER_DESC desc = {};
 	ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
@@ -26,16 +15,17 @@ bool RasterizerState::init(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode)
 	desc.CullMode = cullMode;
 
 	if (!debug::Logger::log(this, this->system->m_d3d_device->CreateRasterizerState(&desc, &m_rasterizer_state)))
-		return false;
-
-	return true;
+		throw std::exception("RasterizerState not created successfully");
 }
 
-bool RasterizerState::release()
+RasterizerState::~RasterizerState()
 {
 	m_rasterizer_state->Release();
-	delete this;
-	return true;
+}
+
+void RasterizerState::updateState()
+{
+	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setRasterizerState(this);
 }
 
 void RasterizerState::setFillMode(D3D11_FILL_MODE fillMode)

@@ -73,11 +73,11 @@ void AppWindow::onDestroy()
 
 	for (auto vp : this->viewPorts)
 	{
-		vp->release();
+		delete vp;
 	}
 
 	this->viewPorts.clear();
-	this->swapChain->release();
+	delete swapChain;
 
 	UIManager::destroy();
 	CameraManager::destroy();
@@ -141,20 +141,17 @@ void AppWindow::initializeEngine()
 
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	this->swapChain = renderSystem->createSwapChain();
-
 	RECT windowRect = this->getClientWindowRect();
 
 	FLOAT width = windowRect.right - windowRect.left;
 	FLOAT height = windowRect.bottom - windowRect.top;
 
-	this->swapChain->init(this->m_hwnd, width, height);
+	this->swapChain = renderSystem->createSwapChain(this->m_hwnd, width, height);
 
 	CBEditor cbData;
 	cbData.wireframe = false;
 
-	this->constantBuffer = renderSystem->createConstantBuffer();
-	this->constantBuffer->load(&cbData, sizeof(CBEditor));
+	this->constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBEditor));
 
 	void* shaderByteCode = nullptr;
 	size_t sizeShader = 0;
@@ -200,7 +197,7 @@ void AppWindow::destroy()
 {
 	if (P_SHARED_INSTANCE != NULL)
 	{
-		P_SHARED_INSTANCE->constantBuffer->release();
+		delete P_SHARED_INSTANCE->constantBuffer;
 		P_SHARED_INSTANCE->release();
 	}
 }

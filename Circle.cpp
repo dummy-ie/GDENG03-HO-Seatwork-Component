@@ -32,13 +32,11 @@ Circle::Circle(std::string name, float radius, int sides, void* shaderByteCode, 
 
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	constantBuffer = renderSystem->createConstantBuffer();
-	constantBuffer->load(&cc, sizeof(CBData));
+	constantBuffer = renderSystem->createConstantBuffer(&cc, sizeof(CBData));
 
 	UINT size_list = list.size();
 
-	vertexBuffer = renderSystem->createVertexBuffer();
-	vertexBuffer->load(list.data(), sizeof(vertex), size_list, shaderByteCode, sizeShader);
+	vertexBuffer = renderSystem->createVertexBuffer(list.data(), sizeof(vertex), size_list, shaderByteCode, sizeShader);
 }
 
 Circle::~Circle()
@@ -124,7 +122,7 @@ void Circle::draw(Window* window, VertexShader* vertexShader, PixelShader* pixel
 
 void Circle::onDestroy()
 {
-	vertexBuffer->release();
-	constantBuffer->release();
+	delete vertexBuffer;
+	delete constantBuffer;
 	delete this;
 }

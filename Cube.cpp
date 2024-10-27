@@ -64,8 +64,7 @@ Cube::Cube(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	vertexBuffer = renderSystem->createVertexBuffer();
-	vertexBuffer->load(vertexList, sizeof(vertex), ARRAYSIZE(vertexList), shaderByteCode, sizeShader);
+	vertexBuffer = renderSystem->createVertexBuffer(vertexList, sizeof(vertex), ARRAYSIZE(vertexList), shaderByteCode, sizeShader);
 
 	unsigned int indexList[] = {
 		0,1,2,
@@ -87,15 +86,13 @@ Cube::Cube(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 		1,0,7
 	};
 
-	indexBuffer = renderSystem->createIndexBuffer();
-	indexBuffer->load(indexList, ARRAYSIZE(indexList));
+	indexBuffer = renderSystem->createIndexBuffer(indexList, ARRAYSIZE(indexList));
 
 	CBData cbData;
 	angle = 0.0f;
 	cbData.time = angle;
 
-	constantBuffer = renderSystem->createConstantBuffer();
-	constantBuffer->load(&cbData, sizeof(CBData));
+	constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBData));
 
 	InputSystem::getInstance()->addListener(this);
 
@@ -214,9 +211,9 @@ void Cube::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelSh
 void Cube::onDestroy()
 {
 	InputSystem::getInstance()->removeListener(this);
-	vertexBuffer->release();
-	indexBuffer->release();
-	constantBuffer->release();
+	delete vertexBuffer;
+	delete indexBuffer;
+	delete constantBuffer;
 }
 
 void Cube::onKeyDown(int key)

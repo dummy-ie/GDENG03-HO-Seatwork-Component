@@ -17,15 +17,13 @@ namespace graphics
 		friend class DeviceContext;
 
 	public:
-		RasterizerState(RenderSystem* system);
+		RasterizerState(RenderSystem* system, D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode);
 		~RasterizerState();
 
 	private:
 		void updateState();
-	public:
-		bool init(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode);
-		bool release();
 
+	public:
 		void setFillMode(D3D11_FILL_MODE fillMode);
 	};
 }

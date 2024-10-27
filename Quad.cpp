@@ -16,13 +16,11 @@ Quad::Quad(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 	CBData cc;
 	cc.time = 0.0f;
 
-	constantBuffer = renderSystem->createConstantBuffer();
-	constantBuffer->load(&cc, sizeof(CBData));
+	constantBuffer = renderSystem->createConstantBuffer(&cc, sizeof(CBData));
 
 	UINT sizeList = ARRAYSIZE(list);
 
-	vertexBuffer = renderSystem->createVertexBuffer();
-	vertexBuffer->load(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
+	vertexBuffer = renderSystem->createVertexBuffer(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
 }
 
 Quad::~Quad()
@@ -88,6 +86,6 @@ void Quad::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelSh
 
 void Quad::onDestroy()
 {
-	constantBuffer->release();
-	vertexBuffer->release();
+	delete constantBuffer;
+	delete vertexBuffer;
 }

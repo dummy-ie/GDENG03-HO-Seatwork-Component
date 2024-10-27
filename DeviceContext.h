@@ -39,9 +39,6 @@ namespace graphics
 		void setConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer, int index = 0);
 		void setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer, int index = 0);
 		void setRasterizerState(RasterizerState* rasterizer_state);
-
-
-		bool release();
 	};
 }
 

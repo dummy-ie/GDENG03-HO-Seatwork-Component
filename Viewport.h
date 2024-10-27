@@ -17,7 +17,8 @@ namespace graphics
 		friend class DeviceContext;
 
 	public:
-		Viewport(RenderSystem* system);
+		Viewport(RenderSystem* system, FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth,
+			FLOAT maxDepth);
 		~Viewport();
 
 	public:
@@ -26,9 +27,5 @@ namespace graphics
 		void setDepth(FLOAT minDepth, FLOAT maxDepth);
 		void setRasterizerSolidState();
 		void setRasterizerWireframeState();
-
-		void init(FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth,
-			FLOAT maxDepth);
-		void release();
 	};
 }

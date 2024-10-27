@@ -41,13 +41,11 @@ Plane::Plane(std::string name, void* shaderByteCode, size_t sizeShader) : GameOb
 	CBData cbData;
 	cbData.time = 0.0f;
 
-	constantBuffer = renderSystem->createConstantBuffer();
-	constantBuffer->load(&cbData, sizeof(CBData));
+	constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBData));
 
 	UINT sizeList = ARRAYSIZE(list);
 
-	vertexBuffer = renderSystem->createVertexBuffer();
-	vertexBuffer->load(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
+	vertexBuffer = renderSystem->createVertexBuffer(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
 }
 
 Plane::~Plane()
@@ -126,6 +124,6 @@ void Plane::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelS
 
 void Plane::onDestroy()
 {
-	constantBuffer->release();
-	vertexBuffer->release();
+	delete constantBuffer;
+	delete vertexBuffer;
 }

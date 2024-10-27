@@ -48,17 +48,18 @@ namespace graphics
 		// Release all the resources loaded
 		bool release();
 	public:
-		SwapChain* createSwapChain();
-		DeviceContext* getImmediateDeviceContext();
-		IDXGIFactory* getDirectXFactory();
-		ID3D11Device* getDirectXDevice();
-		VertexBuffer* createVertexBuffer();
-		IndexBuffer* createIndexBuffer();
-		ConstantBuffer* createConstantBuffer();
+		SwapChain* createSwapChain(HWND hwnd, UINT width, UINT height);
+		VertexBuffer* createVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader);
+		IndexBuffer* createIndexBuffer(void* list_indices, UINT size_list);
+		ConstantBuffer* createConstantBuffer(void* buffer, UINT size_buffer);
 		VertexShader* createVertexShader(const void* shader_byte_code, size_t byte_code_size);
 		PixelShader* createPixelShader(const void* shader_byte_code, size_t byte_code_size);
 		Viewport* createViewport(FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth, FLOAT maxDepth);
-		RasterizerState* createRasterizerState(D3D11_FILL_MODE fillMode = D3D11_FILL_SOLID, D3D11_CULL_MODE cullMode = D3D11_CULL_BACK);
+		RasterizerState* createRasterizerState(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode);
+
+		DeviceContext* getImmediateDeviceContext();
+		IDXGIFactory* getDirectXFactory();
+		ID3D11Device* getDirectXDevice();
 
 	public:
 		bool compileVertexShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size);

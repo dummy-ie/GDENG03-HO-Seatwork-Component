@@ -37,22 +37,18 @@ void MenuScreen::draw()
                     size_t sizeShader = 0;
 
                     renderSystem->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
-                    VertexShader* vertexShader = renderSystem->createVertexShader(shaderByteCode, sizeShader);
 
                     GameObjectManager::getInstance()->createCube(shaderByteCode, sizeShader);
 
-                    vertexShader->release();
                 }
                 if (ImGui::MenuItem("Plane")) {
                     void* shaderByteCode = nullptr;
                     size_t sizeShader = 0;
 
                     renderSystem->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
-                    VertexShader* vertexShader = renderSystem->createVertexShader(shaderByteCode, sizeShader);
 
                     GameObjectManager::getInstance()->createPlane(shaderByteCode, sizeShader);
 
-                    vertexShader->release();
                 }
                 if (ImGui::MenuItem("Quad")) {
                 }

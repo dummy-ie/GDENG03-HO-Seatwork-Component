@@ -19,13 +19,11 @@ Border::Border(std::string name, void* shaderByteCode, size_t sizeShader) : Game
 
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	this->constantBuffer = renderSystem->createConstantBuffer();
-	this->constantBuffer->load(&cbData, sizeof(CBData));
+	this->constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBData));
 
 	UINT sizeList = ARRAYSIZE(list);
 
-	this->vertexBuffer = renderSystem->createVertexBuffer();
-	this->vertexBuffer->load(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
+	this->vertexBuffer = renderSystem->createVertexBuffer(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
 }
 
 Border::~Border()
@@ -76,6 +74,6 @@ void Border::draw(Window* window, VertexShader* vertexShader, PixelShader* pixel
 
 void Border::onDestroy()
 {
-	this->constantBuffer->release();
-	this->vertexBuffer->release();
+	delete this->constantBuffer;
+	delete this->vertexBuffer;
 }

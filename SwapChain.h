@@ -18,12 +18,10 @@ namespace graphics
 		friend class DeviceContext;
 
 	public:
-		SwapChain(RenderSystem* system);
+		SwapChain(RenderSystem* system, HWND hwnd, UINT width, UINT height);
 		~SwapChain();
 
 	public:
-		bool init(HWND hwnd, UINT width, UINT height);
 		bool present(bool vsync);
-		bool release();
 	};
 }

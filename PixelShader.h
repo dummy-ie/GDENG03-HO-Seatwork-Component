@@ -16,14 +16,8 @@ namespace graphics
 		friend class DeviceContext;
 
 	public:
-		PixelShader(RenderSystem* system);
+		PixelShader(RenderSystem* system, const void* shader_byte_code, size_t byte_code_size);
 		~PixelShader();
-
-	private:
-		bool init(const void* shader_byte_code, size_t byte_code_size);
-
-	public:
-		void release();
 	};
 }
 

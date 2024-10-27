@@ -17,13 +17,10 @@ namespace graphics
 		friend class DeviceContext;
 
 	public:
-		IndexBuffer(RenderSystem* system);
+		IndexBuffer(RenderSystem* system, void* list_indices, UINT size_list);
 		~IndexBuffer();
 
 	public:
-		bool load(void* list_indices, UINT size_list);
-
 		UINT getSizeIndexList();
-		bool release();
 	};
 }

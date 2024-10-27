@@ -1,5 +1,7 @@
 #include "DeviceContext.h"
 
+#include <exception>
+
 #include "SwapChain.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
@@ -8,6 +10,7 @@
 #include "PixelShader.h"
 #include "RasterizerState.h"
 #include "Viewport.h"
+
 
 using namespace graphics;
 
@@ -18,6 +21,7 @@ DeviceContext::DeviceContext(RenderSystem* system, ID3D11DeviceContext* device_c
 
 DeviceContext::~DeviceContext()
 {
+	m_device_context->Release();
 }
 
 ID3D11DeviceContext* DeviceContext::getContext()
@@ -126,11 +130,4 @@ void DeviceContext::setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer*
 void DeviceContext::setRasterizerState(RasterizerState* rasterizer_state)
 {
 	m_device_context->RSSetState(rasterizer_state->m_rasterizer_state);
-}
-
-bool DeviceContext::release()
-{
-	m_device_context->Release();
-	delete this;
-	return true;
 }

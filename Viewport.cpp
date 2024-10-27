@@ -1,5 +1,7 @@
 #include "Viewport.h"
 
+#include <exception>
+
 #include "RenderSystem.h"
 #include "DeviceContext.h"
 #include "Logger.h"
@@ -7,13 +9,24 @@
 
 using namespace graphics;
 
-Viewport::Viewport(RenderSystem* system) : system(system)
+Viewport::Viewport(RenderSystem* system, FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth, FLOAT maxDepth) : system(system)
 {
 	vp = {};
+	solidState = this->system->createRasterizerState(D3D11_FILL_SOLID, D3D11_CULL_BACK);
+	wireframeState = this->system->createRasterizerState(D3D11_FILL_WIREFRAME, D3D11_CULL_NONE);
+
+	setPosition(topLeftX, topLeftY);
+	setSize(width, height);
+	setDepth(minDepth, maxDepth);
+
+	setRasterizerSolidState();
+	debug::Logger::log(this, "Initialized");
 }
 
 Viewport::~Viewport()
 {
+	delete solidState;
+	delete wireframeState;
 }
 
 void Viewport::setPosition(FLOAT topLeftX, FLOAT topLeftY)
@@ -42,24 +55,4 @@ void Viewport::setRasterizerSolidState()
 void Viewport::setRasterizerWireframeState()
 {
 	this->system->getImmediateDeviceContext()->setRasterizerState(wireframeState);
-}
-
-void Viewport::init(FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth, FLOAT maxDepth)
-{
-	solidState = this->system->createRasterizerState();
-	wireframeState = this->system->createRasterizerState(D3D11_FILL_WIREFRAME, D3D11_CULL_NONE);
-
-	setPosition(topLeftX, topLeftY);
-	setSize(width, height);
-	setDepth(minDepth, maxDepth);
-
-	setRasterizerSolidState();
-	debug::Logger::log(this,"Initialized");
-}
-
-void Viewport::release()
-{
-	solidState->release();
-	wireframeState->release();
-	delete this;
 }
