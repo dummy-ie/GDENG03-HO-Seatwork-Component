@@ -72,14 +72,14 @@ void InputSystem::update()
 							else if (i == VK_RBUTTON)
 								(*it)->onRightMouseUp(Vector2D(currentMousePosition.x, currentMousePosition.y));
 							else
-							(*it)->onKeyUp(i);
+								(*it)->onKeyUp(i);
 							++it;
 						}
 					}
 				}
 			}
 			// Store current key state to old key state
-			//::memcpy(oldKeysState, keysState, sizeof(unsigned char) * 256);
+			::memcpy(oldKeysState, keysState, sizeof(unsigned char) * 256);
 		}
 	}
 }
@@ -166,8 +166,15 @@ Vector2D InputSystem::getDeltaMousePosition()
 	return deltaMousePosition;
 }
 
-InputSystem::InputSystem() {}
-InputSystem::~InputSystem() {}
+InputSystem::InputSystem()
+{
+	debug::Logger::log(this, "Initialized");
+}
+InputSystem::~InputSystem()
+{
+	P_SHARED_INSTANCE = nullptr;
+	debug::Logger::log(P_SHARED_INSTANCE, "Released");
+}
 InputSystem::InputSystem(const InputSystem&) {}
 
 InputSystem* InputSystem::getInstance() {
@@ -176,17 +183,15 @@ InputSystem* InputSystem::getInstance() {
 
 void InputSystem::initialize()
 {
+	if (P_SHARED_INSTANCE)
+		throw std::exception("Input System already created");
 	P_SHARED_INSTANCE = new InputSystem();
-	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
-	//P_SHARED_INSTANCE->init();
 }
 
 void InputSystem::destroy()
 {
 	if (P_SHARED_INSTANCE != nullptr)
 	{
-		debug::Logger::log(P_SHARED_INSTANCE, "Released");
 		delete P_SHARED_INSTANCE;
-		//P_SHARED_INSTANCE->release();
 	}
 }

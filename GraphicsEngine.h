@@ -10,12 +10,6 @@ namespace graphics
 		RenderSystem* renderSystem = nullptr;
 
 	public:
-		// Initialize the Graphics Engine and DirectX 11 Device
-		bool init();
-		// Release all the resources loaded
-		bool release();
-
-	public:
 		RenderSystem* getRenderSystem();
 
 	private:

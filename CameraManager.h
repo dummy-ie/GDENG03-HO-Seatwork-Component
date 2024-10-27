@@ -26,6 +26,7 @@ private:
 
 private:
     CameraManager();
+    ~CameraManager();
     CameraManager(const CameraManager&);
     CameraManager& operator = (const CameraManager&);
 

@@ -21,6 +21,7 @@ void AppWindow::onCreate()
 {
 	Window::onCreate();
 	InputSystem::initialize();
+	initializeEngine();
 }
 
 void AppWindow::onUpdate()
@@ -59,7 +60,6 @@ void AppWindow::onUpdate()
 	CameraManager::getInstance()->updateSceneCamera(deltaTime);
 
 	UIManager::getInstance()->draw();
-
 	swapChain->present(false);
 }
 
@@ -132,12 +132,20 @@ void AppWindow::onRightMouseUp(const Vector2D& mousePosition)
 
 void AppWindow::initializeEngine()
 {
-	GraphicsEngine::initialize();
-	Random::initialize();
-	InputSystem::getInstance()->addListener(this);
-	GameObjectManager::initialize();
-	CameraManager::initialize();
-	UIManager::initialize(m_hwnd);
+	try
+	{
+		GraphicsEngine::initialize();
+		Random::initialize();
+		InputSystem::getInstance()->addListener(this);
+		GameObjectManager::initialize();
+		CameraManager::initialize();
+		UIManager::initialize(m_hwnd);
+	}
+	catch (...)
+	{
+		m_is_running = false;
+	}
+	
 
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
@@ -178,7 +186,10 @@ void AppWindow::update()
 }
 
 AppWindow* AppWindow::P_SHARED_INSTANCE = NULL;
-AppWindow::AppWindow() {}
+AppWindow::AppWindow()
+{
+	debug::Logger::log(this, "Initialized");
+}
 AppWindow::~AppWindow() {}
 AppWindow::AppWindow(const AppWindow&) {}
 
@@ -188,9 +199,10 @@ AppWindow* AppWindow::getInstance() {
 
 void AppWindow::initialize()
 {
+	if (P_SHARED_INSTANCE)
+		throw std::exception("App Window already created");
 	P_SHARED_INSTANCE = new AppWindow();
-	P_SHARED_INSTANCE->init();
-	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
+	
 }
 
 void AppWindow::destroy()
@@ -198,6 +210,6 @@ void AppWindow::destroy()
 	if (P_SHARED_INSTANCE != NULL)
 	{
 		delete P_SHARED_INSTANCE->constantBuffer;
-		P_SHARED_INSTANCE->release();
+		debug::Logger::log(P_SHARED_INSTANCE, "Released");
 	}
 }

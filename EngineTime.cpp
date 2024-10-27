@@ -4,14 +4,16 @@
 
 EngineTime* EngineTime::P_SHARED_INSTANCE = NULL;
 
-EngineTime::EngineTime() {}
+EngineTime::EngineTime()
+{
+	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
+}
 EngineTime::~EngineTime() {}
 EngineTime::EngineTime(EngineTime const&) {}
 
 void EngineTime::initialize()
 {
 	P_SHARED_INSTANCE = new EngineTime();
-	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
 }
 
 double EngineTime::getDeltaTime()

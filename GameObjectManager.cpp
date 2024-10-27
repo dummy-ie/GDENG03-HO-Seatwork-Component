@@ -139,7 +139,18 @@ GameObject* GameObjectManager::getSelectedObject()
 	return this->selectedObject;
 }
 
-GameObjectManager::GameObjectManager() {}
+GameObjectManager::GameObjectManager()
+{
+	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
+}
+
+GameObjectManager::~GameObjectManager()
+{
+	this->deleteAllObjects();
+	P_SHARED_INSTANCE = nullptr;
+	debug::Logger::log(P_SHARED_INSTANCE, "Released");
+}
+
 GameObjectManager::GameObjectManager(const GameObjectManager&) {}
 
 GameObjectManager* GameObjectManager::getInstance() {
@@ -148,16 +159,16 @@ GameObjectManager* GameObjectManager::getInstance() {
 
 void GameObjectManager::initialize()
 {
+	if (P_SHARED_INSTANCE)
+		throw std::exception("Game Object Manager already created");
 	P_SHARED_INSTANCE = new GameObjectManager();
-	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
+	
 }
 
 void GameObjectManager::destroy()
 {
 	if (P_SHARED_INSTANCE != NULL)
 	{
-		debug::Logger::log(P_SHARED_INSTANCE, "Released");
-		P_SHARED_INSTANCE->deleteAllObjects();
 		delete P_SHARED_INSTANCE;
 	}
 }

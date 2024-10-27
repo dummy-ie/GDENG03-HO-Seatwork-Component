@@ -7,7 +7,6 @@ class Random
 private:
 	static Random* P_SHARED_INSTANCE;
 
-	std::random_device rd;
 	std::mt19937 mt;
 
 public:

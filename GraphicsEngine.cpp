@@ -1,25 +1,11 @@
 #include "GraphicsEngine.h"
 
+#include <exception>
+
 #include "RenderSystem.h"
 #include "Logger.h"
 
 using namespace graphics;
-
-bool GraphicsEngine::init()
-{
-	this->renderSystem = new RenderSystem();
-	this->renderSystem->init();
-	debug::Logger::log(this, "Initialized");
-	return true;
-}
-
-bool GraphicsEngine::release()
-{
-	this->renderSystem->release();
-	debug::Logger::log(this, "Released");
-	delete this;
-	return true;
-}
 
 RenderSystem* GraphicsEngine::getRenderSystem()
 {
@@ -27,8 +13,24 @@ RenderSystem* GraphicsEngine::getRenderSystem()
 }
 
 GraphicsEngine* GraphicsEngine::P_SHARED_INSTANCE = NULL;
-GraphicsEngine::GraphicsEngine() {}
-GraphicsEngine::~GraphicsEngine() {}
+GraphicsEngine::GraphicsEngine()
+{
+	try
+	{
+		this->renderSystem = new RenderSystem();
+	}
+	catch (...)
+	{
+		throw std::exception("Graphics Engine not created successfully");
+	}
+	debug::Logger::log(this, "Initialized");
+}
+GraphicsEngine::~GraphicsEngine()
+{
+	delete renderSystem;
+	P_SHARED_INSTANCE = nullptr;
+	debug::Logger::log(this, "Released");
+}
 GraphicsEngine::GraphicsEngine(const GraphicsEngine&) {}
 
 GraphicsEngine* GraphicsEngine::getInstance() {
@@ -37,15 +39,15 @@ GraphicsEngine* GraphicsEngine::getInstance() {
 
 void GraphicsEngine::initialize()
 {
+	if (P_SHARED_INSTANCE)
+		throw std::exception("Graphics Engine already created");
 	P_SHARED_INSTANCE = new GraphicsEngine();
-	P_SHARED_INSTANCE->init();
 }
 
 void GraphicsEngine::destroy()
 {
-	if (P_SHARED_INSTANCE != NULL)
+	if (P_SHARED_INSTANCE)
 	{
-		debug::Logger::log(P_SHARED_INSTANCE, "Released");
-		P_SHARED_INSTANCE->release();
+		delete P_SHARED_INSTANCE;
 	}
 }

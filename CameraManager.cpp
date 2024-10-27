@@ -63,7 +63,21 @@ void CameraManager::removeCamera(Camera* camera)
 }
 
 
-CameraManager::CameraManager() {}
+CameraManager::CameraManager()
+{
+	this->sceneCamera = new SceneCamera("Scene Camera");
+	this->sceneCamera->setPosition(0, 1, -8);
+	this->sceneCamera->updateViewMatrix();
+	this->addCamera(this->sceneCamera);
+	debug::Logger::log(this, "Initialized");
+}
+
+CameraManager::~CameraManager()
+{
+	P_SHARED_INSTANCE = nullptr;
+	debug::Logger::log(this, "Released");
+}
+
 CameraManager::CameraManager(const CameraManager&) {}
 
 CameraManager* CameraManager::getInstance() {
@@ -72,19 +86,15 @@ CameraManager* CameraManager::getInstance() {
 
 void CameraManager::initialize()
 {
+	if (P_SHARED_INSTANCE)
+		throw std::exception("Camera manager already created");
 	P_SHARED_INSTANCE = new CameraManager();
-	P_SHARED_INSTANCE->sceneCamera = new SceneCamera("Scene Camera");
-	P_SHARED_INSTANCE->sceneCamera->setPosition(0, 1, -8);
-	P_SHARED_INSTANCE->sceneCamera->updateViewMatrix();
-	P_SHARED_INSTANCE->addCamera(P_SHARED_INSTANCE->sceneCamera);
-	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
 }
 
 void CameraManager::destroy()
 {
 	if (P_SHARED_INSTANCE != NULL)
 	{
-		debug::Logger::log(P_SHARED_INSTANCE, "Released");
 		delete P_SHARED_INSTANCE;
 	}
 }

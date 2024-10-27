@@ -19,14 +19,6 @@ using namespace graphics;
 
 RenderSystem::RenderSystem()
 {
-}
-
-RenderSystem::~RenderSystem()
-{
-}
-
-bool RenderSystem::init()
-{
 	D3D_DRIVER_TYPE driver_types[] =
 	{
 		D3D_DRIVER_TYPE_HARDWARE,
@@ -54,7 +46,7 @@ bool RenderSystem::init()
 	}
 
 	if (!debug::Logger::log(this, result))
-		return false;
+		throw std::exception("RenderSystem not created successfully");
 
 	m_imm_device_context = new DeviceContext(this, m_imm_context);
 
@@ -63,17 +55,10 @@ bool RenderSystem::init()
 	m_dxgi_adapter->GetParent(__uuidof(IDXGIFactory), (void**)&m_dxgi_factory);
 
 	debug::Logger::log(this, "Initialized");
-
-	return true;
 }
 
-bool RenderSystem::release()
+RenderSystem::~RenderSystem()
 {
-	if (m_vs)
-		m_vs->Release();
-	if (m_ps)
-		m_ps->Release();
-
 	if (m_vsblob)
 		m_vsblob->Release();
 	if (m_psblob)
@@ -88,8 +73,6 @@ bool RenderSystem::release()
 	m_d3d_device->Release();
 
 	debug::Logger::log(this, "Released");
-	delete this;
-	return true;
 }
 
 SwapChain* RenderSystem::createSwapChain(HWND hwnd, UINT width, UINT height)

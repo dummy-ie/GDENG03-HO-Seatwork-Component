@@ -34,6 +34,7 @@ private:
 
 private:
     GameObjectManager();
+	~GameObjectManager();
     GameObjectManager(const GameObjectManager&);
     GameObjectManager& operator = (const GameObjectManager&);
 
