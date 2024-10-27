@@ -37,6 +37,7 @@ namespace graphics
 		friend class PixelShader;
 		friend class Viewport;
 		friend class RasterizerState;
+		friend class Texture;
 
 	public:
 		RenderSystem();

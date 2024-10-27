@@ -54,7 +54,7 @@ void AppWindow::onUpdate()
 
 		GameObjectManager::getInstance()->update(deltaTime);
 
-		renderSystem->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer, 1);
+		renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer, 1);
 		GameObjectManager::getInstance()->draw(this, vertexShader, pixelShader);
 	}
 	CameraManager::getInstance()->updateSceneCamera(deltaTime);
@@ -146,7 +146,6 @@ void AppWindow::initializeEngine()
 		m_is_running = false;
 	}
 	
-
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
 	RECT windowRect = this->getClientWindowRect();

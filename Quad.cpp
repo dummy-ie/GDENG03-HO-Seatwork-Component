@@ -73,8 +73,7 @@ void Quad::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelSh
 {
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	renderSystem->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
-	renderSystem->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer);
 
 	renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
 	renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);

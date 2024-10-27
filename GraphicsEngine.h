@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Prerequisites.h"
+#include "RenderSystem.h"
+#include "TextureManager.h"
 
 namespace graphics
 {
@@ -8,9 +10,11 @@ namespace graphics
 	{
 	private:
 		RenderSystem* renderSystem = nullptr;
+		TextureManager* textureManager = nullptr;
 
 	public:
 		RenderSystem* getRenderSystem();
+		TextureManager* getTextureManager();
 
 	private:
 		static GraphicsEngine* P_SHARED_INSTANCE;

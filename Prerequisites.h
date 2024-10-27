@@ -12,3 +12,7 @@ namespace graphics
 	class RenderSystem;
 	class GraphicsEngine;
 }
+class Resource;
+class ResourceManager;
+class Texture;
+class TextureManager;

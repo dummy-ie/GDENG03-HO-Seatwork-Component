@@ -61,8 +61,7 @@ void Border::draw(Window* window, VertexShader* vertexShader, PixelShader* pixel
 {
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	renderSystem->getImmediateDeviceContext()->setConstantBuffer(vertexShader, this->constantBuffer);
-	renderSystem->getImmediateDeviceContext()->setConstantBuffer(pixelShader, this->constantBuffer);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(this->constantBuffer);
 
 	renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
 	renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);

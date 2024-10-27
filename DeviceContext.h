@@ -36,8 +36,7 @@ namespace graphics
 		void setVertexShader(VertexShader* vertex_shader);
 		void setPixelShader(PixelShader* pixel_shader);
 
-		void setConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer, int index = 0);
-		void setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer, int index = 0);
+		void setConstantBuffer(ConstantBuffer* buffer, int index = 0);
 		void setRasterizerState(RasterizerState* rasterizer_state);
 	};
 }

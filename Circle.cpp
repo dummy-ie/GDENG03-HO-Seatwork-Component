@@ -109,8 +109,7 @@ void Circle::draw(Window* window, VertexShader* vertexShader, PixelShader* pixel
 {
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	renderSystem->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
-	renderSystem->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer);
 
 	renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
 	renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);

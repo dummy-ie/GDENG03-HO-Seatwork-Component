@@ -9,7 +9,7 @@ namespace graphics
 	{
 	private:
 		RenderSystem* system = nullptr;
-		ID3D11PixelShader* m_ps;
+		ID3D11PixelShader* pixelShader;
 
 	private:
 		friend class RenderSystem;

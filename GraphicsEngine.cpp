@@ -12,6 +12,11 @@ RenderSystem* GraphicsEngine::getRenderSystem()
 	return this->renderSystem;
 }
 
+TextureManager* GraphicsEngine::getTextureManager()
+{
+	return this->textureManager;
+}
+
 GraphicsEngine* GraphicsEngine::P_SHARED_INSTANCE = NULL;
 GraphicsEngine::GraphicsEngine()
 {
@@ -21,12 +26,21 @@ GraphicsEngine::GraphicsEngine()
 	}
 	catch (...)
 	{
-		throw std::exception("Graphics Engine not created successfully");
+		throw std::exception("RenderSystem not created successfully");
+	}
+	try
+	{
+		this->textureManager = new TextureManager();
+	}
+	catch (...)
+	{
+		throw std::exception("TextureManager not created successfully");
 	}
 	debug::Logger::log(this, "Initialized");
 }
 GraphicsEngine::~GraphicsEngine()
 {
+	delete textureManager;
 	delete renderSystem;
 	P_SHARED_INSTANCE = nullptr;
 	debug::Logger::log(this, "Released");

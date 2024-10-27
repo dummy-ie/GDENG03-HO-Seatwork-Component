@@ -31,6 +31,14 @@ namespace debug
 			std::cout << "[DEBUG]: " << message << '\n';
 		}
 
+		static void log(const std::wstring& message)
+		{
+			if (!DEBUG_LOGS)
+				return;
+
+			std::wcout << "[DEBUG]: " << message << '\n';
+		}
+
 		template <class T>
 		static bool log(T* sender, const HRESULT result)
 		{

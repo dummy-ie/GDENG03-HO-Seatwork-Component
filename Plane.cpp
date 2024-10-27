@@ -111,8 +111,7 @@ void Plane::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelS
 {
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	renderSystem->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
-	renderSystem->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer);
 
 	renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
 	renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);
