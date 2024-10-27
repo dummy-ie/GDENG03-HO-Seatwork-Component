@@ -29,13 +29,11 @@ void InspectorScreen::updateInspector()
 	GameObject* gameObject = GameObjectManager::getInstance()->getSelectedObject();
 	if (gameObject != NULL)
 	{
-		//ImGui::Text("Selected Object : %s", gameObject->getName().c_str());
 		std::string name = gameObject->getName();
 		bool isActive = gameObject->isActive();
 		if (ImGui::InputText("Name", &name))
 		{
-			if (name != "")
-				gameObject->setName(name);
+			gameObject->setName(name);
 		}
 		if (ImGui::Checkbox("Active", &isActive))
 		{

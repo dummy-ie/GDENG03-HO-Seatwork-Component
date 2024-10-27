@@ -1,3 +1,5 @@
+#pragma comment(lib, "rpcrt4.lib")
+
 #include "HierarchyScreen.h"
 
 #include "imgui.h"
@@ -22,8 +24,18 @@ void HierarchyScreen::draw()
 
 	for (GameObject* gameObject : list)
 	{
-		if (ImGui::Button(gameObject->getName().c_str(), ImVec2(ImGui::GetWindowSize().x - 15, 20)))
+		std::string guidString;
+		GUID guid = gameObject->getGuid();
+		RPC_CSTR rpcString = NULL;
+
+		UuidToStringA(&guid, &rpcString);
+		guidString = (char*)rpcString;
+		std::string label = gameObject->getName() + "###" + guidString;
+		::RpcStringFreeA(&rpcString);
+
+		if (ImGui::Button(label.c_str(), ImVec2(ImGui::GetWindowSize().x - 15, 20)))
 		{
+			debug::Logger::log("Selected : " + label);
 			GameObjectManager::getInstance()->setSelectedObject(gameObject);
 		}
 	}

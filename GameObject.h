@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <guiddef.h>
 
 #include "GraphicsEngine.h"
 #include "RenderSystem.h"
@@ -22,11 +23,14 @@ using namespace graphics;
 class GameObject
 {
 protected:
-	std::string name;	
+	GUID guid;
+	std::string name;
+
 	Vector3D localPosition;
 	Vector3D localScale;
 	Vector3D localRotation;
 	Matrix4x4 localMatrix;
+
 	bool active;
 
 	friend class GameObjectManager;
@@ -53,6 +57,7 @@ public:
 
 	void setName(std::string name);
 	std::string getName();
+	GUID getGuid();
 
 	bool isActive();
 	void setActive(bool active);

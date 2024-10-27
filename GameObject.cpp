@@ -2,6 +2,10 @@
 
 GameObject::GameObject(std::string name)
 {
+	HRESULT result = CoCreateGuid(&guid);
+	if (!debug::Logger::log(this, result))
+		throw std::exception("Game Object GUID creation failed");
+
 	this->name = name;
 	this->localPosition = Vector3D::zero();
 	this->localRotation = Vector3D::zero();
@@ -85,6 +89,11 @@ void GameObject::setName(std::string name)
 std::string GameObject::getName()
 {
 	return this->name;
+}
+
+GUID GameObject::getGuid()
+{
+	return this->guid;
 }
 
 bool GameObject::isActive()

@@ -15,6 +15,7 @@ private:
 public:
 	void createCube(void* shaderByteCode, size_t sizeShader);
 	void createPlane(void* shaderByteCode, size_t sizeShader);
+	void createQuad(void* shaderByteCode, size_t sizeShader);
 
 	void update(float deltaTime);
 	void draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader);
@@ -26,6 +27,7 @@ public:
 	void deleteObjectByName(std::string name);
 	void deleteAllObjects();
 	void setSelectedObject(std::string name);
+	void setSelectedObject(GUID guid);
 	void setSelectedObject(GameObject* gameObject);
 	GameObject* getSelectedObject();
 

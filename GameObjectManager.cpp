@@ -5,6 +5,7 @@
 #include "Cube.h"
 #include "Plane.h"
 #include "Logger.h"
+#include "Quad.h"
 
 GameObjectManager* GameObjectManager::P_SHARED_INSTANCE = NULL;
 
@@ -18,6 +19,12 @@ void GameObjectManager::createPlane(void* shaderByteCode, size_t sizeShader)
 {
 	Plane* plane = new Plane("Plane", shaderByteCode, sizeShader);
 	this->addObject(plane);
+}
+
+void GameObjectManager::createQuad(void* shaderByteCode, size_t sizeShader)
+{
+	Quad* quad = new Quad("Quad", shaderByteCode, sizeShader);
+	this->addObject(quad);
 }
 
 void GameObjectManager::update(float deltaTime)
@@ -95,6 +102,7 @@ void GameObjectManager::deleteObject(GameObject* gameObject)
 	{
 		this->listGameObjects.erase(this->listGameObjects.begin() + index);
 		this->mapGameObjects.erase(this->listGameObjects[index]->getName());
+
 		gameObject->onDestroy();
 		delete gameObject;
 	}
@@ -118,6 +126,19 @@ void GameObjectManager::deleteAllObjects()
 			gameObject->onDestroy();
 		this->listGameObjects.clear();
 		this->mapGameObjects.clear();
+	}
+}
+
+void GameObjectManager::setSelectedObject(GUID guid)
+{
+	for (GameObject* object : listGameObjects)
+	{
+		GUID objectGuid = object->getGuid();
+		if (IsEqualGUID(objectGuid, guid))
+		{
+			this->setSelectedObject(object);
+			return;
+		}
 	}
 }
 
