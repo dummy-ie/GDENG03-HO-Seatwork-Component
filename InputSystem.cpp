@@ -3,8 +3,6 @@
 
 #include "Logger.h"
 
-using namespace engine;
-
 InputSystem* InputSystem::P_SHARED_INSTANCE = nullptr;
 
 void InputSystem::update()

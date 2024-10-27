@@ -1,10 +1,11 @@
 #include "IndexBuffer.h"
-#include "GraphicsEngine.h"
+
+#include "RenderSystem.h"
 #include "Logger.h"
 
-using namespace engine::graphics;
+using namespace graphics;
 
-IndexBuffer::IndexBuffer() : m_buffer(0)
+IndexBuffer::IndexBuffer(RenderSystem* system) : system(system), m_buffer(0)
 {
 }
 
@@ -29,7 +30,8 @@ bool IndexBuffer::load(void* list_indices, UINT size_list)
 
 	m_size_list = size_list;
 
-	debug::Logger::log(this, GraphicsEngine::getInstance()->m_d3d_device->CreateBuffer(&buff_desc, &init_data, &m_buffer));
+	if (!debug::Logger::log(this, this->system->m_d3d_device->CreateBuffer(&buff_desc, &init_data, &m_buffer)))
+		return false;
 
 	return true;
 }

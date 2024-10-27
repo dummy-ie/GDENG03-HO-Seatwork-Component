@@ -4,7 +4,6 @@
 #include "imgui.h"
 #include "UIManager.h"
 
-using namespace engine;
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 Window::Window()

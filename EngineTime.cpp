@@ -2,8 +2,6 @@
 
 #include "Logger.h"
 
-using namespace engine;
-
 EngineTime* EngineTime::P_SHARED_INSTANCE = NULL;
 
 EngineTime::EngineTime() {}

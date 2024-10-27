@@ -1,8 +1,4 @@
 #include "AppWindow.h"
-#include "InputSystem.h"
-
-using namespace application;
-using namespace engine;
 
 int main()
 {

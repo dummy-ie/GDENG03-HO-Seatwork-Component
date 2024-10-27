@@ -1,10 +1,11 @@
 #include "RasterizerState.h"
 
-#include "GraphicsEngine.h"
+#include "RenderSystem.h"
+#include "Logger.h"
 
-using namespace engine::graphics;
+using namespace graphics;
 
-RasterizerState::RasterizerState()
+RasterizerState::RasterizerState(RenderSystem* system) : system(system)
 {
 }
 
@@ -24,7 +25,7 @@ bool RasterizerState::init(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode)
 	desc.FillMode = fillMode;
 	desc.CullMode = cullMode;
 
-	if (!SUCCEEDED(GraphicsEngine::getInstance()->m_d3d_device->CreateRasterizerState(&desc, &m_rasterizer_state)))
+	if (!debug::Logger::log(this, this->system->m_d3d_device->CreateRasterizerState(&desc, &m_rasterizer_state)))
 		return false;
 
 	return true;

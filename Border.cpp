@@ -1,11 +1,7 @@
 #include "Border.h"
+
 #include "AppWindow.h"
 #include "Camera.h"
-#include "EngineTime.h"
-#include "InputSystem.h"
-
-using namespace engine;
-using namespace application;
 
 Border::Border(std::string name, void* shaderByteCode, size_t sizeShader) : GameObject(name)
 {
@@ -21,13 +17,15 @@ Border::Border(std::string name, void* shaderByteCode, size_t sizeShader) : Game
 	CBData cbData;
 	cbData.time = 0.0f;
 
-	constantBuffer = GraphicsEngine::getInstance()->createConstantBuffer();
-	constantBuffer->load(&cbData, sizeof(CBData));
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+
+	this->constantBuffer = renderSystem->createConstantBuffer();
+	this->constantBuffer->load(&cbData, sizeof(CBData));
 
 	UINT sizeList = ARRAYSIZE(list);
 
-	vertexBuffer = GraphicsEngine::getInstance()->createVertexBuffer();
-	vertexBuffer->load(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
+	this->vertexBuffer = renderSystem->createVertexBuffer();
+	this->vertexBuffer->load(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
 }
 
 Border::~Border()
@@ -41,6 +39,8 @@ void Border::onCreate()
 
 void Border::update(float deltaTime)
 {
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+
 	CBData cbData;
 	cbData.time = 0.0f;
 
@@ -55,25 +55,27 @@ void Border::update(float deltaTime)
 
 	cbData.projMatrix.setIdentity();
 
-	constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cbData);
+	this->constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbData);
 }
 
 // Sets shaders and draws afterwards
 void Border::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader)
 {
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexShader(vertexShader);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setPixelShader(pixelShader);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(vertexShader, this->constantBuffer);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(pixelShader, this->constantBuffer);
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
+	renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
+	renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->drawLineStrip(vertexBuffer->getSizeVertexList(), 0);
+	renderSystem->getImmediateDeviceContext()->setVertexBuffer(this->vertexBuffer);
+
+	renderSystem->getImmediateDeviceContext()->drawLineStrip(this->vertexBuffer->getSizeVertexList(), 0);
 }
 
 void Border::onDestroy()
 {
-	constantBuffer->release();
-	vertexBuffer->release();
+	this->constantBuffer->release();
+	this->vertexBuffer->release();
 }

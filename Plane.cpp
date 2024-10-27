@@ -1,12 +1,7 @@
 #include "Plane.h"
-#include "AppWindow.h"
-#include "Camera.h"
-#include "CameraManager.h"
-#include "EngineTime.h"
-#include "InputSystem.h"
 
-using namespace engine;
-using namespace application;
+#include "AppWindow.h"
+#include "CameraManager.h"
 
 Plane::Plane(std::string name, void* shaderByteCode, size_t sizeShader) : GameObject(name)
 {
@@ -41,16 +36,17 @@ Plane::Plane(std::string name, void* shaderByteCode, size_t sizeShader) : GameOb
 		{ Vector3D(0.5f,-0.5f,0.0f), Vector3D(1, 1, 1),  Vector3D(1, 1, 1) },
 		{ Vector3D(0.5f,0.5f,0.0f),    Vector3D(1, 1, 1), Vector3D(1, 1, 1) }
 	};*/
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
 	CBData cbData;
 	cbData.time = 0.0f;
 
-	constantBuffer = GraphicsEngine::getInstance()->createConstantBuffer();
+	constantBuffer = renderSystem->createConstantBuffer();
 	constantBuffer->load(&cbData, sizeof(CBData));
 
 	UINT sizeList = ARRAYSIZE(list);
 
-	vertexBuffer = GraphicsEngine::getInstance()->createVertexBuffer();
+	vertexBuffer = renderSystem->createVertexBuffer();
 	vertexBuffer->load(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
 }
 
@@ -65,6 +61,8 @@ void Plane::onCreate()
 
 void Plane::update(float deltaTime)
 {
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+
 	CBData cbData;
 
 	cbData.time = 0.0f;
@@ -107,21 +105,23 @@ void Plane::update(float deltaTime)
 
 	cbData.projMatrix.setPerspectiveFovLH(1.57f, width / height, 0.1f, 100.0f);
 
-	constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cbData);
+	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbData);
 }
 
 // Sets shaders and draws afterwards
 void Plane::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader)
 {
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexShader(vertexShader);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setPixelShader(pixelShader);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
+	renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
+	renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->drawTriangleStrip(vertexBuffer->getSizeVertexList(), 0);
+	renderSystem->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
+
+	renderSystem->getImmediateDeviceContext()->drawTriangleStrip(vertexBuffer->getSizeVertexList(), 0);
 }
 
 void Plane::onDestroy()

@@ -1,14 +1,7 @@
 #include "Cube.h"
 
 #include "AppWindow.h"
-#include "Camera.h"
 #include "CameraManager.h"
-#include "EngineTime.h"
-#include "InputSystem.h"
-#include "Logger.h"
-
-using namespace engine;
-using namespace application;
 
 Cube::Cube(std::string name, void* shaderByteCode, size_t sizeShader) : GameObject(name)
 {
@@ -69,7 +62,9 @@ Cube::Cube(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 		{Vector3D(-0.5f,-0.5f,0.5f), color4, color8 }
 	};
 
-	vertexBuffer = GraphicsEngine::getInstance()->createVertexBuffer();
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+
+	vertexBuffer = renderSystem->createVertexBuffer();
 	vertexBuffer->load(vertexList, sizeof(vertex), ARRAYSIZE(vertexList), shaderByteCode, sizeShader);
 
 	unsigned int indexList[] = {
@@ -92,14 +87,14 @@ Cube::Cube(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 		1,0,7
 	};
 
-	indexBuffer = GraphicsEngine::getInstance()->createIndexBuffer();
+	indexBuffer = renderSystem->createIndexBuffer();
 	indexBuffer->load(indexList, ARRAYSIZE(indexList));
 
 	CBData cbData;
 	angle = 0.0f;
 	cbData.time = angle;
 
-	constantBuffer = GraphicsEngine::getInstance()->createConstantBuffer();
+	constantBuffer = renderSystem->createConstantBuffer();
 	constantBuffer->load(&cbData, sizeof(CBData));
 
 	InputSystem::getInstance()->addListener(this);
@@ -119,6 +114,7 @@ void Cube::onCreate()
 
 void Cube::update(float deltaTime)
 {
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 	CBData cbData;
 
 	//if (startRotate)
@@ -195,22 +191,24 @@ void Cube::update(float deltaTime)
 
 	cbData.projMatrix.setPerspectiveFovLH(1.57f, width / height, 0.1f, 100.0f);
 
-	constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cbData);
+	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbData);
 }
 
 // Sets shaders and draws afterwards
 void Cube::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader)
 {
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexShader(vertexShader);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setPixelShader(pixelShader);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setIndexBuffer(indexBuffer);
+	renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
+	renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->drawIndexedTriangleList(indexBuffer->getSizeIndexList(),0,0);
+	renderSystem->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
+	renderSystem->getImmediateDeviceContext()->setIndexBuffer(indexBuffer);
+
+	renderSystem->getImmediateDeviceContext()->drawIndexedTriangleList(indexBuffer->getSizeIndexList(),0,0);
 }
 
 void Cube::onDestroy()

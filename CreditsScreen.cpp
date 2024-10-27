@@ -6,7 +6,6 @@
 #include "Vector4D.h"
 
 using namespace math;
-using namespace engine;
 
 CreditsScreen::CreditsScreen() : UIScreen("CreditsScreen")
 {

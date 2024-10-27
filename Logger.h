@@ -7,7 +7,7 @@
 
 #define DEBUG_LOGS true
 #define ERROR_LOGS true
-#define SUCCESS_LOGS false
+#define SUCCESS_LOGS true
 
 namespace debug
 {

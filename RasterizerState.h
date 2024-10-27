@@ -1,32 +1,31 @@
 #pragma once
 
 #include <d3d11.h>
+#include "Prerequisites.h"
 
-namespace engine
+namespace graphics
 {
-	namespace graphics
+	class RasterizerState
 	{
-		class RasterizerState
-		{
-		private:
-			ID3D11RasterizerState* m_rasterizer_state;
-			// desc;
+	private:
+		RenderSystem* system = nullptr;
+		ID3D11RasterizerState* m_rasterizer_state;
+		// desc;
 
-		private:
-			friend class Viewport;
-			friend class DeviceContext;
+	private:
+		friend class Viewport;
+		friend class DeviceContext;
 
-		public:
-			RasterizerState();
-			~RasterizerState();
+	public:
+		RasterizerState(RenderSystem* system);
+		~RasterizerState();
 
-		private:
-			void updateState();
-		public:
-			bool init(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode);
-			bool release();
+	private:
+		void updateState();
+	public:
+		bool init(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode);
+		bool release();
 
-			void setFillMode(D3D11_FILL_MODE fillMode);
-		};
-	}
+		void setFillMode(D3D11_FILL_MODE fillMode);
+	};
 }

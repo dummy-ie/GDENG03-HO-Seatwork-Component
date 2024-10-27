@@ -1,16 +1,6 @@
 #pragma once
 
 #include "GameObject.h"
-#include "InputListener.h"
-
-namespace engine
-{
-	namespace graphics
-	{
-		class VertexBuffer;
-		class ConstantBuffer;
-	}
-}
 
 class Plane : public GameObject
 {

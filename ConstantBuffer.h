@@ -1,32 +1,26 @@
 #pragma once
 
 #include <d3d11.h>
-#include <Windows.h>
+#include "Prerequisites.h"
 
-namespace engine
+namespace graphics
 {
-	namespace graphics
+	class ConstantBuffer
 	{
-		class DeviceContext;
+	private:
+		RenderSystem* system = nullptr;
+		ID3D11Buffer* m_buffer;
 
-		class ConstantBuffer
-		{
-		private:
-			ID3D11Buffer* m_buffer;
+	private:
+		friend class DeviceContext;
 
-		private:
-			friend class DeviceContext;
+	public:
+		ConstantBuffer(RenderSystem* system);
+		~ConstantBuffer();
 
-		public:
-			ConstantBuffer();
-			~ConstantBuffer();
-
-		public:
-			bool load(void* buffer, UINT size_buffer);
-			void update(DeviceContext* context, void* buffer);
-			bool release();
-		};
-	}
+	public:
+		bool load(void* buffer, UINT size_buffer);
+		void update(DeviceContext* context, void* buffer);
+		bool release();
+	};
 }
-
-

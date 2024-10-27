@@ -8,12 +8,15 @@
 #include "imgui_impl_win32.h"
 
 #include "GraphicsEngine.h"
+#include "RenderSystem.h"
+#include "DeviceContext.h"
+
 #include "HierarchyScreen.h"
 #include "InspectorScreen.h"
 #include "MenuScreen.h"
 #include "ProfilerScreen.h"
 
-using namespace engine::graphics;
+using namespace graphics;
 
 UIManager* UIManager::P_SHARED_INSTANCE = NULL;
 
@@ -42,6 +45,7 @@ void UIManager::setActive(String name)
 
 UIManager::UIManager(HWND hwnd)
 {
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -56,7 +60,7 @@ UIManager::UIManager(HWND hwnd)
 
 	// Setup Platform/Renderer bindings
 	ImGui_ImplWin32_Init(hwnd);
-	ImGui_ImplDX11_Init(GraphicsEngine::getInstance()->getDirectXDevice(), GraphicsEngine::getInstance()->getImmediateDeviceContext()->getContext());
+	ImGui_ImplDX11_Init(renderSystem->getDirectXDevice(), renderSystem->getImmediateDeviceContext()->getContext());
 
 	UINames uiNames;
 	MenuScreen* menuScreen = new MenuScreen();

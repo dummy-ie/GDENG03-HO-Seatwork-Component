@@ -1,31 +1,28 @@
 #pragma once
 
 #include <d3d11.h>
+#include "Prerequisites.h"
 
-namespace engine
+namespace graphics
 {
-	namespace graphics
+	class VertexShader
 	{
-		class GraphicsEngine;
-		class DeviceContext;
-		class VertexShader
-		{
-		private:
-			ID3D11VertexShader* vertexShader;
+	private:
+		RenderSystem* system = nullptr;
+		ID3D11VertexShader* vertexShader;
 
-		private:
-			friend class GraphicsEngine;
-			friend class DeviceContext;
+	private:
+		friend class RenderSystem;
+		friend class DeviceContext;
 
-		public:
-			VertexShader();
-			~VertexShader();
+	public:
+		VertexShader(RenderSystem* system);
+		~VertexShader();
 
-		private:
-			bool init(const void* shaderByteCode, size_t byteCodeSize);
+	private:
+		bool init(const void* shaderByteCode, size_t byteCodeSize);
 
-		public:
-			void release();
-		};
-	}
+	public:
+		void release();
+	};
 }

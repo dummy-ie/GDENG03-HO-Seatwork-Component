@@ -1,10 +1,13 @@
 #include "Viewport.h"
 
-#include "GraphicsEngine.h"
+#include "RenderSystem.h"
+#include "DeviceContext.h"
+#include "Logger.h"
+#include "RasterizerState.h"
 
-using namespace engine::graphics;
+using namespace graphics;
 
-Viewport::Viewport()
+Viewport::Viewport(RenderSystem* system) : system(system)
 {
 	vp = {};
 }
@@ -33,24 +36,25 @@ void Viewport::setDepth(FLOAT minDepth, FLOAT maxDepth)
 
 void Viewport::setRasterizerSolidState()
 {
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setRasterizerState(solidState);
+	this->system->getImmediateDeviceContext()->setRasterizerState(solidState);
 }
 
 void Viewport::setRasterizerWireframeState()
 {
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setRasterizerState(wireframeState);
+	this->system->getImmediateDeviceContext()->setRasterizerState(wireframeState);
 }
 
 void Viewport::init(FLOAT topLeftX, FLOAT topLeftY, FLOAT width, FLOAT height, FLOAT minDepth, FLOAT maxDepth)
 {
-	solidState = GraphicsEngine::getInstance()->createRasterizerState();
-	wireframeState = GraphicsEngine::getInstance()->createRasterizerState(D3D11_FILL_WIREFRAME, D3D11_CULL_NONE);
+	solidState = this->system->createRasterizerState();
+	wireframeState = this->system->createRasterizerState(D3D11_FILL_WIREFRAME, D3D11_CULL_NONE);
 
 	setPosition(topLeftX, topLeftY);
 	setSize(width, height);
 	setDepth(minDepth, maxDepth);
 
 	setRasterizerSolidState();
+	debug::Logger::log(this,"Initialized");
 }
 
 void Viewport::release()

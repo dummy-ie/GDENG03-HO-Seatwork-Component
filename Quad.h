@@ -1,13 +1,8 @@
 #pragma once
 
 #include "GameObject.h"
-#include "GraphicsEngine.h"
-#include "VertexBuffer.h"
-#include "VertexShader.h"
-#include "PixelShader.h"
-#include "ConstantBuffer.h"
 
-using namespace engine::graphics;
+using namespace graphics;
 
 class Quad : public GameObject
 {

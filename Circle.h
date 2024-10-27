@@ -1,17 +1,10 @@
 #pragma once
 
 #include <vector>
-#include <cmath>
 
 #include "GameObject.h"
-#include "GraphicsEngine.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "VertexShader.h"
-#include "PixelShader.h"
-#include "ConstantBuffer.h"
 
-using namespace engine::graphics;
+using namespace graphics;
 
 class Circle : public GameObject
 {

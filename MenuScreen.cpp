@@ -15,6 +15,7 @@ MenuScreen::~MenuScreen()
 
 void MenuScreen::draw()
 {
+    
 	if (ImGui::BeginMainMenuBar())
 	{
         if (ImGui::BeginMenu("File")) {
@@ -30,12 +31,13 @@ void MenuScreen::draw()
         }
         if (ImGui::BeginMenu("Game Object")) {
             if (ImGui::BeginMenu("3D Object")) {
+                RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
                 if (ImGui::MenuItem("Cube")) {
                     void* shaderByteCode = nullptr;
                     size_t sizeShader = 0;
 
-                    GraphicsEngine::getInstance()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
-                    VertexShader* vertexShader = GraphicsEngine::getInstance()->createVertexShader(shaderByteCode, sizeShader);
+                    renderSystem->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
+                    VertexShader* vertexShader = renderSystem->createVertexShader(shaderByteCode, sizeShader);
 
                     GameObjectManager::getInstance()->createCube(shaderByteCode, sizeShader);
 
@@ -45,8 +47,8 @@ void MenuScreen::draw()
                     void* shaderByteCode = nullptr;
                     size_t sizeShader = 0;
 
-                    GraphicsEngine::getInstance()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
-                    VertexShader* vertexShader = GraphicsEngine::getInstance()->createVertexShader(shaderByteCode, sizeShader);
+                    renderSystem->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
+                    VertexShader* vertexShader = renderSystem->createVertexShader(shaderByteCode, sizeShader);
 
                     GameObjectManager::getInstance()->createPlane(shaderByteCode, sizeShader);
 

@@ -2,15 +2,6 @@
 
 #include "GameObject.h"
 
-namespace engine
-{
-	namespace graphics
-	{
-		class VertexBuffer;
-		class ConstantBuffer;
-	}
-}
-
 class Border : public GameObject
 {
 private:

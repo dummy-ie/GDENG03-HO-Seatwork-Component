@@ -2,23 +2,22 @@
 
 #include <string>
 
+#include "GraphicsEngine.h"
+#include "RenderSystem.h"
 #include "VertexShader.h"
+
 #include "Matrix4x4.h"
 #include "Vector3D.h"
 
-namespace engine
-{
-	class Window;
-	namespace graphics
-	{
-		class VertexShader;
-		class PixelShader;
-	}
-}
+#include "EngineTime.h"
+#include "InputSystem.h"
+
+#include "Logger.h"
+
+class Window;
 
 using namespace math;
-using namespace engine;
-using namespace engine::graphics;
+using namespace graphics;
 
 class GameObject
 {

@@ -70,7 +70,7 @@ void SceneCamera::onMouseMove(const Vector2D& deltaMousePosition)
 {
 	if (isRightMouseDown)
 	{
-		RECT windowRect = application::AppWindow::getInstance()->getClientWindowRect();
+		RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 
 		float width = windowRect.right - windowRect.left;
 		float height = windowRect.bottom - windowRect.top;

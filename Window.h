@@ -2,30 +2,27 @@
 
 #include <Windows.h>
 
-namespace engine
+class Window
 {
-	class Window
-	{
-	protected:
-		HWND m_hwnd;
-		bool m_is_running;
-	public:
-		Window();
-		~Window();
+protected:
+	HWND m_hwnd;
+	bool m_is_running;
+public:
+	Window();
+	~Window();
 
-	public:
-		virtual void onCreate();
-		virtual void onUpdate();
-		virtual void onDestroy();
-		virtual void onFocus();
-		virtual void onKillFocus();
+public:
+	virtual void onCreate();
+	virtual void onUpdate();
+	virtual void onDestroy();
+	virtual void onFocus();
+	virtual void onKillFocus();
 
-		bool init();
-		bool broadcast();
-		bool release();
-		bool isRunning();
+	bool init();
+	bool broadcast();
+	bool release();
+	bool isRunning();
 
-		RECT getClientWindowRect();
-		void setHWND(HWND hwnd);
-	};
-}
+	RECT getClientWindowRect();
+	void setHWND(HWND hwnd);
+};

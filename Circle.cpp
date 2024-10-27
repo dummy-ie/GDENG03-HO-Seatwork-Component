@@ -1,11 +1,7 @@
 #include "Circle.h"
-#include <iostream>
-#include "math.h"
-#include "AppWindow.h"
-#include "EngineTime.h"
-#include "Random.h"
 
-using namespace application;
+#include "AppWindow.h"
+#include "Random.h"
 
 Circle::Circle(std::string name, float radius, int sides, void* shaderByteCode, size_t sizeShader) : GameObject(name)
 {
@@ -34,12 +30,14 @@ Circle::Circle(std::string name, float radius, int sides, void* shaderByteCode, 
 
 	CBData cc;
 
-	constantBuffer = GraphicsEngine::getInstance()->createConstantBuffer();
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+
+	constantBuffer = renderSystem->createConstantBuffer();
 	constantBuffer->load(&cc, sizeof(CBData));
 
 	UINT size_list = list.size();
 
-	vertexBuffer = GraphicsEngine::getInstance()->createVertexBuffer();
+	vertexBuffer = renderSystem->createVertexBuffer();
 	vertexBuffer->load(list.data(), sizeof(vertex), size_list, shaderByteCode, sizeShader);
 }
 
@@ -103,21 +101,25 @@ void Circle::update(float deltaTime)
 
 	cc.projMatrix.setOrthoLH(orthoWidth, orthoHeight, -4.0f, 4.0f);
 
-	constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cc);
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+
+	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cc);
 }
 
 // Sets shaders and draws afterwards
 void Circle::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader)
 {
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexShader(vertexShader);
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setPixelShader(pixelShader);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
+	renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
+	renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->drawTriangleStrip(vertexBuffer->getSizeVertexList(), 0);
+	renderSystem->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
+
+	renderSystem->getImmediateDeviceContext()->drawTriangleStrip(vertexBuffer->getSizeVertexList(), 0);
 }
 
 void Circle::onDestroy()

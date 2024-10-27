@@ -2,22 +2,14 @@
 
 #include <Windows.h>
 
-#include "Camera.h"
-#include "CameraManager.h"
-#include "Cube.h"
-#include "Circle.h"
-#include "EngineTime.h"
 #include "GameObjectManager.h"
-#include "InputSystem.h"
-#include "Logger.h"
-#include "Random.h"
+#include "CameraManager.h"
 #include "UIManager.h"
 
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
-
-using namespace application;
+#include "InputSystem.h"
+#include "EngineTime.h"
+#include "Logger.h"
+#include "Random.h"
 
 __declspec(align(16))
 struct CBEditor
@@ -38,12 +30,14 @@ void AppWindow::onUpdate()
 
 	float deltaTime = EngineTime::getDeltaTime();
 
-	GraphicsEngine::getInstance()->getImmediateDeviceContext()->clearRenderTargetColor(this->swapChain, 
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+
+	renderSystem->getImmediateDeviceContext()->clearRenderTargetColor(this->swapChain,
 		0.83, 0.58, 0.895, 1);
 
 	for (int i = 0; i < viewPorts.size(); i++)
 	{
-		GraphicsEngine::getInstance()->getImmediateDeviceContext()->setViewport(viewPorts[i]);
+		renderSystem->getImmediateDeviceContext()->setViewport(viewPorts[i]);
 		CBEditor cbData;
 		cbData.wireframe = false;
 		viewPorts[i]->setRasterizerSolidState();
@@ -55,11 +49,11 @@ void AppWindow::onUpdate()
 
 		CameraManager::getInstance()->setMainCameraByIndex(i);
 
-		constantBuffer->update(GraphicsEngine::getInstance()->getImmediateDeviceContext(), &cbData);
+		constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbData);
 
 		GameObjectManager::getInstance()->update(deltaTime);
-		//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer, 1);
-		GraphicsEngine::getInstance()->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer, 1);
+
+		renderSystem->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer, 1);
 		GameObjectManager::getInstance()->draw(this, vertexShader, pixelShader);
 	}
 	CameraManager::getInstance()->updateSceneCamera(deltaTime);
@@ -77,13 +71,13 @@ void AppWindow::onDestroy()
 
 	GameObjectManager::getInstance()->deleteAllObjects();
 
-	for (auto vp : viewPorts)
+	for (auto vp : this->viewPorts)
 	{
 		vp->release();
 	}
 
-	viewPorts.clear();
-	swapChain->release();
+	this->viewPorts.clear();
+	this->swapChain->release();
 
 	UIManager::destroy();
 	CameraManager::destroy();
@@ -138,46 +132,48 @@ void AppWindow::onRightMouseUp(const Vector2D& mousePosition)
 
 void AppWindow::initializeEngine()
 {
+	GraphicsEngine::initialize();
 	Random::initialize();
 	InputSystem::getInstance()->addListener(this);
 	GameObjectManager::initialize();
 	CameraManager::initialize();
-	GraphicsEngine::initialize();
 	UIManager::initialize(m_hwnd);
 
-	swapChain = GraphicsEngine::getInstance()->createSwapChain();
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+
+	this->swapChain = renderSystem->createSwapChain();
 
 	RECT windowRect = this->getClientWindowRect();
 
 	FLOAT width = windowRect.right - windowRect.left;
 	FLOAT height = windowRect.bottom - windowRect.top;
 
-	swapChain->init(this->m_hwnd, width, height);
+	this->swapChain->init(this->m_hwnd, width, height);
 
 	CBEditor cbData;
 	cbData.wireframe = false;
 
-	constantBuffer = GraphicsEngine::getInstance()->createConstantBuffer();
-	constantBuffer->load(&cbData, sizeof(CBEditor));
+	this->constantBuffer = renderSystem->createConstantBuffer();
+	this->constantBuffer->load(&cbData, sizeof(CBEditor));
 
 	void* shaderByteCode = nullptr;
 	size_t sizeShader = 0;
 
-	GraphicsEngine::getInstance()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
-	vertexShader = GraphicsEngine::getInstance()->createVertexShader(shaderByteCode, sizeShader);
-	GraphicsEngine::getInstance()->releaseCompiledShader();
+	renderSystem->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
+	this->vertexShader = renderSystem->createVertexShader(shaderByteCode, sizeShader);
+	renderSystem->releaseCompiledShader();
 
-	GraphicsEngine::getInstance()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shaderByteCode, &sizeShader);
-	pixelShader = GraphicsEngine::getInstance()->createPixelShader(shaderByteCode, sizeShader);
-	GraphicsEngine::getInstance()->releaseCompiledShader();
+	renderSystem->compilePixelShader(L"PixelShader.hlsl", "psmain", &shaderByteCode, &sizeShader);
+	this->pixelShader = renderSystem->createPixelShader(shaderByteCode, sizeShader);
+	renderSystem->releaseCompiledShader();
 
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
+	this->viewPorts.push_back(renderSystem->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
 	
-	/*viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(0.0f, height / 2, width / 2, height / 2, 0.0f, 1.0f));
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));
-	viewPorts.push_back(GraphicsEngine::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));*/
+	/*viewPorts.push_back(RenderSystem::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
+	viewPorts.push_back(RenderSystem::getInstance()->createViewport(width / 2, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
+	viewPorts.push_back(RenderSystem::getInstance()->createViewport(0.0f, height / 2, width / 2, height / 2, 0.0f, 1.0f));
+	viewPorts.push_back(RenderSystem::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));
+	viewPorts.push_back(RenderSystem::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));*/
 }
 
 void AppWindow::update()
