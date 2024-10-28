@@ -8,6 +8,7 @@
 
 #include "InputSystem.h"
 #include "EngineTime.h"
+#include "imgui.h"
 #include "Logger.h"
 #include "Random.h"
 
@@ -33,33 +34,31 @@ void AppWindow::onUpdate()
 
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	renderSystem->getImmediateDeviceContext()->clearRenderTargetColor(this->swapChain,
+	renderSystem->getImmediateDeviceContext()->clearRenderTargetColor(this->swapChain->getRenderTexture(),
 		0.83, 0.58, 0.895, 1);
 
-	for (int i = 0; i < viewPorts.size(); i++)
-	{
-		renderSystem->getImmediateDeviceContext()->setViewport(viewPorts[i]);
-		CBEditor cbData;
-		cbData.wireframe = false;
-		viewPorts[i]->setRasterizerSolidState();
-		if (i == 1 || i == 2 || i ==4)
-		{
-			viewPorts[i]->setRasterizerWireframeState();
-			cbData.wireframe = true;
-		}
+	RECT windowRect = this->getClientWindowRect();
 
-		CameraManager::getInstance()->setMainCameraByIndex(i);
+	FLOAT width = windowRect.right - windowRect.left;
+	FLOAT height = windowRect.bottom - windowRect.top;
 
-		constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbData);
+	renderSystem->getImmediateDeviceContext()->setViewportSize(width, height);
 
-		GameObjectManager::getInstance()->update(deltaTime);
+	GameObjectManager::getInstance()->update(deltaTime);
+	GameObjectManager::getInstance()->draw(this, vertexShader, pixelShader);
 
-		renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer, 1);
-		GameObjectManager::getInstance()->draw(this, vertexShader, pixelShader);
-	}
 	CameraManager::getInstance()->updateSceneCamera(deltaTime);
 
 	UIManager::getInstance()->draw();
+
+	if (UIManager::RESIZE_WIDTH != 0 && UIManager::RESIZE_HEIGHT != 0)
+	{
+		swapChain->cleanRenderTarget();
+		swapChain->resizeBuffers(0, UIManager::RESIZE_WIDTH, UIManager::RESIZE_HEIGHT);
+		UIManager::RESIZE_WIDTH = UIManager::RESIZE_HEIGHT = 0;
+		swapChain->createRenderTarget();
+	}
+
 	swapChain->present(false);
 }
 
@@ -71,12 +70,6 @@ void AppWindow::onDestroy()
 
 	GameObjectManager::getInstance()->deleteAllObjects();
 
-	for (auto vp : this->viewPorts)
-	{
-		delete vp;
-	}
-
-	this->viewPorts.clear();
 	delete swapChain;
 
 	UIManager::destroy();
@@ -171,13 +164,14 @@ void AppWindow::initializeEngine()
 	this->pixelShader = renderSystem->createPixelShader(shaderByteCode, sizeShader);
 	renderSystem->releaseCompiledShader();
 
-	this->viewPorts.push_back(renderSystem->createViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f));
-	
-	/*viewPorts.push_back(RenderSystem::getInstance()->createViewport(0.0f, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
-	viewPorts.push_back(RenderSystem::getInstance()->createViewport(width / 2, 0.0f, width / 2, height / 2, 0.0f, 1.0f));
-	viewPorts.push_back(RenderSystem::getInstance()->createViewport(0.0f, height / 2, width / 2, height / 2, 0.0f, 1.0f));
-	viewPorts.push_back(RenderSystem::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));
-	viewPorts.push_back(RenderSystem::getInstance()->createViewport(width / 2, height / 2, width / 2, height / 2, 0.0f, 1.0f));*/
+	debug::Logger::log(this, "Initialized Engine");
+}
+
+void AppWindow::drawOnRenderTexture(RenderTexture* renderTexture)
+{
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->clearRenderTargetColor(renderTexture, 0.83, 0.58, 0.895, 1);
+	GameObjectManager::getInstance()->draw(this, vertexShader, pixelShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setRenderTarget(this->swapChain->getRenderTexture());
 }
 
 void AppWindow::update()

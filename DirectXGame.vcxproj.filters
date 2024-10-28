@@ -73,9 +73,6 @@
     <Filter Include="GameEngine\GraphicsEngine\RenderSystem\SwapChain">
       <UniqueIdentifier>{4ac17f8d-b430-4010-824d-72ceb274ec06}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameEngine\GraphicsEngine\RenderSystem\VertexBuffer">
-      <UniqueIdentifier>{7964c222-32e1-42fe-89ea-d320394e0611}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine\GraphicsEngine\RenderSystem\VertexShader">
       <UniqueIdentifier>{1fdc78f2-6801-451d-b139-7122c4897a20}</UniqueIdentifier>
     </Filter>
@@ -102,6 +99,9 @@
     </Filter>
     <Filter Include="GameEngine\Camera\CustomCameras">
       <UniqueIdentifier>{3afbf534-0f89-45f4-9168-0cd1d51047bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\RenderSystem\VertexBuffer">
+      <UniqueIdentifier>{7964c222-32e1-42fe-89ea-d320394e0611}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -246,11 +246,14 @@
     <ClCompile Include="CameraManager.cpp">
       <Filter>GameEngine\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="SceneCameraHandler.cpp">
-      <Filter>GameEngine\Camera</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>GameEngine\Hierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewportScreen.cpp">
+      <Filter>Editor\Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTexture.cpp">
+      <Filter>GameEngine\GraphicsEngine\ResourceManager\TextureManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -416,11 +419,14 @@
     <ClInclude Include="CameraManager.h">
       <Filter>GameEngine\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="SceneCameraHandler.h">
-      <Filter>GameEngine\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>GameEngine\Hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewportScreen.h">
+      <Filter>Editor\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTexture.h">
+      <Filter>GameEngine\GraphicsEngine\ResourceManager\TextureManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

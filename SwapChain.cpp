@@ -3,6 +3,7 @@
 #include <exception>
 
 #include "RenderSystem.h"
+#include "RenderTexture.h"
 #include "Logger.h"
 
 using namespace graphics;
@@ -26,58 +27,61 @@ SwapChain::SwapChain(RenderSystem* system, HWND hwnd, UINT width, UINT height) :
 	desc.Windowed = TRUE;
 
 	// Create the swap chain for the window indicated by HWND parameter
-	HRESULT hr = this->system->m_dxgi_factory->CreateSwapChain(device, &desc, &m_swap_chain);
+	HRESULT hr = this->system->m_dxgi_factory->CreateSwapChain(device, &desc, &swapChain);
 
 	if (!debug::Logger::log(this, hr))
 		throw std::exception("SwapChain not created successfully");
 
-	ID3D11Texture2D* buffer = NULL;
-	hr = m_swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&buffer);
-
-	if (!debug::Logger::log(this, hr))
-		throw std::exception("SwapChain not created successfully");
-
-	hr = device->CreateRenderTargetView(buffer, NULL, &m_rtv);
-	buffer->Release();
-
-	if (!debug::Logger::log(this, hr))
-		throw std::exception("Render Target View not created successfully");
-
-	D3D11_TEXTURE2D_DESC texDesc = {};
-	texDesc.Width = width;
-	texDesc.Height = height;
-	texDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	texDesc.Usage = D3D11_USAGE_DEFAULT;
-	texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	texDesc.MipLevels = 1;
-	texDesc.SampleDesc.Count = 1;
-	texDesc.SampleDesc.Quality = 0;
-	texDesc.MiscFlags = 0;
-	texDesc.ArraySize = 1;
-	texDesc.CPUAccessFlags = 0;
-
-	hr = device->CreateTexture2D(&texDesc, NULL, &buffer);
-
-	if (!debug::Logger::log(this, hr))
-		throw std::exception("Texture2D not created successfully");
-
-	hr = device->CreateDepthStencilView(buffer, NULL, &m_dsv);
-	buffer->Release();
-
-	if (!debug::Logger::log(this, hr))
-		throw std::exception("Depth Stencil View not created successfully");
-
+	try
+	{
+		renderTexture = new RenderTexture();
+	}
+	catch(...) {}
 }
 
 SwapChain::~SwapChain()
 {
-	m_dsv->Release();
-	m_rtv->Release();
-	m_swap_chain->Release();
+	delete renderTexture;
+	swapChain->Release();
+}
+
+void SwapChain::cleanRenderTarget()
+{
+	if (renderTexture->renderTargetView)
+	{
+		renderTexture->renderTargetView->Release();
+		renderTexture->renderTargetView = nullptr;
+	}
+}
+
+void SwapChain::resizeBuffers(UINT bufferCount, UINT width, UINT height)
+{
+	renderTexture->resizeResources(width, height);
+	swapChain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
+}
+
+void SwapChain::createRenderTarget()
+{
+	ID3D11Texture2D* buffer = NULL;
+	HRESULT result = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&buffer);
+
+	if (!debug::Logger::log(this, result))
+		throw std::exception("Swap Chain Fail");
+
+	result = this->system->m_d3d_device->CreateRenderTargetView(buffer, NULL, &renderTexture->renderTargetView);
+	if (!debug::Logger::log(this, result))
+		throw std::exception("Render Target View not created successfully.");
+
+	buffer->Release();
 }
 
 bool SwapChain::present(bool vsync)
 {
-	m_swap_chain->Present(vsync, NULL);
+	swapChain->Present(vsync, NULL);
 	return true;
+}
+
+RenderTexture* SwapChain::getRenderTexture()
+{
+	return this->renderTexture;
 }

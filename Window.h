@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Windows.h>
-
+#include "UIManager.h"
 class Window
 {
 protected:

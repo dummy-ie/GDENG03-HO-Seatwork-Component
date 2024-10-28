@@ -1,9 +1,12 @@
 #include "ColorPickerScreen.h"
 
 #include "imgui.h"
+#include "Logger.h"
 
 ColorPickerScreen::ColorPickerScreen() : UIScreen("ColorPickerScreen")
 {
+    isActive = false;
+    debug::Logger::log(this, "Initialized");
 }
 
 ColorPickerScreen::~ColorPickerScreen()

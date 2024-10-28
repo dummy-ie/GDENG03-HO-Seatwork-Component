@@ -7,6 +7,7 @@
 
 InspectorScreen::InspectorScreen() : UIScreen("InspectorScreen")
 {
+	debug::Logger::log(this, "Initialized");
 }
 
 InspectorScreen::~InspectorScreen()
@@ -16,7 +17,6 @@ InspectorScreen::~InspectorScreen()
 void InspectorScreen::draw()
 {
 	ImGui::SetNextWindowSize(ImVec2(UIManager::WINDOW_WIDTH / 6, UIManager::WINDOW_HEIGHT), ImGuiCond_Once);
-	ImGui::SetNextWindowPos(ImVec2(UIManager::WINDOW_WIDTH * 5 / 6 - 20, 20), ImGuiCond_Once);
 	ImGui::Begin("Inspector", &isActive);
 	
 	this->updateInspector();

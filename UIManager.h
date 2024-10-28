@@ -14,6 +14,7 @@ public:
 	const String INSPECTOR_SCREEN = "INSPECTOR_SCREEN";
 	const String HIERARCHY_SCREEN = "HIERARCHY_SCREEN";
 	const String COLOR_PICKER_SCREEN = "COLOR_PICKER_SCREEN";
+	const String VIEWPORT_SCREEN = "VIEWPORT_SCREEN";
 };
 
 class UIManager
@@ -21,18 +22,23 @@ class UIManager
 private:
 	std::unordered_map<std::string, UIScreen*> mapUI;
 	std::vector<UIScreen*> listUI;
-
+	bool firstTime = true;
 public:
-	void draw();
-	void setActive(String name);
 	static const int WINDOW_WIDTH = 1440;
 	static const int WINDOW_HEIGHT = 900;
+
+	static int RESIZE_WIDTH;
+	static int RESIZE_HEIGHT;
+
+	void draw();
+	void setActive(String name);
 
 private:
 	static UIManager* P_SHARED_INSTANCE;
 
 private:
 	UIManager(HWND hwnd);
+	~UIManager();
 	UIManager(const UIManager&);
 	UIManager& operator = (const UIManager&);
 

@@ -157,6 +157,7 @@
     <ClCompile Include="libs\imgui\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="MenuScreen.cpp" />
     <ClCompile Include="ProfilerScreen.cpp" />
+    <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SceneCamera.cpp" />
@@ -172,7 +173,6 @@
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="RasterizerState.cpp" />
-    <ClCompile Include="SceneCameraHandler.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureManager.cpp" />
@@ -181,6 +181,7 @@
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="Viewport.cpp" />
+    <ClCompile Include="ViewportScreen.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -211,6 +212,7 @@
     <ClInclude Include="MenuScreen.h" />
     <ClInclude Include="Prerequisites.h" />
     <ClInclude Include="ProfilerScreen.h" />
+    <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SceneCamera.h" />
@@ -227,7 +229,6 @@
     <ClInclude Include="Quad.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="RasterizerState.h" />
-    <ClInclude Include="SceneCameraHandler.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
@@ -239,6 +240,7 @@
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="Viewport.h" />
+    <ClInclude Include="ViewportScreen.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

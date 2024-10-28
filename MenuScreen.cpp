@@ -7,6 +7,7 @@
 
 MenuScreen::MenuScreen() : UIScreen("MenuScreen")
 {
+    debug::Logger::log(this, "Initialized");
 }
 
 MenuScreen::~MenuScreen()

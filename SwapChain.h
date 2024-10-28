@@ -10,9 +10,9 @@ namespace graphics
 	private:
 		RenderSystem* system = nullptr;
 
-		IDXGISwapChain* m_swap_chain;
-		ID3D11RenderTargetView* m_rtv;
-		ID3D11DepthStencilView* m_dsv;
+		IDXGISwapChain* swapChain;
+
+		RenderTexture* renderTexture;
 
 	private:
 		friend class DeviceContext;
@@ -22,6 +22,11 @@ namespace graphics
 		~SwapChain();
 
 	public:
+		void cleanRenderTarget();
+		void resizeBuffers(UINT bufferCount, UINT width, UINT height);
+		void createRenderTarget();
 		bool present(bool vsync);
+
+		RenderTexture* getRenderTexture();
 	};
 }

@@ -4,18 +4,17 @@
 
 #include "Window.h"
 #include "GraphicsEngine.h"
+#include "Viewport.h"
 #include "SwapChain.h"
-#include "DeviceContext.h"
-#include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "DeviceContext.h"
 #include "ConstantBuffer.h"
+#include "VertexBuffer.h"
 #include "VertexShader.h"
 #include "PixelShader.h"
-#include "RasterizerState.h"
-#include "Viewport.h"
 
 #include "InputListener.h"
-#include "Matrix4x4.h"
+#include "ViewportScreen.h"
 
 using namespace graphics;
 
@@ -24,8 +23,6 @@ class AppWindow : public Window, public InputListener
 private:
 	SwapChain* swapChain;
 
-	std::vector<Viewport*> viewPorts;
-	
 	VertexShader* vertexShader;
 	PixelShader* pixelShader;
 	ConstantBuffer* constantBuffer;
@@ -48,6 +45,7 @@ public:
 	virtual void onRightMouseUp(const Vector2D& mousePosition) override;
 
 	void initializeEngine();
+	void drawOnRenderTexture(RenderTexture* renderTexture);
 
 private:
 	void update();

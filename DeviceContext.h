@@ -21,7 +21,9 @@ namespace graphics
 	public:
 		ID3D11DeviceContext* getContext();
 
-		void clearRenderTargetColor(SwapChain* swap_chain, float red, float green, float blue, float alpha);
+		//void clearRenderTargetColor(SwapChain* swap_chain, float red, float green, float blue, float alpha);
+		void clearRenderTargetColor(RenderTexture* renderTexture, float red, float green, float blue, float alpha);
+		void setRenderTarget(RenderTexture* renderTexture);
 		void setVertexBuffer(VertexBuffer* vertex_buffer);
 		void setIndexBuffer(IndexBuffer* index_buffer);
 
@@ -30,7 +32,7 @@ namespace graphics
 		void drawTriangleStrip(UINT vertex_count, UINT start_vertex_index);
 		void drawLineStrip(UINT vertex_count, UINT start_vertex_index);
 
-		//void setViewportSize(UINT width, UINT height, int index);
+		void setViewportSize(UINT width, UINT height);
 		void setViewport(Viewport* vp);
 
 		void setVertexShader(VertexShader* vertex_shader);

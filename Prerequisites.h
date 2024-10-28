@@ -11,6 +11,7 @@ namespace graphics
 	class RasterizerState;
 	class RenderSystem;
 	class GraphicsEngine;
+	class RenderTexture;
 }
 class Resource;
 class ResourceManager;

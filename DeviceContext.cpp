@@ -10,6 +10,7 @@
 #include "PixelShader.h"
 #include "RasterizerState.h"
 #include "Viewport.h"
+#include "RenderTexture.h"
 
 
 using namespace graphics;
@@ -29,12 +30,17 @@ ID3D11DeviceContext* DeviceContext::getContext()
 	return this->m_device_context;
 }
 
-void DeviceContext::clearRenderTargetColor(SwapChain* swap_chain, float red, float green, float blue, float alpha)
+void DeviceContext::clearRenderTargetColor(RenderTexture* renderTexture, float red, float green, float blue, float alpha)
 {
-	FLOAT clear_color[] = {red, green, blue, alpha};
-	m_device_context->ClearRenderTargetView(swap_chain->m_rtv, clear_color);
-	m_device_context->ClearDepthStencilView(swap_chain->m_dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0);
-	m_device_context->OMSetRenderTargets(1, &swap_chain->m_rtv, swap_chain->m_dsv);
+	FLOAT clear_color[] = { red, green, blue, alpha };
+	m_device_context->ClearRenderTargetView(renderTexture->renderTargetView, clear_color);
+	m_device_context->ClearDepthStencilView(renderTexture->depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0);
+	m_device_context->OMSetRenderTargets(1, &renderTexture->renderTargetView, renderTexture->depthStencilView);
+}
+
+void DeviceContext::setRenderTarget(RenderTexture* renderTexture)
+{
+	m_device_context->OMSetRenderTargets(1, &renderTexture->renderTargetView, renderTexture->depthStencilView);
 }
 
 void DeviceContext::setVertexBuffer(VertexBuffer* vertex_buffer)
@@ -84,28 +90,18 @@ void DeviceContext::setViewport(Viewport* vp)
 	m_device_context->RSSetViewports(1, &vp->vp);
 }
 
-/*void DeviceContext::setViewportSize(UINT width, UINT height, int index)
+void DeviceContext::setViewportSize(UINT width, UINT height)
 {
 	D3D11_VIEWPORT vp = {};
 	vp.TopLeftX = 0.0f;
 	vp.TopLeftY = 0.0f;
-	vp.Width = (FLOAT)width / 2;
-	vp.Height = (FLOAT)height / 2;
+	vp.Width = (FLOAT)width;
+	vp.Height = (FLOAT)height;
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 
-	D3D11_VIEWPORT vp2;
-	vp2.TopLeftX = (FLOAT)width / 2;
-	vp2.TopLeftY = 0.0f;
-	vp2.Width = (FLOAT)width / 2;
-	vp2.Height = (FLOAT)height / 2;
-	vp2.MinDepth = 0.0f;
-	vp2.MaxDepth = 1.0f;
-
-	D3D11_VIEWPORT viewports[] = { vp, vp2 }; 
-
-	m_device_context->RSSetViewports(1, &viewports[index]);
-}*/
+	m_device_context->RSSetViewports(1, &vp);
+}
 
 void DeviceContext::setVertexShader(VertexShader* vertex_shader)
 {

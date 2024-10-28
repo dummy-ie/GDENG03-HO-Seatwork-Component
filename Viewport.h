@@ -10,8 +10,6 @@ namespace graphics
 	private:
 		RenderSystem* system = nullptr;
 		D3D11_VIEWPORT vp;
-		RasterizerState* solidState;
-		RasterizerState* wireframeState;
 
 	private:
 		friend class DeviceContext;
@@ -25,7 +23,6 @@ namespace graphics
 		void setPosition(FLOAT topLeftX, FLOAT topLeftY);
 		void setSize(FLOAT width, FLOAT height);
 		void setDepth(FLOAT minDepth, FLOAT maxDepth);
-		void setRasterizerSolidState();
-		void setRasterizerWireframeState();
+		
 	};
 }

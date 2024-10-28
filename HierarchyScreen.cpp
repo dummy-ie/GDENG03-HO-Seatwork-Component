@@ -8,6 +8,7 @@
 
 HierarchyScreen::HierarchyScreen() : UIScreen("HierarchyScreen")
 {
+	debug::Logger::log(this, "Initialized");
 }
 
 HierarchyScreen::~HierarchyScreen()
@@ -17,7 +18,6 @@ HierarchyScreen::~HierarchyScreen()
 void HierarchyScreen::draw()
 {
 	ImGui::SetNextWindowSize(ImVec2(UIManager::WINDOW_WIDTH / 6, UIManager::WINDOW_HEIGHT), ImGuiCond_Once);
-	ImGui::SetNextWindowPos(ImVec2(UIManager::WINDOW_WIDTH * 4 / 6 - 20, 20), ImGuiCond_Once);
 	ImGui::Begin("Hierarchy", &isActive);
 	
 	std::vector<GameObject*> list = GameObjectManager::getInstance()->getAllObjects();
