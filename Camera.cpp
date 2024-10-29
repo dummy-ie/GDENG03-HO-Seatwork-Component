@@ -44,7 +44,7 @@ void Camera::updateViewMatrix()
 	worldCam *= temp;
 
 	worldCam.inverse();
-	this->localMatrix = worldCam;
+	this->viewMatrix = worldCam;
 }
 
 void Camera::updateProjectionMatrix()
@@ -55,14 +55,14 @@ void Camera::updateProjectionMatrix()
 
 	switch (type) {
 		case 0:
-			this->projMat.setOrthoLH(
+			this->projMatrix.setOrthoLH(
 				width / 100.0f,
 				height / 100.0f,
 				-100.0f, 100.0f
 			);
 			break;
 		case 1:
-			this->projMat.setPerspectiveFovLH(
+			this->projMatrix.setPerspectiveFovLH(
 				1.57f, // fov
 				(float)width / (float)height, // aspect
 				0.1f, // near
@@ -70,7 +70,7 @@ void Camera::updateProjectionMatrix()
 			);
 			break;
 		default:
-			this->projMat.setPerspectiveFovLH(
+			this->projMatrix.setPerspectiveFovLH(
 				1.57f, // fov
 				(float)width / (float)height, // aspect
 				0.1f, // near
@@ -87,12 +87,12 @@ void Camera::onDestroy()
 
 Matrix4x4 Camera::getViewMatrix()
 {
-	return this->localMatrix;
+	return this->viewMatrix;
 }
 
 Matrix4x4 Camera::getProjMatrix()
 {
-	return this->projMat;
+	return this->projMatrix;
 }
 
 void Camera::setProjectionType(int type)

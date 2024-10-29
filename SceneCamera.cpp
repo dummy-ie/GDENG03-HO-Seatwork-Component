@@ -22,7 +22,7 @@ void SceneCamera::update(float deltaTime)
 	{
 		Vector3D newPosition = this->getLocalPosition();
 
-		Matrix4x4 viewMatrix = this->localMatrix;
+		Matrix4x4 viewMatrix = this->viewMatrix;
 		viewMatrix.inverse();
 
 		if (InputSystem::getInstance()->getKey('W'))
@@ -51,7 +51,6 @@ void SceneCamera::update(float deltaTime)
 		}
 
 		setPosition(newPosition);
-		this->updateViewMatrix();
 	}
 }
 

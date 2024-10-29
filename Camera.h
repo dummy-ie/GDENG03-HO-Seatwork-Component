@@ -8,7 +8,8 @@ class Camera : public GameObject
 {
 	public:
 		int type = 1;
-		Matrix4x4 projMat;
+		Matrix4x4 viewMatrix;
+		Matrix4x4 projMatrix;
 
 		Camera(std::string name);
 		~Camera();
