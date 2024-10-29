@@ -15,6 +15,7 @@ public:
 	const String HIERARCHY_SCREEN = "HIERARCHY_SCREEN";
 	const String COLOR_PICKER_SCREEN = "COLOR_PICKER_SCREEN";
 	const String VIEWPORT_SCREEN = "VIEWPORT_SCREEN";
+	const String TOOLS_SCREEN = "TOOLS_SCREEN";
 };
 
 class UIManager
@@ -32,6 +33,7 @@ public:
 
 	void draw();
 	void setActive(String name);
+	void setUIStyle();
 
 private:
 	static UIManager* P_SHARED_INSTANCE;
