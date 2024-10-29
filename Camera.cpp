@@ -2,6 +2,7 @@
 
 #include "EngineTime.h"
 #include "InputSystem.h"
+#include "AppWindow.h"
 
 Camera::Camera(std::string name) : GameObject(name)
 {
@@ -20,6 +21,7 @@ void Camera::update(float deltaTime)
 {
 	GameObject::update(deltaTime);
 	this->updateViewMatrix();
+	this->updateProjectionMatrix();
 }
 
 void Camera::updateViewMatrix()
@@ -45,6 +47,39 @@ void Camera::updateViewMatrix()
 	this->localMatrix = worldCam;
 }
 
+void Camera::updateProjectionMatrix()
+{
+	RECT viewport = AppWindow::getInstance()->getClientWindowRect();
+	int width = (viewport.right - viewport.left);
+	int height = (viewport.bottom - viewport.top);
+
+	switch (type) {
+		case 0:
+			this->projMat.setOrthoLH(
+				width / 100.0f,
+				height / 100.0f,
+				-100.0f, 100.0f
+			);
+			break;
+		case 1:
+			this->projMat.setPerspectiveFovLH(
+				1.57f, // fov
+				(float)width / (float)height, // aspect
+				0.1f, // near
+				100.0f // far
+			);
+			break;
+		default:
+			this->projMat.setPerspectiveFovLH(
+				1.57f, // fov
+				(float)width / (float)height, // aspect
+				0.1f, // near
+				100.0f // far
+			);
+			break;
+	}
+}
+
 void Camera::onDestroy()
 {
 	GameObject::onDestroy();
@@ -53,4 +88,14 @@ void Camera::onDestroy()
 Matrix4x4 Camera::getViewMatrix()
 {
 	return this->localMatrix;
+}
+
+Matrix4x4 Camera::getProjMatrix()
+{
+	return this->projMat;
+}
+
+void Camera::setProjectionType(int type)
+{
+	this->type = type;
 }

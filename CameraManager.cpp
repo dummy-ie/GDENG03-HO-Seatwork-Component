@@ -13,9 +13,19 @@ Matrix4x4 CameraManager::getMainCameraViewMatrix()
 	return this->mainCamera->getViewMatrix();
 }
 
+Matrix4x4 CameraManager::getMainCameraProjMatrix()
+{
+	return this->mainCamera->getProjMatrix();
+}
+
 Matrix4x4 CameraManager::getSceneCameraViewMatrix()
 {
 	return this->sceneCamera->getViewMatrix();
+}
+
+Matrix4x4 CameraManager::getSceneCameraProjMatrix()
+{
+	return this->sceneCamera->getProjMatrix();
 }
 
 void CameraManager::setMainCamera(Camera* camera)
@@ -31,6 +41,11 @@ void CameraManager::setMainCameraByIndex(int index)
 		return;
 	}
 	setMainCamera(cameras[index]);
+}
+
+void CameraManager::setSceneCameraProjection(int type)
+{
+	this->sceneCamera->setProjectionType(type);
 }
 
 void CameraManager::updateSceneCamera(float deltaTime)

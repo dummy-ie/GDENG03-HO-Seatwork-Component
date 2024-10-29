@@ -255,6 +255,9 @@
     <ClCompile Include="RenderTexture.cpp">
       <Filter>GameEngine\GraphicsEngine\ResourceManager\TextureManager</Filter>
     </ClCompile>
+    <ClCompile Include="ToolsScreen.cpp">
+      <Filter>Editor\Screens</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -427,6 +430,9 @@
     </ClInclude>
     <ClInclude Include="RenderTexture.h">
       <Filter>GameEngine\GraphicsEngine\ResourceManager\TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolsScreen.h">
+      <Filter>Editor\Screens</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

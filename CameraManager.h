@@ -14,9 +14,12 @@ private:
 
 public:
     Matrix4x4 getMainCameraViewMatrix();
+    Matrix4x4 getMainCameraProjMatrix();
     Matrix4x4 getSceneCameraViewMatrix();
+    Matrix4x4 getSceneCameraProjMatrix();
     void setMainCamera(Camera* camera);
     void setMainCameraByIndex(int index);
+    void setSceneCameraProjection(int type);
     void updateSceneCamera(float deltaTime);
     void addCamera(Camera* camera);
     void removeCamera(Camera* camera);

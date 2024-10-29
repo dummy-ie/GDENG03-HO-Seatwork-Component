@@ -1,6 +1,7 @@
 #include "Quad.h"
 
 #include "AppWindow.h"
+#include "CameraManager.h"
 
 Quad::Quad(std::string name, void* shaderByteCode, size_t sizeShader) : GameObject(name)
 {
@@ -58,12 +59,13 @@ void Quad::update(float deltaTime)
 
 	cc.viewMatrix.setIdentity();
 
-	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
+	/*RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 
 	FLOAT width = windowRect.right - windowRect.left;
 	FLOAT height = windowRect.bottom - windowRect.top;
 
-	cc.projMatrix.setOrthoLH(width / 300.0f, height / 300.0f, -4.0f, 4.0f);
+	cc.projMatrix.setOrthoLH(width / 300.0f, height / 300.0f, -4.0f, 4.0f);*/
+	cc.projMatrix = CameraManager::getInstance()->getSceneCameraProjMatrix();
 
 	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cc);
 }

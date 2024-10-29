@@ -16,6 +16,8 @@ SceneCamera::~SceneCamera()
 
 void SceneCamera::update(float deltaTime)
 {
+	Camera::update(deltaTime);
+
 	if (isRightMouseDown)
 	{
 		Vector3D newPosition = this->getLocalPosition();

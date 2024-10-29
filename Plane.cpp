@@ -94,14 +94,15 @@ void Plane::update(float deltaTime)
 
 	cbData.viewMatrix = CameraManager::getInstance()->getSceneCameraViewMatrix();
 
-	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
+	//RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 
-	FLOAT width = windowRect.right - windowRect.left;
-	FLOAT height = windowRect.bottom - windowRect.top;
+	//FLOAT width = windowRect.right - windowRect.left;
+	//FLOAT height = windowRect.bottom - windowRect.top;
 
-	//cbData.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
+	////cbData.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
 
-	cbData.projMatrix.setPerspectiveFovLH(1.57f, width / height, 0.1f, 100.0f);
+	//cbData.projMatrix.setPerspectiveFovLH(1.57f, width / height, 0.1f, 100.0f);
+	cbData.projMatrix = CameraManager::getInstance()->getSceneCameraProjMatrix();
 
 	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbData);
 }
