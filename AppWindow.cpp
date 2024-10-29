@@ -34,9 +34,6 @@ void AppWindow::onUpdate()
 
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	renderSystem->getImmediateDeviceContext()->clearRenderTargetColor(this->swapChain->getRenderTexture(),
-		0.83, 0.58, 0.895, 1);
-
 	RECT windowRect = this->getClientWindowRect();
 
 	FLOAT width = windowRect.right - windowRect.left;
@@ -45,7 +42,6 @@ void AppWindow::onUpdate()
 	renderSystem->getImmediateDeviceContext()->setViewportSize(width, height);
 
 	GameObjectManager::getInstance()->update(deltaTime);
-	GameObjectManager::getInstance()->draw(this, vertexShader, pixelShader);
 
 	CameraManager::getInstance()->updateSceneCamera(deltaTime);
 
@@ -125,6 +121,7 @@ void AppWindow::onRightMouseUp(const Vector2D& mousePosition)
 
 void AppWindow::initializeEngine()
 {
+	// Try Initializing Managers
 	try
 	{
 		GraphicsEngine::initialize();
@@ -138,9 +135,10 @@ void AppWindow::initializeEngine()
 	{
 		m_is_running = false;
 	}
-	
+
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
+	// Initialize the Swap Chain
 	RECT windowRect = this->getClientWindowRect();
 
 	FLOAT width = windowRect.right - windowRect.left;
@@ -148,11 +146,13 @@ void AppWindow::initializeEngine()
 
 	this->swapChain = renderSystem->createSwapChain(this->m_hwnd, width, height);
 
+	// Initialize the Constant Buffer
 	CBEditor cbData;
 	cbData.wireframe = false;
 
 	this->constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBEditor));
 
+	// Initialize the Shaders
 	void* shaderByteCode = nullptr;
 	size_t sizeShader = 0;
 
@@ -164,18 +164,49 @@ void AppWindow::initializeEngine()
 	this->pixelShader = renderSystem->createPixelShader(shaderByteCode, sizeShader);
 	renderSystem->releaseCompiledShader();
 
+	// Initialize Rasterizer States
+	this->solidState = renderSystem->createRasterizerState(D3D11_FILL_SOLID, D3D11_CULL_BACK);
+	this->wireframeState = renderSystem->createRasterizerState(D3D11_FILL_WIREFRAME, D3D11_CULL_NONE);
+
 	debug::Logger::log(this, "Initialized Engine");
 }
 
-void AppWindow::drawOnRenderTexture(RenderTexture* renderTexture)
+void AppWindow::draw(EFillMode fillMode)
 {
-	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->clearRenderTargetColor(renderTexture, 0.83, 0.58, 0.895, 1);
+	DeviceContext* context = GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext();
+
+	CBEditor cbData;
+	switch (fillMode)
+	{
+	default:
+		context->setRasterizerState(solidState);
+		cbData.wireframe = false;
+		break;
+	case WIREFRAME:
+		context->setRasterizerState(wireframeState);
+		cbData.wireframe = true;
+		break;
+	case SOLID_WIREFRAME:
+		context->setRasterizerState(solidState);
+		this->draw(SOLID);
+		context->setRasterizerState(wireframeState);
+		cbData.wireframe = true;
+		break;
+	}
+
+	context->setConstantBuffer(constantBuffer, 1);
+	this->constantBuffer->update(context, &cbData);
+
 	GameObjectManager::getInstance()->draw(this, vertexShader, pixelShader);
-	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setRenderTarget(this->swapChain->getRenderTexture());
 }
 
 void AppWindow::update()
 {
+}
+
+SwapChain* AppWindow::getSwapChain()
+{
+	return this->swapChain;
 }
 
 AppWindow* AppWindow::P_SHARED_INSTANCE = NULL;

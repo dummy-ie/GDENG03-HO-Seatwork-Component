@@ -15,8 +15,6 @@ ViewportScreen::ViewportScreen() : UIScreen("Viewport")
 
 	this->renderTexture = new RenderTexture();
 
-	this->solidState = renderSystem->createRasterizerState(D3D11_FILL_SOLID, D3D11_CULL_BACK);
-	this->wireframeState = renderSystem->createRasterizerState(D3D11_FILL_WIREFRAME, D3D11_CULL_NONE);
 	debug::Logger::log(this, "Initialized");
 }
 
@@ -28,31 +26,16 @@ ViewportScreen::~ViewportScreen()
 void ViewportScreen::draw()
 {
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
-	DeviceContext* context = renderSystem->getImmediateDeviceContext();
+	renderSystem->getImmediateDeviceContext()->clearRenderTargetColor(renderTexture, 0.83, 0.58, 0.895, 1);
 
 	ImGui::Begin("Viewport", &isActive);
 
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-
 	renderTexture->resizeResources(viewportPanelSize.x, viewportPanelSize.y);
-	AppWindow::getInstance()->drawOnRenderTexture(this->renderTexture);
-
-	switch (currentFillMode)
-	{
-	default:
-		context->setRasterizerState(solidState);
-		break;
-	case WIREFRAME:
-		context->setRasterizerState(wireframeState);
-		break;
-	case SOLID_WIREFRAME:
-		context->setRasterizerState(solidState);
-		ImGui::Image((ImTextureID)renderTexture->getShaderResourceView(), viewportPanelSize);
-		context->setRasterizerState(wireframeState);
-		break;
-	}
+	AppWindow::getInstance()->draw(this->currentFillMode);
 
 	ImGui::Image((ImTextureID)renderTexture->getShaderResourceView(), viewportPanelSize);
-
 	ImGui::End();
+
+	renderSystem->getImmediateDeviceContext()->setRenderTarget(AppWindow::getInstance()->getSwapChain()->getRenderTexture());
 }

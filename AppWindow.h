@@ -27,6 +27,9 @@ private:
 	PixelShader* pixelShader;
 	ConstantBuffer* constantBuffer;
 
+	RasterizerState* solidState;
+	RasterizerState* wireframeState;
+
 public:
 	virtual void onCreate() override;
 	virtual void onUpdate() override;
@@ -45,11 +48,12 @@ public:
 	virtual void onRightMouseUp(const Vector2D& mousePosition) override;
 
 	void initializeEngine();
-	void drawOnRenderTexture(RenderTexture* renderTexture);
+	void drawOnRenderTexture(RenderTexture* renderTexture, EFillMode fillMode);
 
-private:
+public:
+	void draw(EFillMode fillMode);
 	void update();
-
+	SwapChain* getSwapChain();
 private:
 	static AppWindow* P_SHARED_INSTANCE;
 

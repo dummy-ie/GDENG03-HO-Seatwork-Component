@@ -20,9 +20,6 @@ private:
 	EFillMode currentFillMode = SOLID;
 	RenderTexture* renderTexture;
 
-	RasterizerState* solidState;
-	RasterizerState* wireframeState;
-
 private:
 	ViewportScreen();
 	~ViewportScreen();
