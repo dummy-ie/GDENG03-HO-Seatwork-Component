@@ -14,12 +14,12 @@ Border::Border(std::string name, void* shaderByteCode, size_t sizeShader) : Game
 		{ Vector3D(-1.0f,-1.0f,0.0f),    Vector3D(0,0,0), Vector3D(0,0,0) }
 	};
 
-	CBData cbData;
+	CBObjectData cbData;
 	cbData.time = 0.0f;
 
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	this->constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBData));
+	this->constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBObjectData));
 
 	UINT sizeList = ARRAYSIZE(list);
 
@@ -39,19 +39,10 @@ void Border::update(float deltaTime)
 {
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	CBData cbData;
+	CBObjectData cbData;
 	cbData.time = 0.0f;
 
 	cbData.worldMatrix.setIdentity();
-
-	cbData.viewMatrix.setIdentity();
-
-	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
-
-	FLOAT width = windowRect.right - windowRect.left;
-	FLOAT height = windowRect.bottom - windowRect.top;
-
-	cbData.projMatrix.setIdentity();
 
 	this->constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbData);
 }
@@ -61,7 +52,7 @@ void Border::draw(Window* window, VertexShader* vertexShader, PixelShader* pixel
 {
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	renderSystem->getImmediateDeviceContext()->setConstantBuffer(this->constantBuffer);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer, 0);
 
 	renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
 	renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);

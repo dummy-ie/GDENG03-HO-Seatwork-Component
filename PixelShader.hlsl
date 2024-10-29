@@ -5,15 +5,19 @@ struct PS_INPUT
     float3 color1 : COLOR1;
 };
 
-cbuffer constant : register(b0)
+cbuffer object : register(b0)
 {
     row_major float4x4 worldMatrix;
-    row_major float4x4 viewMatrix;
-    row_major float4x4 projMatrix;
     float time;
 };
 
-cbuffer editor : register(b1)
+cbuffer view : register(b1)
+{
+    row_major float4x4 viewMatrix;
+    row_major float4x4 projMatrix;
+};
+
+cbuffer editor : register(b2)
 {
     bool wireframe;
 }

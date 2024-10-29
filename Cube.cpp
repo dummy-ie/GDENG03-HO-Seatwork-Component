@@ -88,11 +88,11 @@ Cube::Cube(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 
 	indexBuffer = renderSystem->createIndexBuffer(indexList, ARRAYSIZE(indexList));
 
-	CBData cbData;
+	CBObjectData cbData;
 	angle = 0.0f;
 	cbData.time = angle;
 
-	constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBData));
+	constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBObjectData));
 
 	InputSystem::getInstance()->addListener(this);
 
@@ -112,38 +112,11 @@ void Cube::onCreate()
 void Cube::update(float deltaTime)
 {
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
-	CBData cbData;
+	CBObjectData cbObjectData;
 
-	//if (startRotate)
-	//	deltaRotation += EngineTime::getDeltaTime() * speed;
-
-	cbData.time = 0.0f;
-	//setRotation(deltaRotation, deltaRotation, deltaRotation);
+	cbObjectData.time = 0.0f;
 
 	elapsedTime += EngineTime::getDeltaTime() / 2.0f;
-	
-
-	//this->localPosition = Vector3D::lerp(Vector3D(0.0f, 0.25f, 0.0f), Vector3D(0.0f, -1.25f, 0.0f), (sin(elapsedTime) + 1.0f) / 2.0f);
-
-	// Test Case 2
-	//deltaRotation += EngineTime::getDeltaTime() * speed;
-	//setRotation(deltaRotation, deltaRotation, deltaRotation);
-
-	// Test Case 3
-	//this->localPosition = Vector3D::lerp(Vector3D(1.0f, 1.0f, 0.0f), Vector3D(-1.0f, -1.0f, 0.0f), (sin(elapsedTime) + 1.0f) / 2.0f);
-	//this->localScale = Vector3D::lerp(Vector3D(1.0f, 1.0f, 1.0f), Vector3D(0.25f, 0.25f, 0.25f), (sin(deltaScale) + 1.0f) / 2.0f);
-
-	// Test Case 5
-	/*if (InputSystem::getInstance()->getKeyDown('F'))
-		startRotate = true;
-
-	if (startRotate)
-	{
-		deltaScale += EngineTime::getDeltaTime() / 2.0f;
-		this->localScale = Vector3D::lerp(Vector3D(1.0f, 1.0f, 1.0f), Vector3D(10.0f, 0.01f, 10.0f), deltaScale);
-		if (deltaScale >= 1.0f)
-			deltaScale = 1.0f;
-	}*/
 
 	Matrix4x4 transform, rotation;
 	Matrix4x4 temp;
@@ -155,16 +128,13 @@ void Cube::update(float deltaTime)
 	// Scale * Rotation
 	rotation.setIdentity();
 	rotation.setRotationZ(this->localRotation.z);
-	//temp.setRotationZ(0.0f);
 
 	temp.setIdentity();
 	temp.setRotationY(this->localRotation.y);
-	//temp.setRotationY(0.0f);
 	rotation *= temp;
 
 	temp.setIdentity();
 	temp.setRotationX(this->localRotation.x);
-	//temp.setRotationX(0.0f);
 	rotation *= temp;
 
 	transform *= rotation;
@@ -173,23 +143,9 @@ void Cube::update(float deltaTime)
 	temp.setTranslation(this->localPosition);
 	transform *= temp;
 
-	//std::cout << this->localRotation.y << std::endl;
+	cbObjectData.worldMatrix.setMatrix(transform);
 
-	cbData.worldMatrix.setMatrix(transform);
-
-	cbData.viewMatrix = CameraManager::getInstance()->getSceneCameraViewMatrix();
-
-	/*RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
-
-	FLOAT width = windowRect.right - windowRect.left;
-	FLOAT height = windowRect.bottom - windowRect.top;*/
-
-	//cbData.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
-
-	//cbData.projMatrix.setPerspectiveFovLH(1.57f, width / height, 0.1f, 100.0f);
-	cbData.projMatrix = CameraManager::getInstance()->getSceneCameraProjMatrix();
-
-	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbData);
+	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbObjectData);
 }
 
 // Sets shaders and draws afterwards
@@ -197,7 +153,7 @@ void Cube::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelSh
 {
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer, 0);
 
 	renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
 	renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);

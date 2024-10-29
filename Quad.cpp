@@ -14,10 +14,10 @@ Quad::Quad(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 	};
 
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
-	CBData cc;
+	CBObjectData cc;
 	cc.time = 0.0f;
 
-	constantBuffer = renderSystem->createConstantBuffer(&cc, sizeof(CBData));
+	constantBuffer = renderSystem->createConstantBuffer(&cc, sizeof(CBObjectData));
 
 	UINT sizeList = ARRAYSIZE(list);
 
@@ -38,7 +38,7 @@ void Quad::update(float deltaTime)
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 	angle += 1.57f * EngineTime::getDeltaTime();
 
-	CBData cc;
+	CBObjectData cc;
 	cc.time = angle;
 	
 	deltaPosition += EngineTime::getDeltaTime() / 10.0f;
@@ -56,16 +56,6 @@ void Quad::update(float deltaTime)
 	temp.setIdentity();
 	temp.setTranslation(Vector3D::lerp(Vector3D(0.1f, -1.5f, 0), Vector3D(1.5f, 1.5f, 0), deltaPosition));
 	cc.worldMatrix *= temp;
-
-	cc.viewMatrix.setIdentity();
-
-	/*RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
-
-	FLOAT width = windowRect.right - windowRect.left;
-	FLOAT height = windowRect.bottom - windowRect.top;
-
-	cc.projMatrix.setOrthoLH(width / 300.0f, height / 300.0f, -4.0f, 4.0f);*/
-	cc.projMatrix = CameraManager::getInstance()->getSceneCameraProjMatrix();
 
 	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cc);
 }

@@ -38,10 +38,10 @@ Plane::Plane(std::string name, void* shaderByteCode, size_t sizeShader) : GameOb
 	};*/
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	CBData cbData;
+	CBObjectData cbData;
 	cbData.time = 0.0f;
 
-	constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBData));
+	constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBObjectData));
 
 	UINT sizeList = ARRAYSIZE(list);
 
@@ -61,8 +61,7 @@ void Plane::update(float deltaTime)
 {
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	CBData cbData;
-
+	CBObjectData cbData;
 	cbData.time = 0.0f;
 
 	Matrix4x4 transform;
@@ -92,18 +91,6 @@ void Plane::update(float deltaTime)
 
 	cbData.worldMatrix.setMatrix(transform);
 
-	cbData.viewMatrix = CameraManager::getInstance()->getSceneCameraViewMatrix();
-
-	//RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
-
-	//FLOAT width = windowRect.right - windowRect.left;
-	//FLOAT height = windowRect.bottom - windowRect.top;
-
-	////cbData.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
-
-	//cbData.projMatrix.setPerspectiveFovLH(1.57f, width / height, 0.1f, 100.0f);
-	cbData.projMatrix = CameraManager::getInstance()->getSceneCameraProjMatrix();
-
 	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbData);
 }
 
@@ -112,7 +99,7 @@ void Plane::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelS
 {
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer, 0);
 
 	renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
 	renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);

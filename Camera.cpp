@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "Camera.h"
 
 #include "EngineTime.h"
 #include "InputSystem.h"
@@ -6,10 +7,14 @@
 
 Camera::Camera(std::string name) : GameObject(name)
 {
+	CBCameraData cbData;
+	constantBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createConstantBuffer(&cbData, sizeof(CBCameraData));
 }
 
 Camera::~Camera()
 {
+	delete constantBuffer;
+	GameObject::~GameObject();
 }
 
 void Camera::onCreate()
@@ -20,8 +25,18 @@ void Camera::onCreate()
 void Camera::update(float deltaTime)
 {
 	GameObject::update(deltaTime);
+
+	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+
 	this->updateViewMatrix();
 	this->updateProjectionMatrix();
+
+	CBCameraData cbCameraData = {};
+	cbCameraData.viewMatrix = this->viewMatrix;
+	cbCameraData.projMatrix = this->projMatrix;
+
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer, 1);
+	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbCameraData);
 }
 
 void Camera::updateViewMatrix()

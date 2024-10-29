@@ -12,12 +12,16 @@ struct VS_OUTPUT
     float3 color1 : COLOR1;
 };
 
-cbuffer constant : register(b0)
+cbuffer object : register(b0)
 {
     row_major float4x4 worldMatrix;
+    float time;
+};
+
+cbuffer view : register(b1)
+{
     row_major float4x4 viewMatrix;
     row_major float4x4 projMatrix;
-    float time;
 };
 
 cbuffer editor : register(b1)

@@ -194,7 +194,7 @@ void AppWindow::draw(EFillMode fillMode)
 		break;
 	}
 
-	context->setConstantBuffer(constantBuffer, 1);
+	context->setConstantBuffer(constantBuffer, 2);
 	this->constantBuffer->update(context, &cbData);
 
 	GameObjectManager::getInstance()->draw(this, vertexShader, pixelShader);

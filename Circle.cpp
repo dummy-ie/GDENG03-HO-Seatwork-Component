@@ -28,11 +28,11 @@ Circle::Circle(std::string name, float radius, int sides, void* shaderByteCode, 
 		list.push_back({ Vector3D(cos(theta + deltaTheta) * radius, sin(theta + deltaTheta) * radius, 0.0f), Vector3D(1,i % 2,1), Vector3D(0,0,1) });
 	}
 
-	CBData cc;
+	CBObjectData cc;
 
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	constantBuffer = renderSystem->createConstantBuffer(&cc, sizeof(CBData));
+	constantBuffer = renderSystem->createConstantBuffer(&cc, sizeof(CBObjectData));
 
 	UINT size_list = list.size();
 
@@ -56,7 +56,7 @@ void Circle::onCreate()
 
 void Circle::update(float deltaTime)
 {
-	CBData cc;
+	CBObjectData cc;
 
 	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 
@@ -95,10 +95,6 @@ void Circle::update(float deltaTime)
 
 	cc.worldMatrix.setTranslation(localPosition);
 
-	cc.viewMatrix.setIdentity();
-
-	cc.projMatrix.setOrthoLH(orthoWidth, orthoHeight, -4.0f, 4.0f);
-
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
 	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cc);
@@ -109,7 +105,7 @@ void Circle::draw(Window* window, VertexShader* vertexShader, PixelShader* pixel
 {
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer, 0);
 
 	renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
 	renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);

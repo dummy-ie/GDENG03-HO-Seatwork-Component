@@ -12,6 +12,7 @@ SceneCamera::SceneCamera(std::string name) : Camera(name)
 
 SceneCamera::~SceneCamera()
 {
+	Camera::~Camera();
 }
 
 void SceneCamera::update(float deltaTime)

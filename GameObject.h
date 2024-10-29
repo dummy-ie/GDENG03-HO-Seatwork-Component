@@ -70,13 +70,12 @@ public:
 	};
 
 	__declspec(align(16))
-	struct CBData
+	struct CBObjectData
 	{
 		Matrix4x4 worldMatrix;
-		Matrix4x4 viewMatrix;
-		Matrix4x4 projMatrix;
 		float time;
 	};
+
 public:
 	virtual void onCreate();
 	virtual void onDestroy();

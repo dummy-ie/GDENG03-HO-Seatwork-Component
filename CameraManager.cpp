@@ -37,7 +37,7 @@ void CameraManager::setMainCameraByIndex(int index)
 {
 	if (index > cameras.size())
 	{
-		std::cout << "Camera Index over Cameras in system" << std::endl;
+		debug::Logger::log(this, "Camera Index over Cameras in system");
 		return;
 	}
 	setMainCamera(cameras[index]);
