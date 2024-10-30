@@ -19,11 +19,5 @@ namespace graphics
 	public:
 		RasterizerState(RenderSystem* system, D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode);
 		~RasterizerState();
-
-	private:
-		void updateState();
-
-	public:
-		void setFillMode(D3D11_FILL_MODE fillMode);
 	};
 }

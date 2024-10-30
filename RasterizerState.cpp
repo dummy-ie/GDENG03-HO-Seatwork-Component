@@ -22,18 +22,3 @@ RasterizerState::~RasterizerState()
 {
 	m_rasterizer_state->Release();
 }
-
-void RasterizerState::updateState()
-{
-	//GraphicsEngine::getInstance()->getImmediateDeviceContext()->setRasterizerState(this);
-}
-
-void RasterizerState::setFillMode(D3D11_FILL_MODE fillMode)
-{
-	/*D3D11_RASTERIZER_DESC desc = {};
-	ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
-	m_rasterizer_state->GetDesc(&desc);
-	desc.FillMode = fillMode;
-	GraphicsEngine::getInstance()->m_d3d_device->CreateRasterizerState(&desc, &m_rasterizer_state);
-	updateState();*/
-}

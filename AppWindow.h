@@ -48,11 +48,10 @@ public:
 	virtual void onRightMouseUp(const Vector2D& mousePosition) override;
 
 	void initializeEngine();
-	void drawOnRenderTexture(RenderTexture* renderTexture, EFillMode fillMode);
 
 public:
-	void draw(EFillMode fillMode);
 	void update();
+	void draw(EFillMode fillMode);
 	SwapChain* getSwapChain();
 private:
 	static AppWindow* P_SHARED_INSTANCE;
