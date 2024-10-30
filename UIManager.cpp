@@ -178,6 +178,13 @@ void UIManager::setUIStyle()
 
 }
 
+void UIManager::addViewport(UIScreen* viewport)
+{
+	UINames uiNames;
+	this->mapUI[uiNames.VIEWPORT_SCREEN] = viewport;
+	this->listUI.push_back(viewport);
+}
+
 UIManager::UIManager(HWND hwnd)
 {
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();

@@ -258,6 +258,7 @@
     <ClCompile Include="ToolsScreen.cpp">
       <Filter>Editor\Screens</Filter>
     </ClCompile>
+    <ClCompile Include="ViewportManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -434,6 +435,7 @@
     <ClInclude Include="ToolsScreen.h">
       <Filter>Editor\Screens</Filter>
     </ClInclude>
+    <ClInclude Include="ViewportManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader.hlsl">

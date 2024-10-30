@@ -27,7 +27,7 @@ private:
 
 	bool isRightMouseDown = false;
 
-private:
+public:
 	ViewportScreen(int index);
 	~ViewportScreen();
 

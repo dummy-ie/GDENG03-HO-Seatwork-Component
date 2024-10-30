@@ -5,6 +5,7 @@
 #include "GameObjectManager.h"
 #include "CameraManager.h"
 #include "UIManager.h"
+#include "ViewportManager.h"
 
 #include "InputSystem.h"
 #include "EngineTime.h"
@@ -130,6 +131,7 @@ void AppWindow::initializeEngine()
 		GameObjectManager::initialize();
 		CameraManager::initialize();
 		UIManager::initialize(m_hwnd);
+		ViewportManager::initialize();
 	}
 	catch (...)
 	{

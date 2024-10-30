@@ -5,6 +5,7 @@
 #include "GraphicsEngine.h"
 #include "GameObjectManager.h"
 #include "CameraManager.h"
+#include "ViewportManager.h"
 
 ToolsScreen::ToolsScreen() : UIScreen("ToolsScreen")
 {
@@ -23,6 +24,13 @@ void ToolsScreen::draw()
         }
         if (ImGui::MenuItem("Perspective")) {
             CameraManager::getInstance()->setSceneCameraProjection(1);
+        }
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::BeginMenu("Viewports")) {
+        if (ImGui::MenuItem("New Viewport")) {
+            ViewportManager::getInstance()->createViewport();
         }
         ImGui::EndMenu();
     }
