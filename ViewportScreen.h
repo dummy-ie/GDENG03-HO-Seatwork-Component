@@ -4,6 +4,7 @@
 
 #include "RenderTexture.h"
 #include "Prerequisites.h"
+#include "SceneCamera.h"
 #include "Viewport.h"
 
 enum EFillMode
@@ -17,11 +18,17 @@ using namespace graphics;
 class ViewportScreen : public UIScreen
 {
 private:
+	int index;
+
+	SceneCamera* currentCamera;
+
 	EFillMode currentFillMode = SOLID;
 	RenderTexture* renderTexture;
 
+	bool isRightMouseDown = false;
+
 private:
-	ViewportScreen();
+	ViewportScreen(int index);
 	~ViewportScreen();
 
 private:

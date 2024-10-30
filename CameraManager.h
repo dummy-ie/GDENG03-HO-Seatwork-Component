@@ -17,6 +17,7 @@ public:
     Matrix4x4 getMainCameraProjMatrix();
     Matrix4x4 getSceneCameraViewMatrix();
     Matrix4x4 getSceneCameraProjMatrix();
+    SceneCamera* getSceneCamera();
     void setMainCamera(Camera* camera);
     void setMainCameraByIndex(int index);
     void setSceneCameraProjection(int type);

@@ -57,7 +57,7 @@ void UIManager::draw()
 
 		ImGui::DockBuilderDockWindow("Inspector", dock1);
 		ImGui::DockBuilderDockWindow("Hierarchy", dock2);
-		ImGui::DockBuilderDockWindow("Viewport", dock3);
+		ImGui::DockBuilderDockWindow("Viewport 1", dock3);
 		ImGui::DockBuilderDockWindow("Profiler", dock4);
 
 		ImGui::DockBuilderFinish(id);
@@ -223,7 +223,7 @@ UIManager::UIManager(HWND hwnd)
 	this->mapUI[uiNames.COLOR_PICKER_SCREEN] = colorPickerScreen;
 	this->listUI.push_back(colorPickerScreen);
 
-	ViewportScreen* viewportScreen = new ViewportScreen();
+	ViewportScreen* viewportScreen = new ViewportScreen(0);
 	this->mapUI[uiNames.VIEWPORT_SCREEN] = viewportScreen;
 	this->listUI.push_back(viewportScreen);
 

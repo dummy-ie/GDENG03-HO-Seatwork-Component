@@ -28,6 +28,11 @@ Matrix4x4 CameraManager::getSceneCameraProjMatrix()
 	return this->sceneCamera->getProjMatrix();
 }
 
+SceneCamera* CameraManager::getSceneCamera()
+{
+	return this->sceneCamera;
+}
+
 void CameraManager::setMainCamera(Camera* camera)
 {
 	mainCamera = camera;

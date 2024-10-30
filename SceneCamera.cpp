@@ -7,7 +7,6 @@
 SceneCamera::SceneCamera(std::string name) : Camera(name)
 {
 	localMatrix.setIdentity();
-	InputSystem::getInstance()->addListener(this);
 }
 
 SceneCamera::~SceneCamera()
@@ -18,13 +17,14 @@ SceneCamera::~SceneCamera()
 void SceneCamera::update(float deltaTime)
 {
 	Camera::update(deltaTime);
-
-	if (isRightMouseDown)
+	if (isControllable)
 	{
 		Vector3D newPosition = this->getLocalPosition();
 
 		Matrix4x4 viewMatrix = this->viewMatrix;
 		viewMatrix.inverse();
+
+		debug::Logger::log(name);
 
 		if (InputSystem::getInstance()->getKey('W'))
 		{
@@ -60,6 +60,11 @@ void SceneCamera::setSpeed(float speed)
 	this->speed = speed;
 }
 
+void SceneCamera::setControllable(bool controllable)
+{
+	this->isControllable = controllable;
+}
+
 void SceneCamera::onKeyDown(int key)
 {
 }
@@ -70,19 +75,19 @@ void SceneCamera::onKeyUp(int key)
 
 void SceneCamera::onMouseMove(const Vector2D& deltaMousePosition)
 {
-	if (isRightMouseDown)
+	if (isControllable)
 	{
-		RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
+		/*RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
 
 		float width = windowRect.right - windowRect.left;
 		float height = windowRect.bottom - windowRect.top;
 
 		Vector2D position = Vector2D(windowRect.left + width / 2.0f, windowRect.top + height / 2.0f);
 
-		InputSystem::getInstance()->setCursorPosition(position);
+		InputSystem::getInstance()->setCursorPosition(position);*/
 
-		localRotation.x += ((deltaMousePosition.y - windowRect.top) - (height / 2.0f)) * 0.1f * EngineTime::getDeltaTime();
-		localRotation.y += ((deltaMousePosition.x - windowRect.left) - (width / 2.0f)) * 0.1f * EngineTime::getDeltaTime();
+		localRotation.x += ((deltaMousePosition.y) - (InputSystem::getInstance()->getOldMousePosition().y)) * 0.2f * EngineTime::getDeltaTime();
+		localRotation.y += ((deltaMousePosition.x) - (InputSystem::getInstance()->getOldMousePosition().x)) * 0.2f * EngineTime::getDeltaTime();
 	}
 }
 
@@ -96,12 +101,10 @@ void SceneCamera::onLeftMouseUp(const Vector2D& mousePosition)
 
 void SceneCamera::onRightMouseDown(const Vector2D& mousePosition)
 {
-	isRightMouseDown = true;
-	InputSystem::getInstance()->showCursor(false);
+	isControllable = true;
 }
 
 void SceneCamera::onRightMouseUp(const Vector2D& mousePosition)
 {
-	isRightMouseDown = false;
-	InputSystem::getInstance()->showCursor(true);
+	isControllable = false;
 }

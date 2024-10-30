@@ -2,12 +2,12 @@
 
 #include "Camera.h"
 
-class SceneCamera : public Camera, InputListener
+class SceneCamera : public Camera, public InputListener
 {
 private:
 	float speed = 1.0f;
 
-	bool isRightMouseDown = false;
+	bool isControllable = false;
 
 public:
 	SceneCamera(std::string name);
@@ -16,6 +16,7 @@ public:
 public:
 	void update(float deltaTime) override;
 	void setSpeed(float speed);
+	void setControllable(bool controllable);
 
 	virtual void onKeyDown(int key);
 	virtual void onKeyUp(int key);

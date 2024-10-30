@@ -28,7 +28,6 @@ void AppWindow::onCreate()
 void AppWindow::onUpdate()
 {
 	Window::onUpdate();
-	InputSystem::getInstance()->update();
 
 	float deltaTime = EngineTime::getDeltaTime();
 
@@ -55,6 +54,7 @@ void AppWindow::onUpdate()
 		swapChain->createRenderTarget();
 	}
 
+	InputSystem::getInstance()->update();
 	swapChain->present(false);
 }
 
@@ -78,13 +78,13 @@ void AppWindow::onDestroy()
 void AppWindow::onFocus()
 {
 	Window::onFocus();
-	InputSystem::getInstance()->startUpdate();
+	//InputSystem::getInstance()->startUpdate();
 }
 
 void AppWindow::onKillFocus()
 {
 	Window::onKillFocus();
-	InputSystem::getInstance()->stopUpdate();
+	//InputSystem::getInstance()->stopUpdate();
 }
 
 void AppWindow::onKeyDown(int key)

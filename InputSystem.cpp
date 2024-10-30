@@ -161,6 +161,11 @@ Vector2D InputSystem::getMousePosition()
 	return Vector2D(currentMousePosition.x, currentMousePosition.y);
 }
 
+Vector2D InputSystem::getOldMousePosition()
+{
+	return oldMousePosition;
+}
+
 Vector2D InputSystem::getDeltaMousePosition()
 {
 	return deltaMousePosition;

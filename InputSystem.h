@@ -33,6 +33,7 @@ public:
 	bool getKeyUp(int key);
 	Vector2D getDeltaMousePosition();
 	Vector2D getMousePosition();
+	Vector2D getOldMousePosition();
 
 private:
 	static InputSystem* P_SHARED_INSTANCE;
