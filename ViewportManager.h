@@ -15,12 +15,11 @@ class ViewportManager
 	private:
 		std::vector<ViewportScreen*> viewports;
 
-
 	public:
 		static ViewportManager* getInstance();
 		static void initialize();
 		static void destroy();
-		void Update();
+		void update();
 		
 		void createViewport();
 		void deleteViewport(ViewportScreen* viewport);

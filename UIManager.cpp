@@ -73,7 +73,7 @@ void UIManager::draw()
 			screen->draw();
 	}
 
-	ViewportManager::getInstance()->Update();
+	ViewportManager::getInstance()->update();
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

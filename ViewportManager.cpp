@@ -31,7 +31,7 @@ void ViewportManager::destroy()
 	delete P_SHARED_INSTANCE;
 }
 
-void ViewportManager::Update()
+void ViewportManager::update()
 {
 	for (ViewportScreen* viewport : this->viewports) 
 	{

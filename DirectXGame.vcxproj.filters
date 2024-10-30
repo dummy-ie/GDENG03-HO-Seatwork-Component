@@ -103,6 +103,9 @@
     <Filter Include="GameEngine\GraphicsEngine\RenderSystem\VertexBuffer">
       <UniqueIdentifier>{7964c222-32e1-42fe-89ea-d320394e0611}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Screens\Viewport">
+      <UniqueIdentifier>{4377089f-e82f-4b1b-85dc-07cdc36c42dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -249,16 +252,18 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>GameEngine\Hierarchy</Filter>
     </ClCompile>
-    <ClCompile Include="ViewportScreen.cpp">
-      <Filter>Editor\Screens</Filter>
-    </ClCompile>
     <ClCompile Include="RenderTexture.cpp">
       <Filter>GameEngine\GraphicsEngine\ResourceManager\TextureManager</Filter>
     </ClCompile>
     <ClCompile Include="ToolsScreen.cpp">
       <Filter>Editor\Screens</Filter>
     </ClCompile>
-    <ClCompile Include="ViewportManager.cpp" />
+    <ClCompile Include="ViewportScreen.cpp">
+      <Filter>Editor\Screens\Viewport</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewportManager.cpp">
+      <Filter>Editor\Screens\Viewport</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -426,16 +431,18 @@
     <ClInclude Include="GameObject.h">
       <Filter>GameEngine\Hierarchy</Filter>
     </ClInclude>
-    <ClInclude Include="ViewportScreen.h">
-      <Filter>Editor\Screens</Filter>
-    </ClInclude>
     <ClInclude Include="RenderTexture.h">
       <Filter>GameEngine\GraphicsEngine\ResourceManager\TextureManager</Filter>
     </ClInclude>
     <ClInclude Include="ToolsScreen.h">
       <Filter>Editor\Screens</Filter>
     </ClInclude>
-    <ClInclude Include="ViewportManager.h" />
+    <ClInclude Include="ViewportScreen.h">
+      <Filter>Editor\Screens\Viewport</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewportManager.h">
+      <Filter>Editor\Screens\Viewport</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader.hlsl">

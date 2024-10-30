@@ -43,8 +43,6 @@ void AppWindow::onUpdate()
 
 	GameObjectManager::getInstance()->update(deltaTime);
 
-	CameraManager::getInstance()->updateSceneCamera(deltaTime);
-
 	UIManager::getInstance()->draw();
 
 	if (UIManager::RESIZE_WIDTH != 0 && UIManager::RESIZE_HEIGHT != 0)
