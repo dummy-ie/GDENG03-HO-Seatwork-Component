@@ -20,9 +20,11 @@ class ViewportManager
 		static ViewportManager* getInstance();
 		static void initialize();
 		static void destroy();
+		void Update();
 		
 		void createViewport();
 		void deleteViewport(ViewportScreen* viewport);
+		void addViewport(UIScreen* viewport);
 		std::vector<ViewportScreen*> getViewports();
 		
 

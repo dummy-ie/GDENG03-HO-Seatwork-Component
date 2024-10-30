@@ -10,6 +10,7 @@
 #include "GraphicsEngine.h"
 #include "RenderSystem.h"
 #include "DeviceContext.h"
+#include "ViewportManager.h"
 
 #include "HierarchyScreen.h"
 #include "imgui_internal.h"
@@ -71,6 +72,8 @@ void UIManager::draw()
 		if (screen->isActive)
 			screen->draw();
 	}
+
+	ViewportManager::getInstance()->Update();
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -230,9 +233,10 @@ UIManager::UIManager(HWND hwnd)
 	this->mapUI[uiNames.COLOR_PICKER_SCREEN] = colorPickerScreen;
 	this->listUI.push_back(colorPickerScreen);
 
-	ViewportScreen* viewportScreen = new ViewportScreen(0);
-	this->mapUI[uiNames.VIEWPORT_SCREEN] = viewportScreen;
-	this->listUI.push_back(viewportScreen);
+	//ViewportScreen* viewportScreen = new ViewportScreen(0);
+	//this->mapUI[uiNames.VIEWPORT_SCREEN] = viewportScreen;
+	//this->listUI.push_back(viewportScreen);
+	ViewportManager::getInstance()->createViewport();
 
 	ToolsScreen* toolsScreen = new ToolsScreen();
 	this->mapUI[uiNames.TOOLS_SCREEN] = toolsScreen;

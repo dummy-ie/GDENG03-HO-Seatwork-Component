@@ -128,10 +128,11 @@ void AppWindow::initializeEngine()
 		GraphicsEngine::initialize();
 		Random::initialize();
 		InputSystem::getInstance()->addListener(this);
+		ViewportManager::initialize();
 		GameObjectManager::initialize();
 		CameraManager::initialize();
 		UIManager::initialize(m_hwnd);
-		ViewportManager::initialize();
+		
 	}
 	catch (...)
 	{
