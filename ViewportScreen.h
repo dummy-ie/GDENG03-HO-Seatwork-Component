@@ -28,13 +28,14 @@ private:
 
 	bool isRightMouseDown = false;
 
-public:
+private:
 	ViewportScreen(int index);
 	~ViewportScreen();
+
+public:
 	virtual void draw() override;
 
 private:
 	friend class UIManager;
-
-	
+	friend class ViewportManager;
 };
