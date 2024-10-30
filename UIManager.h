@@ -34,6 +34,7 @@ public:
 	void draw();
 	void setActive(String name);
 	void setUIStyle();
+	void addViewport(UIScreen* viewport);
 
 private:
 	static UIManager* P_SHARED_INSTANCE;

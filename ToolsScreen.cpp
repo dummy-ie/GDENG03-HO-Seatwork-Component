@@ -5,6 +5,7 @@
 #include "GraphicsEngine.h"
 #include "GameObjectManager.h"
 #include "CameraManager.h"
+#include "ViewportManager.h"
 
 ToolsScreen::ToolsScreen() : UIScreen("ToolsScreen")
 {
@@ -31,5 +32,12 @@ void ToolsScreen::draw()
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
+    }
+
+    if (ImGui::BeginMenu("Viewports")) {
+        if (ImGui::MenuItem("New Viewport")) {
+            ViewportManager::getInstance()->createViewport();
+        }
+        ImGui::EndMenu();
     }
 }

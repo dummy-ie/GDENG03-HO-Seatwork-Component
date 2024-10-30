@@ -12,9 +12,13 @@ using namespace graphics;
 
 ViewportScreen::ViewportScreen(int index) : UIScreen("Viewport " + std::to_string(index + 1)), index(index)
 {
-	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
-	this->currentCamera = CameraManager::getInstance()->getSceneCamera();
+	this->currentCamera = new SceneCamera("Scene Camera " + std::to_string(index + 1));
+	this->currentCamera->setPosition(0, 1, -8);
+
+	CameraManager::getInstance()->addSceneCamera(this->currentCamera);
 	this->renderTexture = new RenderTexture();
+
+	this->camIndex = index;
 
 	debug::Logger::log(this, "Initialized");
 }
@@ -51,8 +55,33 @@ void ViewportScreen::draw()
 			InputSystem::getInstance()->removeListener(this->currentCamera);
 			this->currentCamera->setControllable(false);
 		}
+
+		if (ImGui::IsKeyReleased(ImGuiKey_Period)) 
+		{
+			this->camIndex++;
+
+			if (this->camIndex > CameraManager::getInstance()->getSceneCameras().size() - 1)
+				this->camIndex = 0;
+
+			InputSystem::getInstance()->removeListener(this->currentCamera);
+			this->currentCamera->setControllable(false);
+			this->currentCamera = CameraManager::getInstance()->getSceneCameraByIndex(this->camIndex);
+		}
+
+		if (ImGui::IsKeyReleased(ImGuiKey_Comma))
+		{
+			this->camIndex--;
+
+			if (this->camIndex < 0)
+				this->camIndex = CameraManager::getInstance()->getSceneCameras().size() - 1;
+
+			InputSystem::getInstance()->removeListener(this->currentCamera);
+			this->currentCamera->setControllable(false);
+			this->currentCamera = CameraManager::getInstance()->getSceneCameraByIndex(this->camIndex);
+		}
 	}
-	//currentCamera->update(EngineTime::getDeltaTime());
+
+	this->currentCamera->update(EngineTime::getDeltaTime());
 
 	this->renderTexture->resizeResources(viewportPanelSize.x, viewportPanelSize.y);
 	AppWindow::getInstance()->draw(this->currentFillMode);

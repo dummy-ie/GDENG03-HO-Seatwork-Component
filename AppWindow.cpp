@@ -5,6 +5,7 @@
 #include "GameObjectManager.h"
 #include "CameraManager.h"
 #include "UIManager.h"
+#include "ViewportManager.h"
 
 #include "InputSystem.h"
 #include "EngineTime.h"
@@ -41,8 +42,6 @@ void AppWindow::onUpdate()
 	renderSystem->getImmediateDeviceContext()->setViewportSize(width, height);
 
 	GameObjectManager::getInstance()->update(deltaTime);
-
-	CameraManager::getInstance()->updateSceneCamera(deltaTime);
 
 	UIManager::getInstance()->draw();
 
@@ -127,9 +126,11 @@ void AppWindow::initializeEngine()
 		GraphicsEngine::initialize();
 		Random::initialize();
 		InputSystem::getInstance()->addListener(this);
+		ViewportManager::initialize();
 		GameObjectManager::initialize();
 		CameraManager::initialize();
 		UIManager::initialize(m_hwnd);
+		
 	}
 	catch (...)
 	{

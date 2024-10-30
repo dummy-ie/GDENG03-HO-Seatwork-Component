@@ -33,6 +33,21 @@ SceneCamera* CameraManager::getSceneCamera()
 	return this->sceneCamera;
 }
 
+SceneCamera* CameraManager::getSceneCameraByIndex(int index)
+{
+	if (index > sceneCameras.size())
+	{
+		debug::Logger::log(this, "Camera Index over Cameras in system");
+		return NULL;
+	}
+	return this->sceneCameras[index];
+}
+
+std::vector<SceneCamera*> CameraManager::getSceneCameras()
+{
+	return this->sceneCameras;
+}
+
 void CameraManager::setMainCamera(Camera* camera)
 {
 	mainCamera = camera;
@@ -63,6 +78,14 @@ void CameraManager::addCamera(Camera* camera)
 	if (mainCamera == NULL)
 		setMainCamera(camera);
 	this->cameras.push_back(camera);
+}
+
+void CameraManager::addSceneCamera(SceneCamera* camera)
+{
+	if (this->sceneCamera == NULL)
+		this->sceneCamera = camera;
+
+	this->sceneCameras.push_back(camera);
 }
 
 void CameraManager::removeCamera(Camera* camera)

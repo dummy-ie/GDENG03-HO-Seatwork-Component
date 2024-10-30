@@ -19,6 +19,7 @@ class ViewportScreen : public UIScreen
 {
 private:
 	int index;
+	int camIndex;
 
 	SceneCamera* currentCamera;
 
@@ -27,13 +28,13 @@ private:
 
 	bool isRightMouseDown = false;
 
-private:
+public:
 	ViewportScreen(int index);
 	~ViewportScreen();
+	virtual void draw() override;
 
 private:
 	friend class UIManager;
 
-private:
-	virtual void draw() override;
+	
 };

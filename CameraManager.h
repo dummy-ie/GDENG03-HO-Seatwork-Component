@@ -11,6 +11,7 @@ private:
     SceneCamera* sceneCamera;
     Camera* mainCamera;
     std::vector<Camera*> cameras;
+    std::vector<SceneCamera*> sceneCameras;
 
 public:
     Matrix4x4 getMainCameraViewMatrix();
@@ -18,11 +19,14 @@ public:
     Matrix4x4 getSceneCameraViewMatrix();
     Matrix4x4 getSceneCameraProjMatrix();
     SceneCamera* getSceneCamera();
+    SceneCamera* getSceneCameraByIndex(int index);
+    std::vector<SceneCamera*> getSceneCameras();
     void setMainCamera(Camera* camera);
     void setMainCameraByIndex(int index);
     void setSceneCameraProjection(int type);
     void updateSceneCamera(float deltaTime);
     void addCamera(Camera* camera);
+    void addSceneCamera(SceneCamera* camera);
     void removeCamera(Camera* camera);
 
 private:
