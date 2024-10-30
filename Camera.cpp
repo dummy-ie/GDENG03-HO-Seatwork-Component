@@ -28,6 +28,11 @@ void Camera::update(float deltaTime)
 
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
+	if (this->type == 2) {
+		this->localPosition.y = 20.0f;
+		this->localRotation = Vector3D(1.57f, 0, 0);
+	}
+
 	this->updateViewMatrix();
 	this->updateProjectionMatrix();
 
@@ -84,6 +89,12 @@ void Camera::updateProjectionMatrix()
 				100.0f // far
 			);
 			break;
+		case 2:
+			this->projMatrix.setOrthoLH(
+				width / 100.0f,
+				height / 100.0f,
+				-100.0f, 100.0f
+			);
 		default:
 			this->projMatrix.setPerspectiveFovLH(
 				1.57f, // fov

@@ -28,11 +28,17 @@ void SceneCamera::update(float deltaTime)
 
 		if (InputSystem::getInstance()->getKey('W'))
 		{
-			newPosition += viewMatrix.getZDirection() * (speed * deltaTime);
+			if (type < 2)
+				newPosition += viewMatrix.getZDirection() * (speed * deltaTime);
+			else
+				newPosition += viewMatrix.getYDirection() * (speed * deltaTime);
 		}
 		else if (InputSystem::getInstance()->getKey('S'))
 		{
-			newPosition -= viewMatrix.getZDirection() * (speed * deltaTime);
+			if (type < 2)
+				newPosition -= viewMatrix.getZDirection() * (speed * deltaTime);
+			else
+				newPosition -= viewMatrix.getYDirection() * (speed * deltaTime);
 		}
 		if (InputSystem::getInstance()->getKey('A'))
 		{
@@ -50,6 +56,9 @@ void SceneCamera::update(float deltaTime)
 		{
 			newPosition -= viewMatrix.getYDirection() * (speed * deltaTime);
 		}
+
+		// If type < 2
+		// Scroll to zoom in or out: +- in Z direction
 
 		setPosition(newPosition);
 	}
