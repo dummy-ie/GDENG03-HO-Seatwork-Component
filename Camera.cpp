@@ -73,16 +73,17 @@ void Camera::updateProjectionMatrix()
 	int width = (viewport.right - viewport.left);
 	int height = (viewport.bottom - viewport.top);
 
+	Matrix4x4 proj;
 	switch (type) {
 		case 0:
-			this->projMatrix.setOrthoLH(
+			proj.setOrthoLH(
 				width / 100.0f,
 				height / 100.0f,
 				-100.0f, 100.0f
 			);
 			break;
 		case 1:
-			this->projMatrix.setPerspectiveFovLH(
+			proj.setPerspectiveFovLH(
 				1.57f, // fov
 				(float)width / (float)height, // aspect
 				0.1f, // near
@@ -96,7 +97,7 @@ void Camera::updateProjectionMatrix()
 				-100.0f, 100.0f
 			);
 		default:
-			this->projMatrix.setPerspectiveFovLH(
+			proj.setPerspectiveFovLH(
 				1.57f, // fov
 				(float)width / (float)height, // aspect
 				0.1f, // near
@@ -104,6 +105,7 @@ void Camera::updateProjectionMatrix()
 			);
 			break;
 	}
+	this->projMatrix = proj;
 }
 
 void Camera::onDestroy()
