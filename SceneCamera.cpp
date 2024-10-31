@@ -24,8 +24,6 @@ void SceneCamera::update(float deltaTime)
 		Matrix4x4 viewMatrix = this->viewMatrix;
 		viewMatrix.inverse();
 
-		debug::Logger::log(name);
-
 		if (InputSystem::getInstance()->getKey('W'))
 		{
 			if (type < 2)

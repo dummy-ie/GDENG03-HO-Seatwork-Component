@@ -7,6 +7,7 @@
 #include "GraphicsEngine.h"
 #include "DeviceContext.h"
 #include "imgui_internal.h"
+#include "ViewportManager.h"
 
 using namespace graphics;
 
@@ -21,6 +22,7 @@ ViewportScreen::ViewportScreen(int index) : UIScreen("Viewport " + std::to_strin
 	this->camIndex = index;
 
 	debug::Logger::log(this, "Initialized");
+	debug::Logger::log(name + " Current Cam : " + currentCamera->getName());
 }
 
 ViewportScreen::~ViewportScreen()
@@ -56,7 +58,7 @@ void ViewportScreen::draw()
 			this->currentCamera->setControllable(false);
 		}
 
-		if (ImGui::IsKeyReleased(ImGuiKey_Period)) 
+		if (InputSystem::getInstance()->getKeyUp(VK_OEM_PERIOD)) 
 		{
 			this->camIndex++;
 
@@ -66,9 +68,10 @@ void ViewportScreen::draw()
 			InputSystem::getInstance()->removeListener(this->currentCamera);
 			this->currentCamera->setControllable(false);
 			this->currentCamera = CameraManager::getInstance()->getSceneCameraByIndex(this->camIndex);
+			debug::Logger::log(name + " Current Cam : " + currentCamera->getName());
 		}
 
-		if (ImGui::IsKeyReleased(ImGuiKey_Comma))
+		if (InputSystem::getInstance()->getKeyUp(VK_OEM_COMMA))
 		{
 			this->camIndex--;
 
@@ -78,16 +81,22 @@ void ViewportScreen::draw()
 			InputSystem::getInstance()->removeListener(this->currentCamera);
 			this->currentCamera->setControllable(false);
 			this->currentCamera = CameraManager::getInstance()->getSceneCameraByIndex(this->camIndex);
+			debug::Logger::log(name + " Current Cam : " + currentCamera->getName());
 		}
 	}
 
 	this->currentCamera->update(EngineTime::getDeltaTime());
 
-	this->renderTexture->resizeResources(viewportPanelSize.x, viewportPanelSize.y);
+	if (!ImGui::IsWindowCollapsed())
+		this->renderTexture->resizeResources(viewportPanelSize.x, viewportPanelSize.y);
+
 	AppWindow::getInstance()->draw(this->currentFillMode);
 
 	ImGui::Image((ImTextureID)this->renderTexture->getShaderResourceView(), viewportPanelSize);
 	ImGui::End();
 
 	renderSystem->getImmediateDeviceContext()->setRenderTarget(AppWindow::getInstance()->getSwapChain()->getRenderTexture());
+
+	if (!isActive)
+		ViewportManager::getInstance()->deleteViewport(this);
 }
