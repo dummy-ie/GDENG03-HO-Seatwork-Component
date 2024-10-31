@@ -19,48 +19,83 @@ void InspectorScreen::draw()
 	ImGui::SetNextWindowSize(ImVec2(UIManager::WINDOW_WIDTH / 6, UIManager::WINDOW_HEIGHT), ImGuiCond_Once);
 	ImGui::Begin("Inspector", &isActive);
 	
-	this->updateInspector();
+	this->drawInspector(GameObjectManager::getInstance()->getSelectedObject());
 
 	ImGui::End();
 }
 
-void InspectorScreen::updateInspector()
+void InspectorScreen::drawInspector(GameObject* gameObject)
 {
-	GameObject* gameObject = GameObjectManager::getInstance()->getSelectedObject();
-	if (gameObject != NULL)
+	if (gameObject == NULL)
+		return;
+
+	std::string name = gameObject->getName();
+	bool isActive = gameObject->isActive();
+
+	if (ImGui::Checkbox("##Active", &isActive))
 	{
-		std::string name = gameObject->getName();
-		bool isActive = gameObject->isActive();
-		if (ImGui::InputText("Name", &name))
-		{
+		gameObject->setActive(isActive);
+	}
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-1);
+	if (ImGui::InputText("##Name", &name))
+	{
+		if (ImGui::IsItemDeactivatedAfterEdit())
 			gameObject->setName(name);
-		}
-		if (ImGui::Checkbox("Active", &isActive))
+	}
+
+	this->drawTransformTable(gameObject);
+	
+	if (ImGui::Button("Delete", ImVec2(ImGui::GetWindowSize().x - 15, 20)))
+	{
+		GameObjectManager::getInstance()->setSelectedObject(nullptr);
+		GameObjectManager::getInstance()->deleteObject(gameObject);
+	}
+}
+
+void InspectorScreen::drawTransformTable(GameObject* gameObject)
+{
+	int rows = 3;
+
+	std::string labels[] = { "Position", "Rotation", "Scale"};
+
+	Vector3D vectorValues[3];
+	vectorValues[0] = gameObject->getLocalPosition();
+	vectorValues[1] = gameObject->getLocalRotation();
+	vectorValues[2] = gameObject->getLocalScale();
+
+	if (ImGui::BeginTable("Transform", 2, ImGuiTableFlags_SizingFixedFit))
+	{
+		ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed);
+		ImGui::TableSetupColumn("Values", ImGuiTableColumnFlags_WidthStretch);
+
+		for (int i = 0; i < rows; i++)
 		{
-			gameObject->setActive(isActive);
+			ImGui::TableNextRow();
+			ImGui::TableNextColumn();
+			ImGui::Text(labels[i].c_str());
+			ImGui::TableNextColumn();
+			ImGui::SetNextItemWidth(-1);
+			float values[3] = { vectorValues[i].x, vectorValues[i].y, vectorValues[i].z };
+			std::string dragLabel = "##" + labels[i];
+
+			if (ImGui::DragFloat3(dragLabel.c_str(), values, 0.01f))
+			{
+				switch (i)
+				{
+				case 0:
+					gameObject->setPosition(Vector3D(values[0], values[1], values[2]));
+					break;
+				case 1:
+					gameObject->setRotation(Vector3D(values[0], values[1], values[2]));
+					break;
+				case 2:
+					gameObject->setScale(Vector3D(values[0], values[1], values[2]));
+					break;
+				}
+			}
 		}
-		Vector3D objectPosition = gameObject->getLocalPosition();
-		float position[3] = { objectPosition.x, objectPosition.y, objectPosition.z};
-		if (ImGui::DragFloat3("Position", position, 0.01f))
-		{
-			gameObject->setPosition(Vector3D(position[0], position[1], position[2]));
-		}
-		Vector3D objectScale = gameObject->getLocalScale();
-		float scale[3] = { objectScale.x, objectScale.y, objectScale.z };
-		if (ImGui::DragFloat3("Scale", scale, 0.01f))
-		{
-			gameObject->setScale(Vector3D(scale[0], scale[1], scale[2]));
-		}
-		Vector3D objectRotation = gameObject->getLocalRotation();
-		float rotation[3] = { objectRotation.x, objectRotation.y, objectRotation.z };
-		if (ImGui::DragFloat3("Rotation", rotation, 0.01f))
-		{
-			gameObject->setRotation(Vector3D(rotation[0], rotation[1], rotation[2]));
-		}
-		if (ImGui::Button("Delete", ImVec2(ImGui::GetWindowSize().x - 15, 20)))
-		{
-			GameObjectManager::getInstance()->setSelectedObject(nullptr);
-			GameObjectManager::getInstance()->deleteObject(gameObject);
-		}
+
+		ImGui::EndTable();
 	}
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include "GameObject.h"
 #include "UIScreen.h"
 
 class InspectorScreen : public UIScreen
@@ -13,5 +14,6 @@ private:
 
 private:
 	virtual void draw() override;
-	void updateInspector();
+	void drawInspector(GameObject* gameObject);
+	void drawTransformTable(GameObject* gameObject);
 };
