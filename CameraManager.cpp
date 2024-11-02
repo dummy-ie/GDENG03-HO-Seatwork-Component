@@ -88,6 +88,23 @@ void CameraManager::addSceneCamera(SceneCamera* camera)
 	this->sceneCameras.push_back(camera);
 }
 
+void CameraManager::removeSceneCamera(SceneCamera* camera)
+{
+	std::string name = camera->getName();
+	int index = -1;
+
+	for (int i = 0; i < this->sceneCameras.size() && index == -1; i++)
+	{
+		if (this->sceneCameras[i] == camera)
+			index = i;
+	}
+
+	if (index != -1)
+	{
+		this->sceneCameras.erase(this->sceneCameras.begin() + index);
+	}
+}
+
 void CameraManager::removeCamera(Camera* camera)
 {
 	std::string name = camera->getName();

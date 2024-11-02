@@ -27,6 +27,7 @@ public:
     void updateSceneCamera(float deltaTime);
     void addCamera(Camera* camera);
     void addSceneCamera(SceneCamera* camera);
+    void removeSceneCamera(SceneCamera* camera);
     void removeCamera(Camera* camera);
 
 private:

@@ -23,8 +23,6 @@ ViewportScreen::ViewportScreen(int index) : UIScreen("Viewport " + std::to_strin
 
 	this->camIndex = index;
 
-	std::cout << "Cam Index: " << camIndex << std::endl;
-
 	debug::Logger::log(this, "Initialized");
 	debug::Logger::log(name + " Current Cam : " + currentCamera->getName());
 }
@@ -33,7 +31,7 @@ ViewportScreen::~ViewportScreen()
 {
 	delete this->renderTexture;
 
-	CameraManager::getInstance()->removeCamera(this->ownCamera);
+	CameraManager::getInstance()->removeSceneCamera(this->ownCamera);
 }
 
 void ViewportScreen::draw()
@@ -172,13 +170,17 @@ void ViewportScreen::drawViewportUI()
 	static int selectedCameraIndex = camIndex; 
 	ImGui::SetNextItemWidth(buttonWidth);
 
-	for (Camera* cam : CameraManager::getInstance()->getSceneCameras())
+	if (cameras.empty())
 	{
-		std::cout << cam->getName() << std::endl;
+		selectedCameraIndex = 0;
 	}
 
+	if (selectedCameraIndex >= cameras.size())
+	{
+		selectedCameraIndex = cameras.size() - 1;
+	}
 
-	std::string displayName = "Cam " + std::to_string(int(index + 1));
+	std::string displayName = "Cam " + std::to_string(int(selectedCameraIndex + 1));
 	if (ImGui::BeginCombo("##SelectCamera", displayName.c_str()))
 	{
 		for (size_t i = 0; i < cameras.size(); i++)
@@ -188,10 +190,8 @@ void ViewportScreen::drawViewportUI()
 			if (ImGui::Selectable(displayName.c_str(), isSelected))
 			{
 				selectedCameraIndex = static_cast<int>(i);
-				index = selectedCameraIndex;
 				this->currentCamera->setControllable(false);
 				this->currentCamera = cameras[selectedCameraIndex];
-				debug::Logger::log(name + " Current Cam : " + currentCamera->getName());
 			}
 			if (isSelected)
 			{
@@ -200,5 +200,4 @@ void ViewportScreen::drawViewportUI()
 		}
 		ImGui::EndCombo();
 	}
-
 }
