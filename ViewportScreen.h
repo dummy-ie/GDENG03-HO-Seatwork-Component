@@ -36,6 +36,7 @@ public:
 	virtual void draw() override;
 
 private:
+	void handleInput();
 	void drawViewportUI();
 
 private:
