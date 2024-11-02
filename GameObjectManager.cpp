@@ -162,6 +162,7 @@ GameObject* GameObjectManager::getSelectedObject()
 GameObjectManager::GameObjectManager()
 {
 	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
+
 }
 
 GameObjectManager::~GameObjectManager()

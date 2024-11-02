@@ -238,9 +238,9 @@ UIManager::UIManager(HWND hwnd)
 	//this->listUI.push_back(viewportScreen);
 	ViewportManager::getInstance()->createViewport();
 
-	ToolsScreen* toolsScreen = new ToolsScreen();
-	this->mapUI[uiNames.TOOLS_SCREEN] = toolsScreen;
-	this->listUI.push_back(toolsScreen);
+	//ToolsScreen* toolsScreen = new ToolsScreen();
+	//this->mapUI[uiNames.TOOLS_SCREEN] = toolsScreen;
+	//this->listUI.push_back(toolsScreen);
 
 	debug::Logger::log(this, "Initialized");
 }

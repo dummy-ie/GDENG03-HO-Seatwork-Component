@@ -4,6 +4,7 @@
 #include "UIManager.h"
 #include "GraphicsEngine.h"
 #include "GameObjectManager.h"
+#include "ViewportManager.h"
 
 MenuScreen::MenuScreen() : UIScreen("MenuScreen")
 {
@@ -76,6 +77,9 @@ void MenuScreen::draw()
             }
             if (ImGui::MenuItem("Color Picker")) {
                 UIManager::getInstance()->setActive("COLOR_PICKER_SCREEN");
+            }
+            if (ImGui::MenuItem("Viewport")) {
+                ViewportManager::getInstance()->createViewport();
             }
             ImGui::EndMenu();
         }

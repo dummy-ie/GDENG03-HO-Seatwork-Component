@@ -36,6 +36,9 @@ public:
 	virtual void draw() override;
 
 private:
+	void drawViewportUI();
+
+private:
 	friend class UIManager;
 	friend class ViewportManager;
 };

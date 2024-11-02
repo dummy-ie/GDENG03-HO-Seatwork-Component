@@ -39,6 +39,8 @@ void ViewportScreen::draw()
 
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
+	this->drawViewportUI();
+
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootWindow))
 	{
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))	
@@ -50,6 +52,12 @@ void ViewportScreen::draw()
 				InputSystem::getInstance()->removeListener(this->currentCamera);
 				this->currentCamera->setControllable(false);
 				ImGui::FocusWindow(NULL);
+
+				// Floating Close button with a margin
+				if (ImGui::Button("Close", ImVec2(100, 0)))
+				{
+					isActive = false;
+				}
 			}
 		}
 		if (ImGui::IsMouseReleased(ImGuiMouseButton_Right))
@@ -99,4 +107,58 @@ void ViewportScreen::draw()
 
 	if (!isActive)
 		ViewportManager::getInstance()->deleteViewport(this);
+}
+
+void ViewportScreen::drawViewportUI()
+{
+	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+
+	float buttonWidth = viewportPanelSize.x / 8.0f;
+
+	const char* perspectiveOptions[] = {"Perspective", "Orthographic", "Ortho Top"};
+	static int selectedPerspective = 0;
+
+	const char* currentPersLabel = perspectiveOptions[selectedPerspective];
+
+	ImGui::SetNextItemWidth(buttonWidth);
+	if (ImGui::BeginCombo("##Perspective", currentPersLabel))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(perspectiveOptions); n++)
+		{
+			bool isSelected = (selectedPerspective == n);
+			if (ImGui::Selectable(perspectiveOptions[n], isSelected))
+			{
+				selectedPerspective = n;
+			}
+			if (isSelected)
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	const char* stateOptions[] = { "Solid", "Wireframe", "Solid Wireframe"};
+	static int selectedState = 0;
+
+	const char* currentStatesLabel = stateOptions[selectedState];
+
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(buttonWidth);
+	if (ImGui::BeginCombo("##State", currentStatesLabel))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(perspectiveOptions); n++)
+		{
+			bool isSelected = (selectedState == n);
+			if (ImGui::Selectable(stateOptions[n], isSelected))
+			{
+				selectedState = n;
+			}
+			if (isSelected)
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndCombo();
+	}
 }
