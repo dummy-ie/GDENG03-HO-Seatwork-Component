@@ -4,7 +4,12 @@
 #include "InputListener.h"
 #include "Vector2D.h"
 
-
+enum ECameraMode
+{
+	ORTHO,
+	PERSPECTIVE,
+	ORTHO_TOP,
+};
 
 class Camera : public GameObject
 {

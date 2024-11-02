@@ -41,8 +41,8 @@ void ViewportScreen::draw()
 
 	this->drawViewportUI();
 
-	this->currentCamera->setWidth(viewportPanelSize.x);
-	this->currentCamera->setHeight(viewportPanelSize.y);
+	//this->currentCamera->setWidth(viewportPanelSize.x);
+	//this->currentCamera->setHeight(viewportPanelSize.y);
 
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootWindow))
 	{
@@ -132,6 +132,9 @@ void ViewportScreen::drawViewportUI()
 			if (ImGui::Selectable(perspectiveOptions[n], isSelected))
 			{
 				selectedPerspective = n;
+				this->currentCamera->setProjectionType(n);
+				this->currentCamera->setPosition(0, 1, -8); // Value from CameraManager
+				this->currentCamera->setRotation(0, 0, 0);
 			}
 			if (isSelected)
 			{

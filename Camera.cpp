@@ -28,7 +28,8 @@ void Camera::update(float deltaTime)
 
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	if (this->type == 2) {
+	if (this->type == 2) 
+	{
 		this->localPosition.y = 20.0f;
 		this->localRotation = Vector3D(1.57f, 0, 0);
 	}

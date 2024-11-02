@@ -9,8 +9,8 @@ SceneCamera::SceneCamera(std::string name) : Camera(name)
 	localMatrix.setIdentity();
 
 	RECT viewport = AppWindow::getInstance()->getClientWindowRect();
-	int width = (viewport.right - viewport.left);
-	int height = (viewport.bottom - viewport.top);
+	this->width = (viewport.right - viewport.left);
+	this->height = (viewport.bottom - viewport.top);
 }
 
 SceneCamera::~SceneCamera()
