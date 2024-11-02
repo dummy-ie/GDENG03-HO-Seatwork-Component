@@ -56,9 +56,21 @@ void UIManager::draw()
 		ImGuiID dock3 = ImGui::DockBuilderSplitNode(id, ImGuiDir_Left, 0.5f, nullptr, &id);
 		ImGuiID dock4 = ImGui::DockBuilderSplitNode(dock3, ImGuiDir_Down, 0.25f, nullptr, &dock3);
 
+		ImGuiID dock3_top = ImGui::DockBuilderSplitNode(dock3, ImGuiDir_Up, 0.5f, nullptr, &dock3);
+		ImGuiID dock3_bottom = dock3;  
+
+		ImGuiID dock3_top_left = ImGui::DockBuilderSplitNode(dock3_top, ImGuiDir_Left, 0.5f, nullptr, &dock3_top);
+		ImGuiID dock3_top_right = dock3_top;
+
+		ImGuiID dock3_bottom_left = ImGui::DockBuilderSplitNode(dock3_bottom, ImGuiDir_Left, 0.5f, nullptr, &dock3_bottom);
+		ImGuiID dock3_bottom_right = dock3_bottom;
+
 		ImGui::DockBuilderDockWindow("Inspector", dock1);
 		ImGui::DockBuilderDockWindow("Hierarchy", dock2);
-		ImGui::DockBuilderDockWindow("Viewport 1", dock3);
+		ImGui::DockBuilderDockWindow("Viewport 1", dock3_top_left);
+		ImGui::DockBuilderDockWindow("Viewport 2", dock3_top_right);
+		ImGui::DockBuilderDockWindow("Viewport 3", dock3_bottom_left);
+		ImGui::DockBuilderDockWindow("Viewport 4", dock3_bottom_right);
 		ImGui::DockBuilderDockWindow("Profiler", dock4);
 
 		ImGui::DockBuilderFinish(id);
@@ -233,14 +245,8 @@ UIManager::UIManager(HWND hwnd)
 	this->mapUI[uiNames.COLOR_PICKER_SCREEN] = colorPickerScreen;
 	this->listUI.push_back(colorPickerScreen);
 
-	//ViewportScreen* viewportScreen = new ViewportScreen(0);
-	//this->mapUI[uiNames.VIEWPORT_SCREEN] = viewportScreen;
-	//this->listUI.push_back(viewportScreen);
 	ViewportManager::getInstance()->createViewport();
 
-	//ToolsScreen* toolsScreen = new ToolsScreen();
-	//this->mapUI[uiNames.TOOLS_SCREEN] = toolsScreen;
-	//this->listUI.push_back(toolsScreen);
 
 	debug::Logger::log(this, "Initialized");
 }

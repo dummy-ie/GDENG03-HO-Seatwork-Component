@@ -19,3 +19,8 @@ void UIScreen::setActive(bool isActive)
 {
 	this->isActive = true;
 }
+
+bool UIScreen::getIsActive()
+{
+	return this->isActive;
+}

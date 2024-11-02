@@ -78,8 +78,33 @@ void MenuScreen::draw()
             if (ImGui::MenuItem("Color Picker")) {
                 UIManager::getInstance()->setActive("COLOR_PICKER_SCREEN");
             }
-            if (ImGui::MenuItem("Viewport")) {
-                ViewportManager::getInstance()->createViewport();
+            if (ImGui::BeginMenu("Viewport")) 
+            {
+                if (ImGui::MenuItem("Create Viewport")) 
+                {
+                    ViewportManager::getInstance()->createViewport();
+                }
+                if (ImGui::MenuItem("Single Viewport"))
+                {
+                    ViewportManager::getInstance()->setNumViewports(1);
+                }
+                if (ImGui::MenuItem("2 Viewports")) 
+                {
+                    ViewportManager::getInstance()->setNumViewports(2);
+                }
+                if (ImGui::MenuItem("3 Viewports")) 
+                {
+                    ViewportManager::getInstance()->setNumViewports(3);
+                }
+                if (ImGui::MenuItem("4 Viewports")) 
+                {
+                    ViewportManager::getInstance()->setNumViewports(4);
+                }
+                if (ImGui::MenuItem("Delete All Viewports"))
+                {
+                    ViewportManager::getInstance()->deleteAllViewports();
+                }
+                ImGui::EndMenu(); 
             }
             ImGui::EndMenu();
         }

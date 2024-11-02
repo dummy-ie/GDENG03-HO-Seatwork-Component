@@ -46,8 +46,6 @@ void ViewportManager::createViewport()
 
 	this->viewports.push_back(viewport);
 	//UIManager::getInstance()->addViewport(viewport);
-
-	std::cout << "[VIEWPORT MANAGER] Viewports: " << this->viewports.size() << std::endl;
 }
 
 void ViewportManager::deleteViewport(ViewportScreen* viewport)
@@ -62,6 +60,17 @@ void ViewportManager::deleteViewport(ViewportScreen* viewport)
 
 		index++;
 	}
+	delete viewport;
+}
+
+void ViewportManager::deleteAllViewports()
+{
+	for (ViewportScreen* viewport : this->viewports)
+	{
+		delete viewport; 
+	}
+
+	this->viewports.clear();
 }
 
 void ViewportManager::addViewport(UIScreen* viewport)
@@ -69,6 +78,19 @@ void ViewportManager::addViewport(UIScreen* viewport)
 	ViewportScreen* c_viewport = (ViewportScreen*)viewport;
 	this->viewports.push_back(c_viewport);
 
+}
+
+void ViewportManager::setNumViewports(int count)
+{
+	while (viewports.size() > count)
+	{
+		this->deleteViewport(viewports.back());
+	}
+
+	while (viewports.size() < count)
+	{
+		this->createViewport();
+	}
 }
 
 std::vector<ViewportScreen*> ViewportManager::getViewports()

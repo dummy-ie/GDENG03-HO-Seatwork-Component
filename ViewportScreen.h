@@ -22,6 +22,7 @@ private:
 	int camIndex;
 
 	SceneCamera* currentCamera;
+	SceneCamera* ownCamera;
 
 	EFillMode currentFillMode = SOLID;
 	RenderTexture* renderTexture;

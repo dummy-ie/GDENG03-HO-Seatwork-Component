@@ -16,10 +16,14 @@ ViewportScreen::ViewportScreen(int index) : UIScreen("Viewport " + std::to_strin
 	this->currentCamera = new SceneCamera("Scene Camera " + std::to_string(index + 1));
 	this->currentCamera->setPosition(0, 1, -8);
 
+	this->ownCamera = this->currentCamera;
+
 	CameraManager::getInstance()->addSceneCamera(this->currentCamera);
 	this->renderTexture = new RenderTexture();
 
 	this->camIndex = index;
+
+	std::cout << "Cam Index: " << camIndex << std::endl;
 
 	debug::Logger::log(this, "Initialized");
 	debug::Logger::log(name + " Current Cam : " + currentCamera->getName());
@@ -28,6 +32,8 @@ ViewportScreen::ViewportScreen(int index) : UIScreen("Viewport " + std::to_strin
 ViewportScreen::~ViewportScreen()
 {
 	delete this->renderTexture;
+
+	CameraManager::getInstance()->removeCamera(this->ownCamera);
 }
 
 void ViewportScreen::draw()
@@ -101,32 +107,6 @@ void ViewportScreen::handleInput()
 			InputSystem::getInstance()->removeListener(this->currentCamera);
 			this->currentCamera->setControllable(false);
 		}
-
-	//	if (InputSystem::getInstance()->getKeyUp(VK_OEM_PERIOD))
-	//	{
-	//		this->camIndex++;
-
-	//		if (this->camIndex > CameraManager::getInstance()->getSceneCameras().size() - 1)
-	//			this->camIndex = 0;
-
-	//		InputSystem::getInstance()->removeListener(this->currentCamera);
-	//		this->currentCamera->setControllable(false);
-	//		this->currentCamera = CameraManager::getInstance()->getSceneCameraByIndex(this->camIndex);
-	//		debug::Logger::log(name + " Current Cam : " + currentCamera->getName());
-	//	}
-
-	//	if (InputSystem::getInstance()->getKeyUp(VK_OEM_COMMA))
-	//	{
-	//		this->camIndex--;
-
-	//		if (this->camIndex < 0)
-	//			this->camIndex = CameraManager::getInstance()->getSceneCameras().size() - 1;
-
-	//		InputSystem::getInstance()->removeListener(this->currentCamera);
-	//		this->currentCamera->setControllable(false);
-	//		this->currentCamera = CameraManager::getInstance()->getSceneCameraByIndex(this->camIndex);
-	//		debug::Logger::log(name + " Current Cam : " + currentCamera->getName());
-	//	}
 	}
 }
 
@@ -191,6 +171,12 @@ void ViewportScreen::drawViewportUI()
 	const auto& cameras = CameraManager::getInstance()->getSceneCameras();
 	static int selectedCameraIndex = camIndex; 
 	ImGui::SetNextItemWidth(buttonWidth);
+
+	for (Camera* cam : CameraManager::getInstance()->getSceneCameras())
+	{
+		std::cout << cam->getName() << std::endl;
+	}
+
 
 	std::string displayName = "Cam " + std::to_string(int(index + 1));
 	if (ImGui::BeginCombo("##SelectCamera", displayName.c_str()))

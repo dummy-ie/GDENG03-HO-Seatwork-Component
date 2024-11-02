@@ -23,7 +23,9 @@ class ViewportManager
 		
 		void createViewport();
 		void deleteViewport(ViewportScreen* viewport);
+		void deleteAllViewports();
 		void addViewport(UIScreen* viewport);
+		void setNumViewports(int count);
 		std::vector<ViewportScreen*> getViewports();
 		
 

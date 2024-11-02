@@ -105,7 +105,6 @@ void CameraManager::removeCamera(Camera* camera)
 	}
 }
 
-
 CameraManager::CameraManager()
 {
 	this->sceneCamera = new SceneCamera("Scene Camera");

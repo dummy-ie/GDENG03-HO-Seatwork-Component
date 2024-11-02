@@ -25,6 +25,9 @@ protected:
 protected:
 	String getName();
 	virtual void draw() = 0;
+
+public:
 	void setActive(bool isActive);
+	bool getIsActive();
 };
 
