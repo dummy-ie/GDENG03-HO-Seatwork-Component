@@ -33,6 +33,9 @@ ViewportScreen::~ViewportScreen()
 void ViewportScreen::draw()
 {
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+
+	
+
 	renderSystem->getImmediateDeviceContext()->clearRenderTargetColor(this->renderTexture, 0.83, 0.58, 0.895, 1);
 
 	ImGui::Begin(this->name.c_str(), &isActive, ImGuiWindowFlags_NoScrollbar);
@@ -41,12 +44,12 @@ void ViewportScreen::draw()
 
 	this->drawViewportUI();
 
-	//this->currentCamera->setWidth(viewportPanelSize.x);
-	//this->currentCamera->setHeight(viewportPanelSize.y);
+	this->currentCamera->setWidth(viewportPanelSize.x);
+	this->currentCamera->setHeight(viewportPanelSize.y);
 
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootWindow))
 	{
-		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))	
+		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
 		{
 			InputSystem::getInstance()->addListener(this->currentCamera);
 			this->currentCamera->setControllable(true);
@@ -69,7 +72,7 @@ void ViewportScreen::draw()
 			this->currentCamera->setControllable(false);
 		}
 
-		if (InputSystem::getInstance()->getKeyUp(VK_OEM_PERIOD)) 
+		if (InputSystem::getInstance()->getKeyUp(VK_OEM_PERIOD))
 		{
 			this->camIndex++;
 
@@ -100,13 +103,21 @@ void ViewportScreen::draw()
 
 	if (!ImGui::IsWindowCollapsed() && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
 	{
+		renderSystem->getImmediateDeviceContext()->setViewportSize(viewportPanelSize.x, viewportPanelSize.y);
+
 		this->renderTexture->resizeResources(viewportPanelSize.x, viewportPanelSize.y);
 		AppWindow::getInstance()->draw(this->currentFillMode);
 		renderSystem->getImmediateDeviceContext()->setRenderTarget(AppWindow::getInstance()->getSwapChain()->getRenderTexture());
 	}
-
 	ImGui::Image((ImTextureID)this->renderTexture->getShaderResourceView(), viewportPanelSize);
 	ImGui::End();
+
+	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
+
+	FLOAT width = windowRect.right - windowRect.left;
+	FLOAT height = windowRect.bottom - windowRect.top;
+
+	renderSystem->getImmediateDeviceContext()->setViewportSize(width, height);
 
 	if (!isActive)
 		ViewportManager::getInstance()->deleteViewport(this);
@@ -118,7 +129,7 @@ void ViewportScreen::drawViewportUI()
 
 	float buttonWidth = viewportPanelSize.x / 8.0f;
 
-	const char* perspectiveOptions[] = {"Perspective", "Orthographic", "Ortho Top"};
+	const char* perspectiveOptions[] = { "Perspective", "Orthographic", "Ortho Top" };
 	static int selectedPerspective = 0;
 
 	const char* currentPersLabel = perspectiveOptions[selectedPerspective];
@@ -144,7 +155,7 @@ void ViewportScreen::drawViewportUI()
 		ImGui::EndCombo();
 	}
 
-	const char* stateOptions[] = { "Solid", "Wireframe", "Solid Wireframe"};
+	const char* stateOptions[] = { "Solid", "Wireframe", "Solid Wireframe" };
 	static int selectedState = 0;
 
 	const char* currentStatesLabel = stateOptions[selectedState];
