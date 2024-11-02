@@ -7,6 +7,8 @@
 #include "SceneCamera.h"
 #include "Viewport.h"
 
+struct ImVec2;
+
 enum EFillMode
 {
 	SOLID,
@@ -42,7 +44,7 @@ public:
 
 private:
 	void handleInput();
-	void drawViewportUI();
+	void drawViewportUI(ImVec2 position);
 
 private:
 	friend class UIManager;

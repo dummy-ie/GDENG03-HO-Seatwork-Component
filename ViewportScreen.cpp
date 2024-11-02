@@ -44,9 +44,15 @@ void ViewportScreen::draw()
 
 	renderSystem->getImmediateDeviceContext()->clearRenderTargetColor(this->renderTexture, 0.83, 0.58, 0.895, 1);
 
-	ImGui::Begin(this->name.c_str(), &isActive, ImGuiWindowFlags_NoScrollbar);
+	// Push Style so Window has no padding
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+
+	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoScrollWithMouse;
+	ImGui::Begin(this->name.c_str(), &isActive, windowFlags);
 
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+
+	renderSystem->getImmediateDeviceContext()->setViewportSize(viewportPanelSize.x, viewportPanelSize.y);
 
 	this->currentCamera->setWidth(viewportPanelSize.x);
 	this->currentCamera->setHeight(viewportPanelSize.y);
@@ -57,25 +63,30 @@ void ViewportScreen::draw()
 
 	if (!ImGui::IsWindowCollapsed() && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
 	{
-		renderSystem->getImmediateDeviceContext()->setViewportSize(viewportPanelSize.x, viewportPanelSize.y);
-
 		this->renderTexture->resizeResources(viewportPanelSize.x, viewportPanelSize.y);
 		AppWindow::getInstance()->draw(this->currentFillMode);
-		renderSystem->getImmediateDeviceContext()->setRenderTarget(AppWindow::getInstance()->getSwapChain()->getRenderTexture());
 	}
 
-	this->drawViewportUI();
+	// Stores top left position
+	ImVec2 position = ImGui::GetCursorScreenPos();
+
 	viewportPanelSize = ImGui::GetContentRegionAvail();
 	ImGui::Image((ImTextureID)this->renderTexture->getShaderResourceView(), viewportPanelSize);
 
+	// Pop Style so Selectables (Child Windows) don't get affected
+	ImGui::PopStyleVar();
+
+	this->drawViewportUI(position);
+
 	ImGui::End();
 
+	// Reset back to window size so other draw functions won't be broken
 	RECT windowRect = AppWindow::getInstance()->getClientWindowRect();
-
 	FLOAT width = windowRect.right - windowRect.left;
 	FLOAT height = windowRect.bottom - windowRect.top;
 
 	renderSystem->getImmediateDeviceContext()->setViewportSize(width, height);
+	renderSystem->getImmediateDeviceContext()->setRenderTarget(AppWindow::getInstance()->getSwapChain()->getRenderTexture());
 
 	if (!isActive)
 		ViewportManager::getInstance()->deleteViewport(this);
@@ -112,7 +123,7 @@ void ViewportScreen::handleInput()
 	}
 }
 
-void ViewportScreen::drawViewportUI()
+void ViewportScreen::drawViewportUI(ImVec2 position)
 {
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
@@ -122,6 +133,11 @@ void ViewportScreen::drawViewportUI()
 
 	const char* currentPersLabel = perspectiveOptions[selectedProj];
 
+	position.x += 10.0f;
+	position.y += 8.0f;
+
+	// Sets to draw on position
+	ImGui::SetCursorScreenPos(position);
 	ImGui::SetNextItemWidth(buttonWidth);
 	if (ImGui::BeginCombo("##Perspective", currentPersLabel))
 	{
