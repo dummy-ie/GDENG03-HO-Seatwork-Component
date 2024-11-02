@@ -41,6 +41,9 @@ void ViewportScreen::draw()
 
 	this->drawViewportUI();
 
+	this->currentCamera->setWidth(viewportPanelSize.x);
+	this->currentCamera->setHeight(viewportPanelSize.y);
+
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootWindow))
 	{
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))	
@@ -153,6 +156,7 @@ void ViewportScreen::drawViewportUI()
 			if (ImGui::Selectable(stateOptions[n], isSelected))
 			{
 				selectedState = n;
+				this->currentFillMode = static_cast<EFillMode>(n);
 			}
 			if (isSelected)
 			{

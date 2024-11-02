@@ -7,6 +7,10 @@
 SceneCamera::SceneCamera(std::string name) : Camera(name)
 {
 	localMatrix.setIdentity();
+
+	RECT viewport = AppWindow::getInstance()->getClientWindowRect();
+	int width = (viewport.right - viewport.left);
+	int height = (viewport.bottom - viewport.top);
 }
 
 SceneCamera::~SceneCamera()
@@ -62,6 +66,48 @@ void SceneCamera::update(float deltaTime)
 	}
 }
 
+void SceneCamera::updateProjectionMatrix()
+{
+	Matrix4x4 proj;
+
+	switch (type) {
+	case 0:
+		proj.setOrthoLH(
+			width / 100.0f,
+			height / 100.0f,
+			-100.0f, 100.0f
+		);
+		break;
+
+	case 1:
+		proj.setPerspectiveFovLH(
+			1.57f, // fov
+			(float)width / (float)height, // aspect
+			0.1f, // near
+			100.0f // far
+		);
+		break;
+
+	case 2:
+		this->projMatrix.setOrthoLH(
+			width / 100.0f,
+			height / 100.0f,
+			-100.0f, 100.0f
+		);
+
+	default:
+		proj.setPerspectiveFovLH(
+			1.57f, // fov
+			(float)width / (float)height, // aspect
+			0.1f, // near
+			100.0f // far
+		);
+		break;
+	}
+	this->projMatrix = proj;
+
+}
+
 void SceneCamera::setSpeed(float speed)
 {
 	this->speed = speed;
@@ -114,4 +160,14 @@ void SceneCamera::onRightMouseDown(const Vector2D& mousePosition)
 void SceneCamera::onRightMouseUp(const Vector2D& mousePosition)
 {
 	isControllable = false;
+}
+
+void SceneCamera::setWidth(float width)
+{
+	this->width = width;
+}
+
+void SceneCamera::setHeight(float height)
+{
+	this->height = height;
 }

@@ -4,6 +4,8 @@
 #include "InputListener.h"
 #include "Vector2D.h"
 
+
+
 class Camera : public GameObject
 {
 	private:
