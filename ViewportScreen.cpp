@@ -95,15 +95,15 @@ void ViewportScreen::draw()
 
 	this->currentCamera->update(EngineTime::getDeltaTime());
 
-	if (!ImGui::IsWindowCollapsed())
+	if (!ImGui::IsWindowCollapsed() && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
+	{
 		this->renderTexture->resizeResources(viewportPanelSize.x, viewportPanelSize.y);
-
-	AppWindow::getInstance()->draw(this->currentFillMode);
+		AppWindow::getInstance()->draw(this->currentFillMode);
+		renderSystem->getImmediateDeviceContext()->setRenderTarget(AppWindow::getInstance()->getSwapChain()->getRenderTexture());
+	}
 
 	ImGui::Image((ImTextureID)this->renderTexture->getShaderResourceView(), viewportPanelSize);
 	ImGui::End();
-
-	renderSystem->getImmediateDeviceContext()->setRenderTarget(AppWindow::getInstance()->getSwapChain()->getRenderTexture());
 
 	if (!isActive)
 		ViewportManager::getInstance()->deleteViewport(this);
