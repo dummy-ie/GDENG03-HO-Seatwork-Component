@@ -35,6 +35,7 @@ ViewportScreen::~ViewportScreen()
 	delete this->renderTexture;
 
 	CameraManager::getInstance()->removeSceneCamera(this->ownCamera);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setRenderTarget(AppWindow::getInstance()->getSwapChain()->getRenderTexture());
 }
 
 void ViewportScreen::draw()
