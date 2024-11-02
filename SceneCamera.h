@@ -9,16 +9,12 @@ private:
 
 	bool isControllable = false;
 
-	float width;
-	float height;
-
 public:
 	SceneCamera(std::string name);
 	~SceneCamera();
 
 public:
 	void update(float deltaTime) override;
-	void updateProjectionMatrix() override;
 	void setSpeed(float speed);
 	void setControllable(bool controllable);
 
@@ -33,7 +29,5 @@ public:
 	virtual void onRightMouseDown(const Vector2D& mousePosition);
 	virtual void onRightMouseUp(const Vector2D& mousePosition);
 
-	void setWidth(float width);
-	void setHeight(float height);
 };
 

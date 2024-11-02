@@ -29,6 +29,10 @@ private:
 
 	bool isRightMouseDown = false;
 
+	int selectedProj = 0; 
+	int selectedState = 0;       
+	int selectedCameraIndex; 
+
 private:
 	ViewportScreen(int index);
 	~ViewportScreen();

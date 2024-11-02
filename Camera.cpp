@@ -9,6 +9,10 @@ Camera::Camera(std::string name) : GameObject(name)
 {
 	CBCameraData cbData;
 	constantBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createConstantBuffer(&cbData, sizeof(CBCameraData));
+
+	RECT viewport = AppWindow::getInstance()->getClientWindowRect();
+	this->width = (viewport.right - viewport.left);
+	this->height = (viewport.bottom - viewport.top);
 }
 
 Camera::~Camera()
@@ -27,12 +31,6 @@ void Camera::update(float deltaTime)
 	GameObject::update(deltaTime);
 
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
-
-	if (this->type == 2) 
-	{
-		this->localPosition.y = 20.0f;
-		this->localRotation = Vector3D(1.57f, 0, 0);
-	}
 
 	this->updateViewMatrix();
 	this->updateProjectionMatrix();
@@ -70,25 +68,23 @@ void Camera::updateViewMatrix()
 
 void Camera::updateProjectionMatrix()
 {
-	RECT viewport = AppWindow::getInstance()->getClientWindowRect();
-	int width = (viewport.right - viewport.left);
-	int height = (viewport.bottom - viewport.top);
 
 	Matrix4x4 proj;
 	switch (type) {
 		case 0:
-			proj.setOrthoLH(
-				width / 100.0f,
-				height / 100.0f,
-				-100.0f, 100.0f
-			);
-			break;
-		case 1:
 			proj.setPerspectiveFovLH(
 				1.57f, // fov
 				(float)width / (float)height, // aspect
 				0.1f, // near
 				100.0f // far
+			);
+			break;
+
+		case 1:
+			proj.setOrthoLH(
+				width / 100.0f,
+				height / 100.0f,
+				-100.0f, 100.0f
 			);
 			break;
 		case 2:
@@ -127,4 +123,15 @@ Matrix4x4 Camera::getProjMatrix()
 void Camera::setProjectionType(int type)
 {
 	this->type = type;
+
+}
+
+void Camera::setWidth(float width)
+{
+	this->width = width;
+}
+
+void Camera::setHeight(float height)
+{
+	this->height = height;
 }

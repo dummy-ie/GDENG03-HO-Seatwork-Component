@@ -17,9 +17,11 @@ class Camera : public GameObject
 		ConstantBuffer* constantBuffer;
 
 	protected:
-		int type = 1;
+		int type = 0;
 		Matrix4x4 viewMatrix;
 		Matrix4x4 projMatrix;
+		int width;
+		int height;
 
 	public:
 		Camera(std::string name);
@@ -35,6 +37,9 @@ class Camera : public GameObject
 		Matrix4x4 getViewMatrix();
 		Matrix4x4 getProjMatrix();
 		void setProjectionType(int type);
+
+		void setWidth(float width);
+		void setHeight(float height);
 
 		__declspec(align(16))
 			struct CBCameraData

@@ -14,7 +14,8 @@ using namespace graphics;
 ViewportScreen::ViewportScreen(int index) : UIScreen("Viewport " + std::to_string(index + 1)), index(index)
 {
 	this->currentCamera = new SceneCamera("Scene Camera " + std::to_string(index + 1));
-	this->currentCamera->setPosition(0, 1, -8);
+	this->currentCamera->setPosition(0, 0, -3);
+	this->currentCamera->setProjectionType(this->selectedProj);
 
 	this->ownCamera = this->currentCamera;
 
@@ -22,6 +23,8 @@ ViewportScreen::ViewportScreen(int index) : UIScreen("Viewport " + std::to_strin
 	this->renderTexture = new RenderTexture();
 
 	this->camIndex = index;
+
+	this->selectedCameraIndex = this->camIndex;
 
 	debug::Logger::log(this, "Initialized");
 	debug::Logger::log(name + " Current Cam : " + currentCamera->getName());
@@ -115,22 +118,27 @@ void ViewportScreen::drawViewportUI()
 	float buttonWidth = viewportPanelSize.x / 8.0f;
 
 	const char* perspectiveOptions[] = { "Perspective", "Orthographic", "Ortho Top" };
-	static int selectedPerspective = 0;
 
-	const char* currentPersLabel = perspectiveOptions[selectedPerspective];
+	const char* currentPersLabel = perspectiveOptions[selectedProj];
 
 	ImGui::SetNextItemWidth(buttonWidth);
 	if (ImGui::BeginCombo("##Perspective", currentPersLabel))
 	{
 		for (int n = 0; n < IM_ARRAYSIZE(perspectiveOptions); n++)
 		{
-			bool isSelected = (selectedPerspective == n);
+			bool isSelected = (selectedProj == n);
 			if (ImGui::Selectable(perspectiveOptions[n], isSelected))
 			{
-				selectedPerspective = n;
+				selectedProj = n;
 				this->currentCamera->setProjectionType(n);
-				this->currentCamera->setPosition(0, 1, -8); 
+				this->currentCamera->setPosition(0, 0, -3);
 				this->currentCamera->setRotation(0, 0, 0);
+
+				if (n == 2)
+				{
+					this->currentCamera->setPosition(0, 10, 0);
+					this->currentCamera->setRotation(1.57f, 0, 0);
+				}
 			}
 			if (isSelected)
 			{
@@ -141,7 +149,6 @@ void ViewportScreen::drawViewportUI()
 	}
 
 	const char* stateOptions[] = { "Solid", "Wireframe", "Solid Wireframe" };
-	static int selectedState = 0;
 
 	const char* currentStatesLabel = stateOptions[selectedState];
 
@@ -167,7 +174,7 @@ void ViewportScreen::drawViewportUI()
 
 	ImGui::SameLine();
 	const auto& cameras = CameraManager::getInstance()->getSceneCameras();
-	static int selectedCameraIndex = camIndex; 
+
 	ImGui::SetNextItemWidth(buttonWidth);
 
 	if (cameras.empty())

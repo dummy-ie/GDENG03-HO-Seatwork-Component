@@ -7,10 +7,6 @@
 SceneCamera::SceneCamera(std::string name) : Camera(name)
 {
 	localMatrix.setIdentity();
-
-	RECT viewport = AppWindow::getInstance()->getClientWindowRect();
-	this->width = (viewport.right - viewport.left);
-	this->height = (viewport.bottom - viewport.top);
 }
 
 SceneCamera::~SceneCamera()
@@ -30,17 +26,11 @@ void SceneCamera::update(float deltaTime)
 
 		if (InputSystem::getInstance()->getKey('W'))
 		{
-			if (type < 2)
-				newPosition += viewMatrix.getZDirection() * (speed * deltaTime);
-			else
-				newPosition += viewMatrix.getYDirection() * (speed * deltaTime);
+			newPosition += viewMatrix.getZDirection() * (speed * deltaTime); \
 		}
 		else if (InputSystem::getInstance()->getKey('S'))
 		{
-			if (type < 2)
-				newPosition -= viewMatrix.getZDirection() * (speed * deltaTime);
-			else
-				newPosition -= viewMatrix.getYDirection() * (speed * deltaTime);
+			newPosition -= viewMatrix.getZDirection() * (speed * deltaTime);
 		}
 		if (InputSystem::getInstance()->getKey('A'))
 		{
@@ -66,47 +56,6 @@ void SceneCamera::update(float deltaTime)
 	}
 }
 
-void SceneCamera::updateProjectionMatrix()
-{
-	Matrix4x4 proj;
-
-	switch (type) {
-	case 0:
-		proj.setOrthoLH(
-			width / 100.0f,
-			height / 100.0f,
-			-100.0f, 100.0f
-		);
-		break;
-
-	case 1:
-		proj.setPerspectiveFovLH(
-			1.57f, // fov
-			(float)width / (float)height, // aspect
-			0.1f, // near
-			100.0f // far
-		);
-		break;
-
-	case 2:
-		this->projMatrix.setOrthoLH(
-			width / 100.0f,
-			height / 100.0f,
-			-100.0f, 100.0f
-		);
-
-	default:
-		proj.setPerspectiveFovLH(
-			1.57f, // fov
-			(float)width / (float)height, // aspect
-			0.1f, // near
-			100.0f // far
-		);
-		break;
-	}
-	this->projMatrix = proj;
-
-}
 
 void SceneCamera::setSpeed(float speed)
 {
@@ -162,12 +111,3 @@ void SceneCamera::onRightMouseUp(const Vector2D& mousePosition)
 	isControllable = false;
 }
 
-void SceneCamera::setWidth(float width)
-{
-	this->width = width;
-}
-
-void SceneCamera::setHeight(float height)
-{
-	this->height = height;
-}
