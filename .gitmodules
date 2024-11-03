@@ -4,3 +4,6 @@
 [submodule "libs/DirectXTex"]
 	path = libs/DirectXTex
 	url = https://github.com/microsoft/DirectXTex
+[submodule "libs/imguizmo"]
+	path = libs/imguizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo
