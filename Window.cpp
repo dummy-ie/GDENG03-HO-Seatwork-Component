@@ -85,7 +85,7 @@ Window::Window()
 	if (!::RegisterClassEx(&wc))
 		throw std::exception("Window not created successfully");
 
-	m_hwnd = ::CreateWindowEx(WS_EX_OVERLAPPEDWINDOW, L"MyWindowClass", L"[GROUP 2] DirectXApplication", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, UIManager::WINDOW_WIDTH, UIManager::WINDOW_HEIGHT,
+	m_hwnd = ::CreateWindowEx(WS_EX_OVERLAPPEDWINDOW, L"MyWindowClass", L"[GROUP 2] DirectXApplication", WS_OVERLAPPEDWINDOW, 0, 0, UIManager::WINDOW_WIDTH, UIManager::WINDOW_HEIGHT,
 		NULL, NULL, NULL, NULL);
 
 	if (!m_hwnd)

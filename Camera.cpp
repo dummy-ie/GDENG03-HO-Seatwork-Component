@@ -68,7 +68,6 @@ void Camera::updateViewMatrix()
 
 void Camera::updateProjectionMatrix()
 {
-
 	Matrix4x4 proj;
 	switch (type) {
 		case 0:
@@ -88,11 +87,12 @@ void Camera::updateProjectionMatrix()
 			);
 			break;
 		case 2:
-			this->projMatrix.setOrthoLH(
+			proj.setOrthoLH(
 				width / 100.0f,
 				height / 100.0f,
 				-100.0f, 100.0f
 			);
+			break;
 		default:
 			proj.setPerspectiveFovLH(
 				1.57f, // fov

@@ -26,7 +26,7 @@ void SceneCamera::update(float deltaTime)
 
 		if (InputSystem::getInstance()->getKey('W'))
 		{
-			newPosition += viewMatrix.getZDirection() * (speed * deltaTime); \
+			newPosition += viewMatrix.getZDirection() * (speed * deltaTime); 
 		}
 		else if (InputSystem::getInstance()->getKey('S'))
 		{
