@@ -70,6 +70,7 @@ void AppWindow::onDestroy()
 	UIManager::destroy();
 	CameraManager::destroy();
 	GameObjectManager::destroy();
+	ViewportManager::destroy();
 	GraphicsEngine::destroy();
 	InputSystem::destroy();
 }
