@@ -18,6 +18,8 @@ public:
 	void createPlane();
 	void createQuad();
 	void createTeapot();
+	void createBunny();
+	void createArmadillo();
 
 	void update(float deltaTime);
 	void draw(int width, int height);

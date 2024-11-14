@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "Armadillo.h"
+#include "Bunny.h"
 #include "Cube.h"
 #include "Plane.h"
 #include "Logger.h"
@@ -39,6 +41,18 @@ void GameObjectManager::createTeapot()
 {
 	Teapot* teapot = new Teapot("Teapot");
 	this->addObject(teapot);
+}
+
+void GameObjectManager::createBunny()
+{
+	Bunny* bunny = new Bunny("Bunny");
+	this->addObject(bunny);
+}
+
+void GameObjectManager::createArmadillo()
+{
+	Armadillo* armadillo = new Armadillo("Armadillo");
+	this->addObject(armadillo);
 }
 
 void GameObjectManager::update(float deltaTime)

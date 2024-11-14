@@ -118,6 +118,12 @@
     <Filter Include="GameEngine\Primitives\Teapot">
       <UniqueIdentifier>{abd180ed-39af-464b-a9ca-745fc3f64e86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\Primitives\Bunny">
+      <UniqueIdentifier>{3c30fc1c-44d2-4730-ae10-81776573ccab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Primitives\Armadillo">
+      <UniqueIdentifier>{b446127e-b7bf-4ef0-aed6-e961cb85ec2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -293,6 +299,12 @@
     </ClCompile>
     <ClCompile Include="Teapot.cpp">
       <Filter>GameEngine\Primitives\Teapot</Filter>
+    </ClCompile>
+    <ClCompile Include="Bunny.cpp">
+      <Filter>GameEngine\Primitives\Bunny</Filter>
+    </ClCompile>
+    <ClCompile Include="Armadillo.cpp">
+      <Filter>GameEngine\Primitives\Armadillo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -493,6 +505,12 @@
     </ClInclude>
     <ClInclude Include="Teapot.h">
       <Filter>GameEngine\Primitives\Teapot</Filter>
+    </ClInclude>
+    <ClInclude Include="Bunny.h">
+      <Filter>GameEngine\Primitives\Bunny</Filter>
+    </ClInclude>
+    <ClInclude Include="Armadillo.h">
+      <Filter>GameEngine\Primitives\Armadillo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

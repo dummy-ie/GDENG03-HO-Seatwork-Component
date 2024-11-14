@@ -59,8 +59,13 @@ Mesh::Mesh(const wchar_t* fullPath) : Resource(fullPath)
 				tinyobj::real_t vy = attribs.vertices[index.vertex_index * 3 + 1];
 				tinyobj::real_t vz = attribs.vertices[index.vertex_index * 3 + 2];
 
-				tinyobj::real_t tx = attribs.texcoords[index.texcoord_index * 2 + 0];
-				tinyobj::real_t ty = attribs.texcoords[index.texcoord_index * 2 + 1];
+				tinyobj::real_t tx = 0;
+				tinyobj::real_t ty = 0;
+				if (!attribs.texcoords.empty())
+				{
+					tx = attribs.texcoords[index.texcoord_index * 2 + 0];
+					ty = attribs.texcoords[index.texcoord_index * 2 + 1];
+				}
 
 				VertexMesh vertex(Vector3D(vx, vy, vz), Vector2D(tx, ty));
 				listVertices.push_back(vertex);

@@ -49,6 +49,12 @@ void MenuScreen::draw()
                 if (ImGui::MenuItem("Teapot")) {
                     GameObjectManager::getInstance()->createTeapot();
                 }
+                if (ImGui::MenuItem("Bunny")) {
+                    GameObjectManager::getInstance()->createBunny();
+                }
+                if (ImGui::MenuItem("Armadillo")) {
+                    GameObjectManager::getInstance()->createArmadillo();
+                }
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
