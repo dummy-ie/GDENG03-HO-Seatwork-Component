@@ -2,8 +2,9 @@
 
 #include "AppWindow.h"
 #include "CameraManager.h"
+#include "ShaderLibrary.h"
 
-Plane::Plane(std::string name, void* shaderByteCode, size_t sizeShader) : GameObject(name)
+Plane::Plane(std::string name) : GameObject(name)
 {
 
 	Vector3D color1 = Vector3D(255.0f / 255.0f, 227.0f / 255.0f, 222.0f / 255.0f);
@@ -44,6 +45,13 @@ Plane::Plane(std::string name, void* shaderByteCode, size_t sizeShader) : GameOb
 	constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBObjectData));
 
 	UINT sizeList = ARRAYSIZE(list);
+
+	ShaderNames shaderNames;
+
+	void* shaderByteCode = NULL;
+	size_t sizeShader = 0;
+
+	ShaderLibrary::getInstance()->requestVertexShaderData(shaderNames.BASE_VERTEX_SHADER_NAME, &shaderByteCode, &sizeShader);
 
 	vertexBuffer = renderSystem->createVertexBuffer(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
 }
@@ -95,9 +103,13 @@ void Plane::update(float deltaTime)
 }
 
 // Sets shaders and draws afterwards
-void Plane::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader)
+void Plane::draw(int width, int height)
 {
+	ShaderNames shaderNames;
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+
+	VertexShader* vertexShader = ShaderLibrary::getInstance()->getVertexShader(shaderNames.BASE_VERTEX_SHADER_NAME);
+	PixelShader* pixelShader = ShaderLibrary::getInstance()->getPixelShader(shaderNames.BASE_PIXEL_SHADER_NAME);
 
 	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer, 0);
 

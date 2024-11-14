@@ -64,7 +64,7 @@ void ViewportScreen::draw()
 	if (!ImGui::IsWindowCollapsed() && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
 	{
 		this->renderTexture->resizeResources(viewportPanelSize.x, viewportPanelSize.y);
-		AppWindow::getInstance()->draw(this->currentFillMode);
+		AppWindow::getInstance()->draw(viewportPanelSize.x, viewportPanelSize.y, this->currentFillMode);
 	}
 
 	// Stores top left position

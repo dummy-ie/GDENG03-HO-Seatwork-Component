@@ -2,8 +2,9 @@
 
 #include "AppWindow.h"
 #include "Camera.h"
+#include "ShaderLibrary.h"
 
-Border::Border(std::string name, void* shaderByteCode, size_t sizeShader) : GameObject(name)
+Border::Border(std::string name) : GameObject(name)
 {
 	vertex list[] =
 	{
@@ -22,6 +23,13 @@ Border::Border(std::string name, void* shaderByteCode, size_t sizeShader) : Game
 	this->constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBObjectData));
 
 	UINT sizeList = ARRAYSIZE(list);
+
+	ShaderNames shaderNames;
+
+	void* shaderByteCode = NULL;
+	size_t sizeShader = 0;
+
+	ShaderLibrary::getInstance()->requestVertexShaderData(shaderNames.BASE_VERTEX_SHADER_NAME, &shaderByteCode, &sizeShader);
 
 	this->vertexBuffer = renderSystem->createVertexBuffer(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
 }
@@ -48,9 +56,14 @@ void Border::update(float deltaTime)
 }
 
 // Sets shaders and draws afterwards
-void Border::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader)
+void Border::draw(int width, int height)
 {
+	ShaderNames shaderNames;
+
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+
+	VertexShader* vertexShader = ShaderLibrary::getInstance()->getVertexShader(shaderNames.BASE_VERTEX_SHADER_NAME);
+	PixelShader* pixelShader = ShaderLibrary::getInstance()->getPixelShader(shaderNames.BASE_PIXEL_SHADER_NAME);
 
 	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer, 0);
 

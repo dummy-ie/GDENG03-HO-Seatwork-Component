@@ -6,6 +6,7 @@
 #include "SwapChain.h"
 #include "DeviceContext.h"
 #include "VertexBuffer.h"
+#include "TexturedVertexBuffer.h"
 #include "IndexBuffer.h"
 #include "ConstantBuffer.h"
 #include "VertexShader.h"
@@ -72,7 +73,7 @@ RenderSystem::~RenderSystem()
 
 	m_d3d_device->Release();
 
-	debug::Logger::log(this, "Released");
+	debug::Logger::log(this, "Destroyed");
 }
 
 SwapChain* RenderSystem::createSwapChain(HWND hwnd, UINT width, UINT height)
@@ -91,10 +92,23 @@ VertexBuffer* RenderSystem::createVertexBuffer(void* list_vertices, UINT size_ve
 	VertexBuffer* vertexBuffer = nullptr;
 	try
 	{
-		vertexBuffer = new VertexBuffer(this, list_vertices, size_vertex, size_list, shader_byte_code, size_byte_shader);
+		vertexBuffer = new VertexBuffer(this);
+		vertexBuffer->load(list_vertices, size_vertex, size_list, shader_byte_code, size_byte_shader);
 	}
 	catch (...) {}
 	return vertexBuffer;
+}
+
+TexturedVertexBuffer* RenderSystem::createTexturedVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader)
+{
+	TexturedVertexBuffer* texturedVertexBuffer = nullptr;
+	try
+	{
+		texturedVertexBuffer = new TexturedVertexBuffer(this);
+		texturedVertexBuffer->load(list_vertices, size_vertex, size_list, shader_byte_code, size_byte_shader);
+	}
+	catch (...) {}
+	return texturedVertexBuffer;
 }
 
 IndexBuffer* RenderSystem::createIndexBuffer(void* list_indices, UINT size_list)

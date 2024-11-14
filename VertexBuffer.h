@@ -7,7 +7,7 @@ namespace graphics
 {
 	class VertexBuffer
 	{
-	private:
+	protected:
 		RenderSystem* system = nullptr;
 
 		UINT m_size_vertex;
@@ -16,12 +16,15 @@ namespace graphics
 		ID3D11InputLayout* m_layout;
 		ID3D11Buffer* m_buffer;
 
-	private:
+	protected:
 		friend class DeviceContext;
 
 	public:
-		VertexBuffer(RenderSystem* system, void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader);
-		~VertexBuffer();
+		VertexBuffer(RenderSystem* system);
+		virtual ~VertexBuffer();
+
+	public:
+		virtual void load(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader);
 
 	public:
 		UINT getSizeVertexList();

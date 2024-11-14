@@ -31,16 +31,18 @@ protected:
 	Vector3D localRotation;
 	Matrix4x4 localMatrix;
 
+	friend class GameObjectManager;
+
+private:
 	bool active;
 
-	friend class GameObjectManager;
 public:
 	GameObject(std::string name);
-	~GameObject();
+	virtual ~GameObject();
 
 public:
 	virtual void update(float deltaTime) = 0;
-	virtual void draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader);
+	virtual void draw(int width, int height);
 
 public:
 	void setPosition(float x, float y, float z);
@@ -62,18 +64,19 @@ public:
 	bool isActive();
 	void setActive(bool active);
 
-	struct vertex
-	{
-		Vector3D position;
-		Vector3D color;
-		Vector3D color2;
-	};
-
 	__declspec(align(16))
 	struct CBObjectData
 	{
 		Matrix4x4 worldMatrix;
 		float time;
+	};
+
+protected:
+	struct vertex
+	{
+		Vector3D position;
+		Vector3D color;
+		Vector3D color2;
 	};
 
 public:

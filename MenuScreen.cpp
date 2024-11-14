@@ -35,31 +35,16 @@ void MenuScreen::draw()
             if (ImGui::BeginMenu("3D Object")) {
                 RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
                 if (ImGui::MenuItem("Cube")) {
-                    void* shaderByteCode = nullptr;
-                    size_t sizeShader = 0;
-
-                    renderSystem->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
-
-                    GameObjectManager::getInstance()->createCube(shaderByteCode, sizeShader);
-
+                    GameObjectManager::getInstance()->createCube();
                 }
                 if (ImGui::MenuItem("Plane")) {
-                    void* shaderByteCode = nullptr;
-                    size_t sizeShader = 0;
-
-                    renderSystem->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
-
-                    GameObjectManager::getInstance()->createPlane(shaderByteCode, sizeShader);
-
+                    GameObjectManager::getInstance()->createPlane();
                 }
                 if (ImGui::MenuItem("Quad")) {
-                    void* shaderByteCode = nullptr;
-                    size_t sizeShader = 0;
-
-                    renderSystem->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
-
-                    GameObjectManager::getInstance()->createQuad(shaderByteCode, sizeShader);
-
+                    GameObjectManager::getInstance()->createQuad();
+                }
+                if (ImGui::MenuItem("Textured Cube")) {
+                    GameObjectManager::getInstance()->createTexturedCube();
                 }
                 ImGui::EndMenu();
             }

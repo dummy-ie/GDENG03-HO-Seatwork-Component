@@ -13,12 +13,13 @@ private:
 	GameObject* selectedObject;
 
 public:
-	void createCube(void* shaderByteCode, size_t sizeShader);
-	void createPlane(void* shaderByteCode, size_t sizeShader);
-	void createQuad(void* shaderByteCode, size_t sizeShader);
+	void createCube();
+	void createTexturedCube();
+	void createPlane();
+	void createQuad();
 
 	void update(float deltaTime);
-	void draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader);
+	void draw(int width, int height);
 
 	std::vector<GameObject*> getAllObjects();
 	GameObject* findObjectByName(std::string name);

@@ -6,14 +6,15 @@
 class TextureManager : public ResourceManager
 {
 public:
-	TextureManager();
-	~TextureManager();
-
-public:
 	Texture* createTextureFromFile(const wchar_t* filePath);
 
-public:
+protected:
 	virtual Resource* createResourceFromFileConcrete(const wchar_t* filePath);
+	friend class graphics::GraphicsEngine;
+
+private:
+	TextureManager();
+	~TextureManager() override;
 };
 
 

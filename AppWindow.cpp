@@ -12,6 +12,7 @@
 #include "imgui.h"
 #include "Logger.h"
 #include "Random.h"
+#include "ShaderLibrary.h"
 
 __declspec(align(16))
 struct CBEditor
@@ -71,6 +72,7 @@ void AppWindow::onDestroy()
 	CameraManager::destroy();
 	GameObjectManager::destroy();
 	ViewportManager::destroy();
+	ShaderLibrary::destroy();
 	GraphicsEngine::destroy();
 	InputSystem::destroy();
 }
@@ -125,6 +127,7 @@ void AppWindow::initializeEngine()
 	try
 	{
 		GraphicsEngine::initialize();
+		ShaderLibrary::initialize();
 		Random::initialize();
 		InputSystem::getInstance()->addListener(this);
 		ViewportManager::initialize();
@@ -154,18 +157,6 @@ void AppWindow::initializeEngine()
 
 	this->constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBEditor));
 
-	// Initialize the Shaders
-	void* shaderByteCode = nullptr;
-	size_t sizeShader = 0;
-
-	renderSystem->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
-	this->vertexShader = renderSystem->createVertexShader(shaderByteCode, sizeShader);
-	renderSystem->releaseCompiledShader();
-
-	renderSystem->compilePixelShader(L"PixelShader.hlsl", "psmain", &shaderByteCode, &sizeShader);
-	this->pixelShader = renderSystem->createPixelShader(shaderByteCode, sizeShader);
-	renderSystem->releaseCompiledShader();
-
 	// Initialize Rasterizer States
 	this->solidState = renderSystem->createRasterizerState(D3D11_FILL_SOLID, D3D11_CULL_BACK);
 	this->wireframeState = renderSystem->createRasterizerState(D3D11_FILL_WIREFRAME, D3D11_CULL_NONE);
@@ -173,7 +164,7 @@ void AppWindow::initializeEngine()
 	debug::Logger::log(this, "Initialized Engine");
 }
 
-void AppWindow::draw(EFillMode fillMode)
+void AppWindow::draw(int width, int height, EFillMode fillMode)
 {
 	DeviceContext* context = GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext();
 
@@ -190,7 +181,7 @@ void AppWindow::draw(EFillMode fillMode)
 		break;
 	case SOLID_WIREFRAME:
 		context->setRasterizerState(solidState);
-		this->draw(SOLID);
+		this->draw(width, height, SOLID);
 		context->setRasterizerState(wireframeState);
 		cbData.wireframe = true;
 		break;
@@ -199,7 +190,7 @@ void AppWindow::draw(EFillMode fillMode)
 	context->setConstantBuffer(constantBuffer, 2);
 	this->constantBuffer->update(context, &cbData);
 
-	GameObjectManager::getInstance()->draw(this, vertexShader, pixelShader);
+	GameObjectManager::getInstance()->draw(width, height);
 }
 
 void AppWindow::update()

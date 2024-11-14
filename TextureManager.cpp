@@ -22,6 +22,7 @@ TextureManager::TextureManager() : ResourceManager()
 
 TextureManager::~TextureManager()
 {
+	debug::Logger::log(this, "Destroyed");
 }
 
 Texture* TextureManager::createTextureFromFile(const wchar_t* filePath)

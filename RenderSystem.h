@@ -31,6 +31,7 @@ namespace graphics
 	private:
 		friend class SwapChain;
 		friend class VertexBuffer;
+		friend class TexturedVertexBuffer;
 		friend class IndexBuffer;
 		friend class ConstantBuffer;
 		friend class VertexShader;
@@ -38,14 +39,16 @@ namespace graphics
 		friend class Viewport;
 		friend class RasterizerState;
 		friend class Texture;
+		friend class GraphicsEngine;
 
-	public:
+	private:
 		RenderSystem();
 		~RenderSystem();
 
 	public:
 		SwapChain* createSwapChain(HWND hwnd, UINT width, UINT height);
 		VertexBuffer* createVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader);
+		TexturedVertexBuffer* createTexturedVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader);
 		IndexBuffer* createIndexBuffer(void* list_indices, UINT size_list);
 		ConstantBuffer* createConstantBuffer(void* buffer, UINT size_buffer);
 		VertexShader* createVertexShader(const void* shader_byte_code, size_t byte_code_size);

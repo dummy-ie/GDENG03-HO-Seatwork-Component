@@ -28,7 +28,7 @@ public:
 public:
 	void onCreate() override;
 	void update(float deltaTime) override;
-	void draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader) override;
+	void draw(int width, int height) override;
 	void onDestroy() override;
 };
 

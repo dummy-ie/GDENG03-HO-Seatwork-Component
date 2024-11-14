@@ -23,8 +23,6 @@ class AppWindow : public Window, public InputListener
 private:
 	SwapChain* swapChain;
 
-	VertexShader* vertexShader;
-	PixelShader* pixelShader;
 	ConstantBuffer* constantBuffer;
 
 	RasterizerState* solidState;
@@ -51,7 +49,7 @@ public:
 
 public:
 	void update();
-	void draw(EFillMode fillMode);
+	void draw(int width, int height, EFillMode fillMode);
 	SwapChain* getSwapChain();
 private:
 	static AppWindow* P_SHARED_INSTANCE;

@@ -3,6 +3,7 @@ namespace graphics
 	class SwapChain;
 	class DeviceContext;
 	class VertexBuffer;
+	class TexturedVertexBuffer;
 	class IndexBuffer;
 	class VertexShader;
 	class ConstantBuffer;

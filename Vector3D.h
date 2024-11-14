@@ -70,6 +70,11 @@ namespace math
 			return Vector3D(x / num, y / num, z / num);
 		}
 
+		bool operator!=(const Vector3D& vec) const
+		{
+			return x != vec.x || y != vec.y || z != vec.z;
+		}
+
 		float getMagnitude() {
 			return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
 		}

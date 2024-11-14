@@ -13,13 +13,21 @@ private:
 	float angle;
 
 public:
-	Plane(std::string name, void* shaderByteCode, size_t sizeShader);
+	Plane(std::string name);
 	~Plane();
 
 public:
 	void onCreate() override;
 	void update(float deltaTime) override;
-	void draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader) override;
+	void draw(int width, int height) override;
 	void onDestroy() override;
+
+protected:
+	struct vertex
+	{
+		Vector3D position;
+		Vector3D color;
+		Vector3D color2;
+	};
 };
 

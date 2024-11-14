@@ -2,6 +2,7 @@
 
 #include "AppWindow.h"
 #include "Random.h"
+#include "ShaderLibrary.h"
 
 Circle::Circle(std::string name, float radius, int sides, void* shaderByteCode, size_t sizeShader) : GameObject(name)
 {
@@ -101,9 +102,14 @@ void Circle::update(float deltaTime)
 }
 
 // Sets shaders and draws afterwards
-void Circle::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader)
+void Circle::draw(int width, int height)
 {
+	ShaderNames shaderNames;
+
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+
+	VertexShader* vertexShader = ShaderLibrary::getInstance()->getVertexShader(shaderNames.BASE_VERTEX_SHADER_NAME);
+	PixelShader* pixelShader = ShaderLibrary::getInstance()->getPixelShader(shaderNames.BASE_PIXEL_SHADER_NAME);
 
 	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer, 0);
 

@@ -18,6 +18,10 @@ ResourceManager::ResourceManager()
 
 ResourceManager::~ResourceManager()
 {
+	if (!this->mapResources.empty())
+	{
+		this->mapResources.clear();
+	} 
 }
 
 Resource* ResourceManager::createResourceFromFile(const wchar_t* filePath)
@@ -44,3 +48,5 @@ Resource* ResourceManager::createResourceFromFile(const wchar_t* filePath)
 
 	return nullptr;
 }
+
+ResourceManager::ResourceManager(ResourceManager const&) {}

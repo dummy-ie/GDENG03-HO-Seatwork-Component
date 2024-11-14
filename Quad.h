@@ -15,13 +15,13 @@ private:
 	float angle;
 
 public:
-	Quad(std::string name, void* shaderByteCode, size_t sizeShader);
+	Quad(std::string name);
 	~Quad();
 
 public:
 	void onCreate() override;
 	void update(float deltaTime) override;
-	void draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader) override;
+	void draw(int width, int height) override;
 	void onDestroy() override;
 };
 

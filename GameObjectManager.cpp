@@ -6,24 +6,31 @@
 #include "Plane.h"
 #include "Logger.h"
 #include "Quad.h"
+#include "TexturedCube.h"
 
 GameObjectManager* GameObjectManager::P_SHARED_INSTANCE = NULL;
 
-void GameObjectManager::createCube(void* shaderByteCode, size_t sizeShader)
+void GameObjectManager::createCube()
 {
-	Cube* cube = new Cube("Cube", shaderByteCode, sizeShader);
+	Cube* cube = new Cube("Cube");
 	this->addObject(cube);
 }
 
-void GameObjectManager::createPlane(void* shaderByteCode, size_t sizeShader)
+void GameObjectManager::createTexturedCube()
 {
-	Plane* plane = new Plane("Plane", shaderByteCode, sizeShader);
+	TexturedCube* cube = new TexturedCube("Textured Cube");
+	this->addObject(cube);
+}
+
+void GameObjectManager::createPlane()
+{
+	Plane* plane = new Plane("Plane");
 	this->addObject(plane);
 }
 
-void GameObjectManager::createQuad(void* shaderByteCode, size_t sizeShader)
+void GameObjectManager::createQuad()
 {
-	Quad* quad = new Quad("Quad", shaderByteCode, sizeShader);
+	Quad* quad = new Quad("Quad");
 	this->addObject(quad);
 }
 
@@ -36,12 +43,12 @@ void GameObjectManager::update(float deltaTime)
 	}
 }
 
-void GameObjectManager::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader)
+void GameObjectManager::draw(int width, int height)
 {
 	for (GameObject* gameObject : this->listGameObjects)
 	{
 		if (gameObject->isActive())
-			gameObject->draw(window, vertexShader, pixelShader);
+			gameObject->draw(width, height);
 	}
 }
 

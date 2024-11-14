@@ -106,6 +106,9 @@
     <Filter Include="Editor\Screens\Viewport">
       <UniqueIdentifier>{4377089f-e82f-4b1b-85dc-07cdc36c42dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\Primitives\TexturedCube">
+      <UniqueIdentifier>{610b1cce-4416-43a7-be11-19e49bbe92e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -263,6 +266,15 @@
     </ClCompile>
     <ClCompile Include="ViewportManager.cpp">
       <Filter>Editor\Screens\Viewport</Filter>
+    </ClCompile>
+    <ClCompile Include="TexturedCube.cpp">
+      <Filter>GameEngine\Primitives\TexturedCube</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderLibrary.cpp">
+      <Filter>GameEngine\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="TexturedVertexBuffer.cpp">
+      <Filter>GameEngine\GraphicsEngine\RenderSystem\VertexBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -443,12 +455,27 @@
     <ClInclude Include="ViewportManager.h">
       <Filter>Editor\Screens\Viewport</Filter>
     </ClInclude>
+    <ClInclude Include="TexturedCube.h">
+      <Filter>GameEngine\Primitives\TexturedCube</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderLibrary.h">
+      <Filter>GameEngine\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturedVertexBuffer.h">
+      <Filter>GameEngine\GraphicsEngine\RenderSystem\VertexBuffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="PixelShader.hlsl">
+    <FxCompile Include="BasePixelShader.hlsl">
       <Filter>GameEngine\Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="VertexShader.hlsl">
+    <FxCompile Include="BaseVertexShader.hlsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="TexturedPixelShader.hlsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="TexturedVertexShader.hlsl">
       <Filter>GameEngine\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

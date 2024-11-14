@@ -2,8 +2,9 @@
 
 #include "AppWindow.h"
 #include "CameraManager.h"
+#include "ShaderLibrary.h"
 
-Quad::Quad(std::string name, void* shaderByteCode, size_t sizeShader) : GameObject(name)
+Quad::Quad(std::string name) : GameObject(name)
 {
 	vertex list[] =
 	{
@@ -20,6 +21,13 @@ Quad::Quad(std::string name, void* shaderByteCode, size_t sizeShader) : GameObje
 	constantBuffer = renderSystem->createConstantBuffer(&cc, sizeof(CBObjectData));
 
 	UINT sizeList = ARRAYSIZE(list);
+
+	ShaderNames shaderNames;
+
+	void* shaderByteCode = NULL;
+	size_t sizeShader = 0;
+
+	ShaderLibrary::getInstance()->requestVertexShaderData(shaderNames.BASE_VERTEX_SHADER_NAME, &shaderByteCode, &sizeShader);
 
 	vertexBuffer = renderSystem->createVertexBuffer(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
 }
@@ -61,9 +69,12 @@ void Quad::update(float deltaTime)
 }
 
 // Sets shaders and draws afterwards
-void Quad::draw(Window* window, VertexShader* vertexShader, PixelShader* pixelShader)
+void Quad::draw(int width, int height)
 {
+	ShaderNames shaderNames;
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+	VertexShader* vertexShader = ShaderLibrary::getInstance()->getVertexShader(shaderNames.BASE_VERTEX_SHADER_NAME);
+	PixelShader* pixelShader = ShaderLibrary::getInstance()->getPixelShader(shaderNames.BASE_PIXEL_SHADER_NAME);
 
 	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer);
 
