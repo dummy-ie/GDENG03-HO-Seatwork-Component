@@ -3,6 +3,7 @@
 #include "Prerequisites.h"
 #include "RenderSystem.h"
 #include "TextureManager.h"
+#include "MeshManager.h"
 
 namespace graphics
 {
@@ -11,10 +12,12 @@ namespace graphics
 	private:
 		RenderSystem* renderSystem = nullptr;
 		TextureManager* textureManager = nullptr;
+		MeshManager* meshManager = nullptr;
 
 	public:
 		RenderSystem* getRenderSystem();
 		TextureManager* getTextureManager();
+		MeshManager* getMeshManager();
 
 	private:
 		static GraphicsEngine* P_SHARED_INSTANCE;

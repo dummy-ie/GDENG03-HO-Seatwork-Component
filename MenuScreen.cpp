@@ -46,6 +46,9 @@ void MenuScreen::draw()
                 if (ImGui::MenuItem("Textured Cube")) {
                     GameObjectManager::getInstance()->createTexturedCube();
                 }
+                if (ImGui::MenuItem("Teapot")) {
+                    GameObjectManager::getInstance()->createTeapot();
+                }
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();

@@ -17,6 +17,7 @@ public:
 	void createTexturedCube();
 	void createPlane();
 	void createQuad();
+	void createTeapot();
 
 	void update(float deltaTime);
 	void draw(int width, int height);

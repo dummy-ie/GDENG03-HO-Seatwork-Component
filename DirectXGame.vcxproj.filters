@@ -109,6 +109,15 @@
     <Filter Include="GameEngine\Primitives\TexturedCube">
       <UniqueIdentifier>{610b1cce-4416-43a7-be11-19e49bbe92e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\ShaderLibrary">
+      <UniqueIdentifier>{e07960d7-e1af-4ded-a568-e0e371f34197}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\ResourceManager\MeshManager">
+      <UniqueIdentifier>{415520e1-0b08-45d4-8e66-1aedc781740e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Primitives\Teapot">
+      <UniqueIdentifier>{abd180ed-39af-464b-a9ca-745fc3f64e86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -270,11 +279,20 @@
     <ClCompile Include="TexturedCube.cpp">
       <Filter>GameEngine\Primitives\TexturedCube</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderLibrary.cpp">
-      <Filter>GameEngine\GraphicsEngine</Filter>
-    </ClCompile>
     <ClCompile Include="TexturedVertexBuffer.cpp">
       <Filter>GameEngine\GraphicsEngine\RenderSystem\VertexBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderLibrary.cpp">
+      <Filter>GameEngine\GraphicsEngine\ShaderLibrary</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshManager.cpp">
+      <Filter>GameEngine\GraphicsEngine\ResourceManager\MeshManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>GameEngine\GraphicsEngine\ResourceManager\MeshManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Teapot.cpp">
+      <Filter>GameEngine\Primitives\Teapot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -458,11 +476,23 @@
     <ClInclude Include="TexturedCube.h">
       <Filter>GameEngine\Primitives\TexturedCube</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderLibrary.h">
-      <Filter>GameEngine\GraphicsEngine</Filter>
-    </ClInclude>
     <ClInclude Include="TexturedVertexBuffer.h">
       <Filter>GameEngine\GraphicsEngine\RenderSystem\VertexBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderLibrary.h">
+      <Filter>GameEngine\GraphicsEngine\ShaderLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshManager.h">
+      <Filter>GameEngine\GraphicsEngine\ResourceManager\MeshManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>GameEngine\GraphicsEngine\ResourceManager\MeshManager</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexMesh.h">
+      <Filter>GameEngine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Teapot.h">
+      <Filter>GameEngine\Primitives\Teapot</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -476,6 +506,9 @@
       <Filter>GameEngine\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="TexturedVertexShader.hlsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexMeshLayoutShader.hlsl">
       <Filter>GameEngine\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

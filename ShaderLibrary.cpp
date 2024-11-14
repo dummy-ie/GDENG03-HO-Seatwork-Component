@@ -48,6 +48,9 @@ ShaderLibrary::ShaderLibrary()
 	renderSystem->compilePixelShader(shaderNames.TEXTURED_PIXEL_SHADER_NAME.c_str(), "main", &shaderData.shaderByteCode, &shaderData.sizeShader);
 	this->activePixelShaders[shaderNames.TEXTURED_PIXEL_SHADER_NAME] = renderSystem->createPixelShader(shaderData.shaderByteCode, shaderData.sizeShader);
 
+	renderSystem->compileVertexShader(shaderNames.VERTEX_MESH_LAYOUT_SHADER_NAME.c_str(), "main", &shaderData.shaderByteCode, &shaderData.sizeShader);
+	this->activeVertexShaders[shaderNames.VERTEX_MESH_LAYOUT_SHADER_NAME] = renderSystem->createVertexShader(shaderData.shaderByteCode, shaderData.sizeShader);
+
 	debug::Logger::log(this, "Initialized");
 }
 
@@ -59,6 +62,7 @@ ShaderLibrary::~ShaderLibrary()
 
 	this->activeVertexShaders.clear();
 	this->activePixelShaders.clear();
+	debug::Logger::log(this, "Destroyed");
 }
 
 ShaderLibrary* ShaderLibrary::P_SHARED_INSTANCE = NULL;

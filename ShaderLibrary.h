@@ -15,6 +15,8 @@ namespace graphics
 
 		const std::wstring BASE_PIXEL_SHADER_NAME = L"BasePixelShader.hlsl";
 		const std::wstring TEXTURED_PIXEL_SHADER_NAME = L"TexturedPixelShader.hlsl";
+
+		const std::wstring VERTEX_MESH_LAYOUT_SHADER_NAME = L"VertexMeshLayoutShader.hlsl";
 	};
 
 	class ShaderLibrary

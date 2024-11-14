@@ -4,6 +4,7 @@
 
 #include "RenderSystem.h"
 #include "Logger.h"
+#include "ShaderLibrary.h"
 
 using namespace graphics;
 
@@ -15,6 +16,11 @@ RenderSystem* GraphicsEngine::getRenderSystem()
 TextureManager* GraphicsEngine::getTextureManager()
 {
 	return this->textureManager;
+}
+
+MeshManager* GraphicsEngine::getMeshManager()
+{
+	return this->meshManager;
 }
 
 GraphicsEngine* GraphicsEngine::P_SHARED_INSTANCE = NULL;
@@ -36,10 +42,19 @@ GraphicsEngine::GraphicsEngine()
 	{
 		throw std::exception("TextureManager not created successfully");
 	}
+	try
+	{
+		this->meshManager = new MeshManager();
+	}
+	catch (...)
+	{
+		throw std::exception("MeshManager not created successfully");
+	}
 	debug::Logger::log(this, "Initialized");
 }
 GraphicsEngine::~GraphicsEngine()
 {
+	delete meshManager;
 	delete textureManager;
 	delete renderSystem;
 	P_SHARED_INSTANCE = nullptr;

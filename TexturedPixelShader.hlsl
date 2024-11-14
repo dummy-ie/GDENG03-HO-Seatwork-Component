@@ -29,5 +29,5 @@ float4 main(PS_INPUT input) : SV_TARGET
 {
     if (wireframe)
         return float4(0.0, 0.0, 0.0, 1.0);
-    return Texture.Sample(TextureSampler, input.texcoord);
+    return Texture.Sample(TextureSampler, input.texcoord * 0.5);
 }

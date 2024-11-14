@@ -6,6 +6,7 @@
 #include "Plane.h"
 #include "Logger.h"
 #include "Quad.h"
+#include "Teapot.h"
 #include "TexturedCube.h"
 
 GameObjectManager* GameObjectManager::P_SHARED_INSTANCE = NULL;
@@ -32,6 +33,12 @@ void GameObjectManager::createQuad()
 {
 	Quad* quad = new Quad("Quad");
 	this->addObject(quad);
+}
+
+void GameObjectManager::createTeapot()
+{
+	Teapot* teapot = new Teapot("Teapot");
+	this->addObject(teapot);
 }
 
 void GameObjectManager::update(float deltaTime)
