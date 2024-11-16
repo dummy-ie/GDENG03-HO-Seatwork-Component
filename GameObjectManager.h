@@ -14,6 +14,8 @@ private:
 
 public:
 	void createCube();
+	void createPhysicsCube();
+	void createPhysicsPlane();
 	void createTexturedCube();
 	void createPlane();
 	void createQuad();

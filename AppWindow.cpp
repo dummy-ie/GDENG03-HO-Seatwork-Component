@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 
+#include "BaseComponentSystem.h"
 #include "GameObjectManager.h"
 #include "CameraManager.h"
 #include "UIManager.h"
@@ -13,6 +14,8 @@
 #include "Logger.h"
 #include "Random.h"
 #include "ShaderLibrary.h"
+
+#include "PhysicsSystem.h"
 
 __declspec(align(16))
 struct CBEditor
@@ -70,6 +73,7 @@ void AppWindow::onDestroy()
 
 	UIManager::destroy();
 	CameraManager::destroy();
+	BaseComponentSystem::destroy();
 	GameObjectManager::destroy();
 	ViewportManager::destroy();
 	ShaderLibrary::destroy();
@@ -132,6 +136,7 @@ void AppWindow::initializeEngine()
 		InputSystem::getInstance()->addListener(this);
 		ViewportManager::initialize();
 		GameObjectManager::initialize();
+		BaseComponentSystem::initialize();
 		CameraManager::initialize();
 		UIManager::initialize(m_hwnd);
 		

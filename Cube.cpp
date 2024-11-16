@@ -78,6 +78,7 @@ Cube::~Cube()
 	delete vertexBuffer;
 	delete indexBuffer;
 	delete constantBuffer;
+	GameObject::~GameObject();
 }
 
 void Cube::onCreate()
@@ -87,6 +88,7 @@ void Cube::onCreate()
 
 void Cube::update(float deltaTime)
 {
+	GameObject::update(deltaTime);
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 	CBObjectData cbObjectData;
 
@@ -94,32 +96,9 @@ void Cube::update(float deltaTime)
 
 	elapsedTime += EngineTime::getDeltaTime() / 2.0f;
 
-	Matrix4x4 transform, rotation;
-	Matrix4x4 temp;
+	this->updateLocalMatrix();
 
-	// Scale
-	transform.setIdentity();
-	transform.setScale(this->localScale);
-
-	// Scale * Rotation
-	rotation.setIdentity();
-	rotation.setRotationZ(this->localRotation.z);
-
-	temp.setIdentity();
-	temp.setRotationY(this->localRotation.y);
-	rotation *= temp;
-
-	temp.setIdentity();
-	temp.setRotationX(this->localRotation.x);
-	rotation *= temp;
-
-	transform *= rotation;
-	// Scale * Rotation * Translation
-	temp.setIdentity();
-	temp.setTranslation(this->localPosition);
-	transform *= temp;
-
-	cbObjectData.worldMatrix.setMatrix(transform);
+	cbObjectData.worldMatrix.setMatrix(this->localMatrix);
 
 	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbObjectData);
 }

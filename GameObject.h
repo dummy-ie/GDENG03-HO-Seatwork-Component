@@ -3,9 +3,8 @@
 #include <string>
 #include <guiddef.h>
 
+#include "Component.h"
 #include "GraphicsEngine.h"
-#include "RenderSystem.h"
-#include "VertexShader.h"
 
 #include "Matrix4x4.h"
 #include "Vector3D.h"
@@ -15,6 +14,8 @@
 
 #include "Logger.h"
 
+
+class PhysicsComponent;
 class Window;
 
 using namespace math;
@@ -29,14 +30,19 @@ protected:
 	Vector3D localPosition;
 	Vector3D localScale;
 	Vector3D localRotation;
+	Vector4D orientation;
 	Matrix4x4 localMatrix;
+
+	std::vector<Component*> listComponents;
 
 	friend class GameObjectManager;
 
 private:
 	bool active;
+	bool physics;
 
 public:
+	Vector4D quaternion;
 	GameObject(std::string name);
 	virtual ~GameObject();
 
@@ -55,14 +61,33 @@ public:
 
 	void setRotation(float x, float y, float z);
 	void setRotation(Vector3D rotation);
+	void setOrientation(Vector4D orientation);
 	Vector3D getLocalRotation();
 
 	void setName(std::string name);
 	std::string getName();
 	GUID getGuid();
 
+	void updateLocalMatrix();
+	void setLocalMatrix(float matrix[16]);
+	void setLocalMatrix(Vector3D position, Vector4D orientation, float matrix[16]);
+	float* getLocalMatrix();
+	float* getPhysicsLocalMatrix();
+
 	bool isActive();
 	void setActive(bool active);
+
+	bool isPhysics();
+	void setPhysics(bool physics);
+
+	void attachComponent(Component* component);
+	void detachComponent(Component* component);
+
+	Component* findComponentByName(std::string name);
+	Component* findComponentOfType(Component::ComponentType type, std::string name);
+	std::vector<Component*> getComponentsOfType(Component::ComponentType type);
+	std::vector<Component*> getComponentsOfTypeRecursive(Component::ComponentType type);
+
 
 	__declspec(align(16))
 	struct CBObjectData

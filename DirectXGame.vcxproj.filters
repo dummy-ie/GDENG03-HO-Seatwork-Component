@@ -124,6 +124,12 @@
     <Filter Include="GameEngine\Primitives\Armadillo">
       <UniqueIdentifier>{b446127e-b7bf-4ef0-aed6-e961cb85ec2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\ComponentSystem">
+      <UniqueIdentifier>{2be07752-b170-4496-86dd-762ec2c2518c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\ComponentSystem\PhysicsSystem">
+      <UniqueIdentifier>{b52907f7-0d2f-4b69-b8fa-fada23dde020}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -305,6 +311,18 @@
     </ClCompile>
     <ClCompile Include="Armadillo.cpp">
       <Filter>GameEngine\Primitives\Armadillo</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseComponentSystem.cpp">
+      <Filter>GameEngine\ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsComponent.cpp">
+      <Filter>GameEngine\ComponentSystem\PhysicsSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>GameEngine\ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsSystem.cpp">
+      <Filter>GameEngine\ComponentSystem\PhysicsSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -511,6 +529,18 @@
     </ClInclude>
     <ClInclude Include="Armadillo.h">
       <Filter>GameEngine\Primitives\Armadillo</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>GameEngine\ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseComponentSystem.h">
+      <Filter>GameEngine\ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsComponent.h">
+      <Filter>GameEngine\ComponentSystem\PhysicsSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsSystem.h">
+      <Filter>GameEngine\ComponentSystem\PhysicsSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

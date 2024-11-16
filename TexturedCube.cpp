@@ -129,29 +129,9 @@ void TexturedCube::update(float deltaTime)
 	Matrix4x4 transform, rotation;
 	Matrix4x4 temp;
 
-	// Scale
-	transform.setIdentity();
-	transform.setScale(this->localScale);
+	this->updateLocalMatrix();
 
-	// Scale * Rotation
-	rotation.setIdentity();
-	rotation.setRotationZ(this->localRotation.z);
-
-	temp.setIdentity();
-	temp.setRotationY(this->localRotation.y);
-	rotation *= temp;
-
-	temp.setIdentity();
-	temp.setRotationX(this->localRotation.x);
-	rotation *= temp;
-
-	transform *= rotation;
-	// Scale * Rotation * Translation
-	temp.setIdentity();
-	temp.setTranslation(this->localPosition);
-	transform *= temp;
-
-	cbObjectData.worldMatrix.setMatrix(transform);
+	cbObjectData.worldMatrix.setMatrix(this->localMatrix);
 
 	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbObjectData);
 }

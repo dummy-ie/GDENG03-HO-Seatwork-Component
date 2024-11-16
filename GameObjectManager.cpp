@@ -3,13 +3,16 @@
 #include <iostream>
 
 #include "Armadillo.h"
+#include "BaseComponentSystem.h"
 #include "Bunny.h"
 #include "Cube.h"
 #include "Plane.h"
 #include "Logger.h"
+#include "PhysicsComponent.h"
 #include "Quad.h"
 #include "Teapot.h"
 #include "TexturedCube.h"
+#include "PhysicsSystem.h"
 
 GameObjectManager* GameObjectManager::P_SHARED_INSTANCE = NULL;
 
@@ -17,6 +20,32 @@ void GameObjectManager::createCube()
 {
 	Cube* cube = new Cube("Cube");
 	this->addObject(cube);
+}
+
+void GameObjectManager::createPhysicsCube()
+{
+	Cube* cube = new Cube("Physics Cube");
+	cube->setPosition(0.0f, 5.0f, 0.0f);
+	cube->setPhysics(true);
+	this->addObject(cube);
+	cube->attachComponent(new PhysicsComponent("PhysicsComponent " + cube->getName(), cube));
+}
+
+void GameObjectManager::createPhysicsPlane()
+{
+	Cube* plane = new Cube("Physics Plane");
+	plane->setScale(64, 0.5f, 64);
+	plane->setPhysics(true);
+	this->addObject(plane);
+	plane->attachComponent(new PhysicsComponent("PhysicsComponent " + plane->getName(), plane));
+	PhysicsComponent* component = (PhysicsComponent*)plane->findComponentOfType(Component::ComponentType::Physics, "PhysicsComponent " + plane->getName());
+	component->getRigidBody()->setType(BodyType::KINEMATIC);
+
+	/*Plane* plane = new Plane("Physics Plane");
+	plane->attachComponent(new PhysicsComponent("PhysicsComponent", plane));
+	PhysicsComponent* component = (PhysicsComponent*)plane->findComponentOfType(Component::ComponentType::Physics, "PhysicsComponent");
+	component->getRigidBody()->setType(BodyType::KINEMATIC);
+	this->addObject(plane);*/
 }
 
 void GameObjectManager::createTexturedCube()
@@ -60,8 +89,11 @@ void GameObjectManager::update(float deltaTime)
 	for (GameObject* gameObject : this->listGameObjects)
 	{
 		if (gameObject->isActive())
+		{
 			gameObject->update(deltaTime);
+		}
 	}
+	BaseComponentSystem::getInstance()->getPhysicsSystem()->updateAllComponents();
 }
 
 void GameObjectManager::draw(int width, int height)

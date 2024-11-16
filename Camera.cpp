@@ -28,10 +28,9 @@ void Camera::onCreate()
 
 void Camera::update(float deltaTime)
 {
-	GameObject::update(deltaTime);
-
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
+	this->updateLocalMatrix();
 	this->updateViewMatrix();
 	this->updateProjectionMatrix();
 

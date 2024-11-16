@@ -58,6 +58,7 @@ Plane::Plane(std::string name) : GameObject(name)
 
 Plane::~Plane()
 {
+	GameObject::~GameObject();
 }
 
 void Plane::onCreate()
@@ -72,32 +73,9 @@ void Plane::update(float deltaTime)
 	CBObjectData cbData;
 	cbData.time = 0.0f;
 
-	Matrix4x4 transform;
-	Matrix4x4 temp;
+	this->updateLocalMatrix();
 
-	// Scale
-	transform.setIdentity();
-	transform.setScale(this->localScale);
-
-	// Scale * Rotation
-	temp.setIdentity();
-	temp.setRotationZ(this->localRotation.z);
-	transform *= temp;
-
-	temp.setIdentity();
-	temp.setRotationY(this->localRotation.y);
-	transform *= temp;
-
-	temp.setIdentity();
-	temp.setRotationX(this->localRotation.x);
-	transform *= temp;
-
-	// Scale * Rotation * Translation
-	temp.setIdentity();
-	temp.setTranslation(this->localPosition);
-	transform *= temp;
-
-	cbData.worldMatrix.setMatrix(transform);
+	cbData.worldMatrix.setMatrix(this->localMatrix);
 
 	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbData);
 }

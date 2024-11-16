@@ -34,26 +34,52 @@ void MenuScreen::draw()
         if (ImGui::BeginMenu("Game Object")) {
             if (ImGui::BeginMenu("3D Object")) {
                 RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
-                if (ImGui::MenuItem("Cube")) {
-                    GameObjectManager::getInstance()->createCube();
+                if (ImGui::BeginMenu("Primitives"))
+                {
+                    if (ImGui::MenuItem("Cube")) {
+                        GameObjectManager::getInstance()->createCube();
+                    }
+                    if (ImGui::MenuItem("Plane")) {
+                        GameObjectManager::getInstance()->createPlane();
+                    }
+                    if (ImGui::MenuItem("Quad")) {
+                        GameObjectManager::getInstance()->createQuad();
+                    }
+                    ImGui::EndMenu();
                 }
-                if (ImGui::MenuItem("Plane")) {
-                    GameObjectManager::getInstance()->createPlane();
+                if (ImGui::BeginMenu("Textured Primitives"))
+                {
+                    if (ImGui::MenuItem("Textured Cube")) {
+                        GameObjectManager::getInstance()->createTexturedCube();
+                    }
+                    ImGui::EndMenu();
                 }
-                if (ImGui::MenuItem("Quad")) {
-                    GameObjectManager::getInstance()->createQuad();
+                if (ImGui::BeginMenu("Models"))
+                {
+                    if (ImGui::MenuItem("Teapot")) {
+                        GameObjectManager::getInstance()->createTeapot();
+                    }
+                    if (ImGui::MenuItem("Bunny")) {
+                        GameObjectManager::getInstance()->createBunny();
+                    }
+                    if (ImGui::MenuItem("Armadillo")) {
+                        GameObjectManager::getInstance()->createArmadillo();
+                    }
+                    ImGui::EndMenu();
                 }
-                if (ImGui::MenuItem("Textured Cube")) {
-                    GameObjectManager::getInstance()->createTexturedCube();
-                }
-                if (ImGui::MenuItem("Teapot")) {
-                    GameObjectManager::getInstance()->createTeapot();
-                }
-                if (ImGui::MenuItem("Bunny")) {
-                    GameObjectManager::getInstance()->createBunny();
-                }
-                if (ImGui::MenuItem("Armadillo")) {
-                    GameObjectManager::getInstance()->createArmadillo();
+                if (ImGui::BeginMenu("Physics Objects"))
+                {
+                    if (ImGui::MenuItem("Physics Cube")) {
+                        for (int i = 0; i < 20; i++)
+                        {
+							GameObjectManager::getInstance()->createPhysicsCube();
+	                        
+                        }
+                    }
+                    if (ImGui::MenuItem("Physics Plane")) {
+                        GameObjectManager::getInstance()->createPhysicsPlane();
+                    }
+                    ImGui::EndMenu();
                 }
                 ImGui::EndMenu();
             }
