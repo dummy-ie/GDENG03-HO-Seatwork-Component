@@ -1,39 +1,41 @@
 #include "Component.h"
 
-Component::Component(std::string name, ComponentType type, GameObject* owner) : name(name), type(type), owner(owner)
+using namespace GDEngine;
+
+Component::Component(std::string name, ComponentType type, GameObject* owner) : m_name(name), m_type(type), m_owner(owner)
 {
 }
 
 Component::~Component()
 {
-	this->owner = nullptr;
-	this->type = NotSet;
+	this->m_owner = nullptr;
+	this->m_type = NotSet;
 }
 
 void Component::attachOwner(GameObject* owner)
 {
-	this->owner = owner;
+	this->m_owner = owner;
 }
 
 void Component::detachOwner()
 {
-	this->owner = nullptr;
+	this->m_owner = nullptr;
 	delete this;
 }
 
 GameObject* Component::getOwner()
 {
-	return this->owner;
+	return this->m_owner;
 }
 
 Component::ComponentType Component::getType()
 {
-	return this->type;
+	return this->m_type;
 }
 
 std::string Component::getName()
 {
-	return this->name;
+	return this->m_name;
 }
 
 void Component::perform(float deltaTime)

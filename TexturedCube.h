@@ -2,22 +2,27 @@
 
 #include "Cube.h"
 
-class TexturedCube : public Cube
+#include "Vector2D.h"
+
+namespace GDEngine
 {
-public:
-	TexturedCube(std::string name);
-	~TexturedCube() override;
-
-public:
-	void onCreate() override;
-	void update(float deltaTime) override;
-	void draw(int width, int height) override;
-	void onDestroy() override;
-
-private:
-	struct vertex
+	class TexturedCube : public Cube
 	{
-		Vector3D position;
-		Vector2D texCoord;
+	public:
+		TexturedCube(std::string name);
+		~TexturedCube() override;
+
+	public:
+		void onCreate() override;
+		void update(float deltaTime) override;
+		void draw(int width, int height) override;
+		void onDestroy() override;
+
+	private:
+		struct vertex
+		{
+			Vector3D position;
+			Vector2D texCoord;
+		};
 	};
-};
+}

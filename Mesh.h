@@ -1,26 +1,27 @@
 #pragma once
 
-#include "DeviceContext.h"
 #include "Resource.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
 
-using namespace graphics;
+#include "Prerequisites.h"
 
-class Mesh : public Resource
+namespace GDEngine
 {
-private:
-	VertexBuffer* vertexBuffer;
-	IndexBuffer* indexBuffer;
-private:
-	friend class graphics::DeviceContext;
+	class Mesh : public Resource
+	{
+	private:
+		VertexBuffer* m_vertexBuffer;
+		IndexBuffer* m_indexBuffer;
 
-public:
-	Mesh(const wchar_t* fullPath);
-	~Mesh() override;
+	private:
+		friend class DeviceContext;
 
-public:
-	VertexBuffer* getVertexBuffer();
-	IndexBuffer* getIndexBuffer();
-};
+	public:
+		Mesh(const wchar_t* fullPath);
+		~Mesh() override;
 
+	public:
+		VertexBuffer* getVertexBuffer();
+		IndexBuffer* getIndexBuffer();
+	};
+
+}

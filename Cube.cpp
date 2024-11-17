@@ -1,8 +1,15 @@
 #include "Cube.h"
 
-#include "AppWindow.h"
+#include "GraphicsEngine.h"
+#include "DeviceContext.h"
 #include "CameraManager.h"
+#include "EngineTime.h"
 #include "ShaderLibrary.h"
+#include "VertexBuffer.h"
+#include "ConstantBuffer.h"
+#include "IndexBuffer.h"
+
+using namespace GDEngine;
 
 Cube::Cube(std::string name) : GameObject(name)
 {
@@ -39,7 +46,7 @@ Cube::Cube(std::string name) : GameObject(name)
 
 	ShaderLibrary::getInstance()->requestVertexShaderData(shaderNames.BASE_VERTEX_SHADER_NAME, &shaderByteCode, &sizeShader);
 
-	vertexBuffer = renderSystem->createVertexBuffer(vertexList, sizeof(vertex), ARRAYSIZE(vertexList), shaderByteCode, sizeShader);
+	m_vertexBuffer = renderSystem->createVertexBuffer(vertexList, sizeof(vertex), ARRAYSIZE(vertexList), shaderByteCode, sizeShader);
 
 	unsigned int indexList[] = {
 		0,1,2,
@@ -61,13 +68,13 @@ Cube::Cube(std::string name) : GameObject(name)
 		1,0,7
 	};
 
-	indexBuffer = renderSystem->createIndexBuffer(indexList, ARRAYSIZE(indexList));
+	m_indexBuffer = renderSystem->createIndexBuffer(indexList, ARRAYSIZE(indexList));
 
 	CBObjectData cbData;
 	angle = 0.0f;
 	cbData.time = angle;
 
-	constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBObjectData));
+	m_constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBObjectData));
 
 	speed = 1.0f;
 	deltaRotation = 0.0f;
@@ -75,9 +82,9 @@ Cube::Cube(std::string name) : GameObject(name)
 
 Cube::~Cube()
 {
-	delete vertexBuffer;
-	delete indexBuffer;
-	delete constantBuffer;
+	delete m_vertexBuffer;
+	delete m_indexBuffer;
+	delete m_constantBuffer;
 	GameObject::~GameObject();
 }
 
@@ -98,9 +105,9 @@ void Cube::update(float deltaTime)
 
 	this->updateLocalMatrix();
 
-	cbObjectData.worldMatrix.setMatrix(this->localMatrix);
+	cbObjectData.worldMatrix.setMatrix(this->m_localMatrix);
 
-	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbObjectData);
+	m_constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbObjectData);
 }
 
 // Sets shaders and draws afterwards
@@ -112,15 +119,15 @@ void Cube::draw(int height, int width)
 	VertexShader* vertexShader = ShaderLibrary::getInstance()->getVertexShader(shaderNames.BASE_VERTEX_SHADER_NAME);
 	PixelShader* pixelShader = ShaderLibrary::getInstance()->getPixelShader(shaderNames.BASE_PIXEL_SHADER_NAME);
 
-	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer, 0);
+	renderSystem->getImmediateDeviceContext()->setConstantBuffer(m_constantBuffer, 0);
 
 	renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
 	renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);
 
-	renderSystem->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
-	renderSystem->getImmediateDeviceContext()->setIndexBuffer(indexBuffer);
+	renderSystem->getImmediateDeviceContext()->setVertexBuffer(m_vertexBuffer);
+	renderSystem->getImmediateDeviceContext()->setIndexBuffer(m_indexBuffer);
 
-	renderSystem->getImmediateDeviceContext()->drawIndexedTriangleList(indexBuffer->getSizeIndexList(),0,0);
+	renderSystem->getImmediateDeviceContext()->drawIndexedTriangleList(m_indexBuffer->getSizeIndexList(),0,0);
 }
 
 void Cube::onDestroy()

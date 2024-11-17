@@ -12,17 +12,16 @@
 #include "Logger.h"
 #include "Mesh.h"
 
-
-using namespace graphics;
+using namespace GDEngine;
 
 MeshManager::MeshManager() : ResourceManager()
 {
-	debug::Logger::log(this, "Initialized");
+	Logger::log(this, "Initialized");
 }
 
 MeshManager::~MeshManager()
 {
-	debug::Logger::log(this, "Destroyed");
+	Logger::log(this, "Destroyed");
 }
 
 Mesh* MeshManager::createMeshFromFile(const wchar_t* filePath)
@@ -32,16 +31,16 @@ Mesh* MeshManager::createMeshFromFile(const wchar_t* filePath)
 #endif
 
 #if _MSC_VER >= 1920 && __cplusplus > 201402L 
-	std::wstring fullPath = std::filesystem::absolute(filePath);
+	std::wstring m_fullPath = std::filesystem::absolute(filePath);
 #endif
 
-	if (this->mapResources[fullPath] == NULL)
+	if (this->m_resourceMap[fullPath] == NULL)
 	{
-		debug::Logger::log(L"Created Mesh from path : " + fullPath);
-		this->mapResources[fullPath] = this->createResourceFromFileConcrete(filePath);
+		Logger::log(L"Trying to create Mesh from path : " + std::wstring(filePath));
+		this->m_resourceMap[fullPath] = this->createResourceFromFileConcrete(filePath);
 	}
 
-	return (Mesh*)this->mapResources[fullPath];
+	return (Mesh*)this->m_resourceMap[fullPath];
 }
 
 Resource* MeshManager::createResourceFromFileConcrete(const wchar_t* filePath)

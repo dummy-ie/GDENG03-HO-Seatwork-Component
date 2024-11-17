@@ -4,7 +4,7 @@
 #include "Prerequisites.h"
 #include "VertexBuffer.h"
 
-namespace graphics
+namespace GDEngine
 {
 	class TexturedVertexBuffer : public VertexBuffer
 	{
@@ -16,5 +16,3 @@ namespace graphics
 		void load(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader) override;
 	};
 }
-
-

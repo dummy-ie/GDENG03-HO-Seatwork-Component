@@ -1,11 +1,10 @@
 #pragma once
 
-#include "Prerequisites.h"
 #include "RenderSystem.h"
 #include "TextureManager.h"
 #include "MeshManager.h"
 
-namespace graphics
+namespace GDEngine
 {
 	class GraphicsEngine
 	{

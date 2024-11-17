@@ -6,7 +6,7 @@
 #include "Vector2D.h"
 #include "Vector3D.h"
 
-namespace math
+namespace GDEngine
 {
 	class VertexMesh
 	{

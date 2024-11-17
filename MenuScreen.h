@@ -2,16 +2,19 @@
 
 #include "UIScreen.h"
 
-class MenuScreen : public UIScreen
+namespace GDEditor
 {
-private:
-	MenuScreen();
-	~MenuScreen();
+	class MenuScreen : public UIScreen
+	{
+	private:
+		MenuScreen();
+		~MenuScreen();
 
-private:
-	friend class UIManager;
+	private:
+		friend class UIManager;
 
-private:
-	virtual void draw() override;
-};
+	private:
+		virtual void draw() override;
+	};
+}
 

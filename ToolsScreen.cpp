@@ -7,9 +7,11 @@
 #include "CameraManager.h"
 #include "ViewportManager.h"
 
+using namespace GDEditor;
+
 ToolsScreen::ToolsScreen() : UIScreen("ToolsScreen")
 {
-    debug::Logger::log(this, "Initialized");
+    Logger::log(this, "Initialized");
 }
 
 ToolsScreen::~ToolsScreen()

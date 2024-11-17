@@ -2,20 +2,32 @@
 
 #include <Windows.h>
 
+#include "imgui.h"
+
+#include "Random.h"
+#include "EngineTime.h"
+
+#include "GraphicsEngine.h"
+
 #include "BaseComponentSystem.h"
+#include "PhysicsSystem.h"
+
+#include "InputSystem.h"
+
 #include "GameObjectManager.h"
 #include "CameraManager.h"
+
 #include "UIManager.h"
 #include "ViewportManager.h"
 
-#include "InputSystem.h"
-#include "EngineTime.h"
-#include "imgui.h"
-#include "Logger.h"
-#include "Random.h"
+#include "DeviceContext.h"
+#include "ConstantBuffer.h"
 #include "ShaderLibrary.h"
 
-#include "PhysicsSystem.h"
+#include "Logger.h"
+
+using namespace GDEditor;
+using namespace GDEngine;
 
 __declspec(align(16))
 struct CBEditor
@@ -101,7 +113,7 @@ void AppWindow::onKeyDown(int key)
 void AppWindow::onKeyUp(int key)
 {
 	if (key == VK_ESCAPE) {
-		//m_is_running = false;
+		//m_isRunning = false;
 	}
 }
 
@@ -138,12 +150,12 @@ void AppWindow::initializeEngine()
 		GameObjectManager::initialize();
 		BaseComponentSystem::initialize();
 		CameraManager::initialize();
-		UIManager::initialize(m_hwnd);
+		UIManager::initialize(m_windowHandle);
 		
 	}
 	catch (...)
 	{
-		m_is_running = false;
+		m_isRunning = false;
 	}
 
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
@@ -154,7 +166,7 @@ void AppWindow::initializeEngine()
 	FLOAT width = windowRect.right - windowRect.left;
 	FLOAT height = windowRect.bottom - windowRect.top;
 
-	this->swapChain = renderSystem->createSwapChain(this->m_hwnd, width, height);
+	this->swapChain = renderSystem->createSwapChain(this->m_windowHandle, width, height);
 
 	// Initialize the Constant Buffer
 	CBEditor cbData;
@@ -166,7 +178,7 @@ void AppWindow::initializeEngine()
 	this->solidState = renderSystem->createRasterizerState(D3D11_FILL_SOLID, D3D11_CULL_BACK);
 	this->wireframeState = renderSystem->createRasterizerState(D3D11_FILL_WIREFRAME, D3D11_CULL_NONE);
 
-	debug::Logger::log(this, "Initialized Engine");
+	GDEngine::Logger::log(this, "Initialized Engine");
 }
 
 void AppWindow::draw(int width, int height, EFillMode fillMode)
@@ -210,7 +222,7 @@ SwapChain* AppWindow::getSwapChain()
 AppWindow* AppWindow::P_SHARED_INSTANCE = NULL;
 AppWindow::AppWindow()
 {
-	debug::Logger::log(this, "Initialized");
+	GDEngine::Logger::log(this, "Initialized");
 }
 AppWindow::~AppWindow() {}
 AppWindow::AppWindow(const AppWindow&) {}
@@ -222,7 +234,7 @@ AppWindow* AppWindow::getInstance() {
 void AppWindow::initialize()
 {
 	if (P_SHARED_INSTANCE)
-		throw std::exception("App Window already created");
+		GDEngine::Logger::throw_exception("App Window already created");
 	P_SHARED_INSTANCE = new AppWindow();
 	
 }
@@ -232,6 +244,6 @@ void AppWindow::destroy()
 	if (P_SHARED_INSTANCE != NULL)
 	{
 		delete P_SHARED_INSTANCE->constantBuffer;
-		debug::Logger::log(P_SHARED_INSTANCE, "Released");
+		GDEngine::Logger::log(P_SHARED_INSTANCE, "Released");
 	}
 }

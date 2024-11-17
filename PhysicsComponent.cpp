@@ -4,7 +4,8 @@
 #include "PhysicsSystem.h"
 #include "GameObject.h"
 #include "Vector3D.h"
-#include <reactphysics3d/reactphysics3d.h>
+
+using namespace GDEngine;
 
 PhysicsComponent::PhysicsComponent(std::string name, GameObject* owner) : Component(name, Physics, owner)
 {
@@ -24,13 +25,13 @@ PhysicsComponent::PhysicsComponent(std::string name, GameObject* owner) : Compon
 
 	BoxShape* boxShape = physicsCommon->createBoxShape(Vector3(scale.x / 1.9, scale.y / 1.9, scale.z / 1.9));
 
-	this->rigidBody = physicsWorld->createRigidBody(transform);
-	this->rigidBody->addCollider(boxShape, transform);
-	this->rigidBody->updateMassPropertiesFromColliders();
-	this->rigidBody->setMass(this->mass);
-	this->rigidBody->setType(BodyType::DYNAMIC);
+	this->m_rigidBody = physicsWorld->createRigidBody(transform);
+	this->m_rigidBody->addCollider(boxShape, transform);
+	this->m_rigidBody->updateMassPropertiesFromColliders();
+	this->m_rigidBody->setMass(this->m_mass);
+	this->m_rigidBody->setType(BodyType::DYNAMIC);
 
-	transform = this->rigidBody->getTransform();
+	transform = this->m_rigidBody->getTransform();
 	float matrix[16];
 	transform.getOpenGLMatrix(matrix);
 
@@ -49,28 +50,28 @@ PhysicsComponent::~PhysicsComponent()
 	Component::~Component();
 
 	PhysicsWorld* physicsWorld = BaseComponentSystem::getInstance()->getPhysicsSystem()->getPhysicsWorld();
-	physicsWorld->destroyRigidBody(this->rigidBody);
+	physicsWorld->destroyRigidBody(this->m_rigidBody);
 }
 
 void PhysicsComponent::perform(float deltaTime)
 {
-	/*const Transform transform = this->rigidBody->getTransform();
+	/*const Transform transform = this->m_rigidBody->getTransform();
 	const Vector3 position = transform.getPosition();
 	const Quaternion orientation = transform.getOrientation();
 	const Vector3 rotation = orientation.getVectorV();
 	
 	this->getOwner()->setPosition(Vector3D(position.x, position.y, position.z));
 	//this->getOwner()->setRotation(Vector3D(rotation.x, rotation.y, rotation.z));*/
-	Transform transform = this->rigidBody->getTransform();
+	Transform transform = this->m_rigidBody->getTransform();
 	const Vector3 position = transform.getPosition();
 	const Quaternion orientation = transform.getOrientation();
 
 	//this->getOwner()->setPosition(Vector3D(position.x, position.y, position.z));
 	//this->getOwner()->setOrientation(Vector4D(orientation.x, orientation.y, orientation.z, orientation.w));
 	
-	//this->rigidBody->setTransform(Transform(position, orientation));
+	//this->m_rigidBody->setTransform(Transform(position, orientation));
 	//transform = Transform(position, quaternion);
-	//this->rigidBody->setTransform(transform);
+	//this->m_rigidBody->setTransform(transform);
 	float matrix[16];
 	transform.getOpenGLMatrix(matrix);
 	//this->getOwner()->setLocalMatrix(Vector4D(orientation.x, orientation.y, orientation.z, orientation.w), matrix);
@@ -78,10 +79,10 @@ void PhysicsComponent::perform(float deltaTime)
 	const Vector3D position2 = this->getOwner()->getLocalPosition();
 
 	//this->getOwner()->setLocalMatrix(Vector3D(position.x, position.y, position.z), Vector4D(orientation.x, orientation.y, orientation.z, orientation.w), matrix);
-	debug::Logger::log("Updating Component : " + this->name);
+	Logger::log("Updating Component : " + this->m_name);
 }
 
 RigidBody* PhysicsComponent::getRigidBody()
 {
-	return this->rigidBody;
+	return this->m_rigidBody;
 }

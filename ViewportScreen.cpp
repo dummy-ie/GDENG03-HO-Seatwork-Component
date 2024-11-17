@@ -3,13 +3,17 @@
 #include "imgui.h"
 
 #include "AppWindow.h"
+#include "SwapChain.h"
 #include "CameraManager.h"
 #include "GraphicsEngine.h"
 #include "DeviceContext.h"
+#include "EngineTime.h"
 #include "imgui_internal.h"
+#include "InputSystem.h"
 #include "ViewportManager.h"
 
-using namespace graphics;
+using namespace GDEngine;
+using namespace GDEditor;
 
 ViewportScreen::ViewportScreen(int index) : UIScreen("Viewport " + std::to_string(index + 1)), index(index)
 {
@@ -26,8 +30,8 @@ ViewportScreen::ViewportScreen(int index) : UIScreen("Viewport " + std::to_strin
 
 	this->selectedCameraIndex = this->camIndex;
 
-	debug::Logger::log(this, "Initialized");
-	debug::Logger::log(name + " Current Cam : " + currentCamera->getName());
+	Logger::log(this, "Initialized");
+	Logger::log(name + " Current Cam : " + currentCamera->getName());
 }
 
 ViewportScreen::~ViewportScreen()

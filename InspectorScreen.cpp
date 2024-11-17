@@ -5,9 +5,11 @@
 #include "UIManager.h"
 #include "GameObjectManager.h"
 
+using namespace GDEditor;
+
 InspectorScreen::InspectorScreen() : UIScreen("InspectorScreen")
 {
-	debug::Logger::log(this, "Initialized");
+	Logger::log(this, "Initialized");
 }
 
 InspectorScreen::~InspectorScreen()

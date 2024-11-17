@@ -6,9 +6,12 @@
 #include "UIManager.h"
 #include "GameObjectManager.h"
 
+using namespace GDEditor;
+using namespace GDEngine;
+
 HierarchyScreen::HierarchyScreen() : UIScreen("HierarchyScreen")
 {
-	debug::Logger::log(this, "Initialized");
+	Logger::log(this, "Initialized");
 }
 
 HierarchyScreen::~HierarchyScreen()
@@ -35,7 +38,7 @@ void HierarchyScreen::draw()
 
 		if (ImGui::Button(label.c_str(), ImVec2(ImGui::GetWindowSize().x - 15, 20)))
 		{
-			debug::Logger::log("Selected : " + label);
+			Logger::log("Selected : " + label);
 			GameObjectManager::getInstance()->setSelectedObject(gameObject);
 		}
 	}

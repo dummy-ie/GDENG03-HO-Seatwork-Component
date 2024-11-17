@@ -1,6 +1,6 @@
 ﻿#include "OrbitCamera.h"
 
-#include <iostream>
+using namespace GDEngine;
 
 OrbitCamera::OrbitCamera(std::string name) : Camera(name)
 {
@@ -25,7 +25,7 @@ void OrbitCamera::update(float deltaTime)
 	float x = objectToOrbit->getLocalPosition().x + (cos(radian) * radius);
 	float z = objectToOrbit->getLocalPosition().z + (sin(radian) * radius);
 
-	this->localRotation.y = -radian - (90.0f * ((atan(1.0f) * 4.0f) / 180.0f));
+	this->m_localRotation.y = -radian - (90.0f * ((atan(1.0f) * 4.0f) / 180.0f));
 
 	this->setPosition(Vector3D(x, 0, z));
 }

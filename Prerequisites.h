@@ -1,4 +1,4 @@
-namespace graphics
+namespace GDEngine
 {
 	class SwapChain;
 	class DeviceContext;
@@ -13,10 +13,10 @@ namespace graphics
 	class RenderSystem;
 	class GraphicsEngine;
 	class RenderTexture;
+	class Resource;
+	class ResourceManager;
+	class Texture;
+	class TextureManager;
+	class Mesh;
+	class MeshManager;
 }
-class Resource;
-class ResourceManager;
-class Texture;
-class TextureManager;
-class Mesh;
-class MeshManager;

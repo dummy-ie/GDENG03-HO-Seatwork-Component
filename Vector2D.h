@@ -3,7 +3,7 @@
 #include <string>
 #include <ostream>
 
-namespace math
+namespace GDEngine
 {
 	class Vector2D
 	{

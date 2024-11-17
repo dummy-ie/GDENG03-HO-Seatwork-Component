@@ -3,10 +3,13 @@
 #include "imgui.h"
 #include "Logger.h"
 
+using namespace GDEditor;
+using namespace GDEngine;
+
 ColorPickerScreen::ColorPickerScreen() : UIScreen("ColorPickerScreen")
 {
     isActive = false;
-    debug::Logger::log(this, "Initialized");
+    Logger::log(this, "Initialized");
 }
 
 ColorPickerScreen::~ColorPickerScreen()

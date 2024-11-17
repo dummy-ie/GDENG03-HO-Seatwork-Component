@@ -1,22 +1,16 @@
 #pragma once
 
-#include <vector>
-
 #include "Window.h"
-#include "GraphicsEngine.h"
-#include "Viewport.h"
+
 #include "SwapChain.h"
-#include "IndexBuffer.h"
-#include "DeviceContext.h"
 #include "ConstantBuffer.h"
-#include "VertexBuffer.h"
-#include "VertexShader.h"
-#include "PixelShader.h"
+#include "RasterizerState.h"
 
 #include "InputListener.h"
-#include "ViewportScreen.h"
 
-using namespace graphics;
+using namespace GDEngine;
+
+enum EFillMode : int;
 
 class AppWindow : public Window, public InputListener
 {

@@ -7,12 +7,13 @@
 #include "Texture.h"
 #include "Vector4D.h"
 
-using namespace math;
+using namespace GDEngine;
+using namespace GDEditor;
 
 CreditsScreen::CreditsScreen() : UIScreen("CreditsScreen")
 {
 	isActive = false;
-	debug::Logger::log(this, "Initialized");
+	Logger::log(this, "Initialized");
 }
 
 CreditsScreen::~CreditsScreen()
@@ -43,9 +44,9 @@ void CreditsScreen::draw()
 
 	ImGui::Begin("Credits", &isActive, ImGuiWindowFlags_NoDocking);
 
-	Texture* dlsuTexture = graphics::GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"assets/textures/dlsu.png");
+	Texture* dlsuTexture = GDEngine::GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"assets/textures/dlsu.png");
 
-	ImGui::Image((ImTextureID)dlsuTexture->shaderResourceView, ImVec2(256, 256));
+	ImGui::Image((ImTextureID)dlsuTexture->m_shaderResourceView, ImVec2(256, 256));
 
 	ImVec4 vec4 = ImVec4(rainbow.x / 255.0f, rainbow.y / 255.0f, rainbow.z / 255.0f, rainbow.w / 255.0f);
 	ImVec4 vec4_2 = ImVec4(rainbow2.x / 255.0f, rainbow2.y / 255.0f, rainbow2.z / 255.0f, rainbow2.w / 255.0f);

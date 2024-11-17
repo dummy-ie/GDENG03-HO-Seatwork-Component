@@ -1,9 +1,11 @@
 #include "Camera.h"
-#include "Camera.h"
 
-#include "EngineTime.h"
-#include "InputSystem.h"
 #include "AppWindow.h"
+#include "GraphicsEngine.h"
+
+#include "ConstantBuffer.h"
+
+using namespace GDEngine;
 
 Camera::Camera(std::string name) : GameObject(name)
 {
@@ -50,15 +52,15 @@ void Camera::updateViewMatrix()
 	Matrix4x4 temp;
 
 	temp.setIdentity();
-	temp.setRotationX(this->localRotation.x);
+	temp.setRotationX(this->m_localRotation.x);
 	worldCam *= temp;
 
 	temp.setIdentity();
-	temp.setRotationY(this->localRotation.y);
+	temp.setRotationY(this->m_localRotation.y);
 	worldCam *= temp;
 
 	temp.setIdentity();
-	temp.setTranslation(this->localPosition);
+	temp.setTranslation(this->m_localPosition);
 	worldCam *= temp;
 
 	worldCam.inverse();

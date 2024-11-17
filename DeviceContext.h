@@ -3,13 +3,13 @@
 #include <d3d11.h>
 #include "Prerequisites.h"
 
-namespace graphics
+namespace GDEngine
 {
 	class DeviceContext
 	{
 	private:
-		RenderSystem* system = nullptr;
-		ID3D11DeviceContext* deviceContext;
+		RenderSystem* m_system = nullptr;
+		ID3D11DeviceContext* m_deviceContext;
 
 	private:
 		friend class ConstantBuffer;

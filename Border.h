@@ -2,20 +2,21 @@
 
 #include "GameObject.h"
 
-class Border : public GameObject
-{
-private:
-	VertexBuffer* vertexBuffer;
-	ConstantBuffer* constantBuffer;
+namespace GDEngine {
+	class Border : public GameObject
+	{
+	private:
+		VertexBuffer* m_vertexBuffer;
+		ConstantBuffer* m_constantBuffer;
 
-public:
-	Border(std::string name);
-	~Border();
+	public:
+		Border(std::string name);
+		~Border();
 
-public:
-	void onCreate() override;
-	void update(float deltaTime) override;
-	void draw(int width, int height) override;
-	void onDestroy() override;
-};
-
+	public:
+		void onCreate() override;
+		void update(float deltaTime) override;
+		void draw(int width, int height) override;
+		void onDestroy() override;
+	};
+}

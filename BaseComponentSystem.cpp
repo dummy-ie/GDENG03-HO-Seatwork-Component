@@ -3,32 +3,34 @@
 #include "PhysicsSystem.h"
 #include "Logger.h"
 
+using namespace GDEngine;
+
 BaseComponentSystem* BaseComponentSystem::P_SHARED_INSTANCE = NULL;
 
 PhysicsSystem* BaseComponentSystem::getPhysicsSystem()
 {
-	return this->physicsSystem;
+	return this->m_physicsSystem;
 }
 
 BaseComponentSystem::BaseComponentSystem()
 {
 	try
 	{
-		this->physicsSystem = new PhysicsSystem();
+		this->m_physicsSystem = new PhysicsSystem();
 	}
 	catch (...)
 	{
-		throw std::exception("PhysicsSystem not created successfully");
+		Logger::throw_exception("PhysicsSystem not created successfully");
 	}
 	
-	debug::Logger::log(P_SHARED_INSTANCE, "Initialized");
+	Logger::log(P_SHARED_INSTANCE, "Initialized");
 }
 
 BaseComponentSystem::~BaseComponentSystem()
 {
-	delete this->physicsSystem;
+	delete this->m_physicsSystem;
 	P_SHARED_INSTANCE = nullptr;
-	debug::Logger::log(P_SHARED_INSTANCE, "Released");
+	Logger::log(P_SHARED_INSTANCE, "Released");
 }
 
 BaseComponentSystem::BaseComponentSystem(const BaseComponentSystem&) {}
@@ -41,7 +43,7 @@ BaseComponentSystem* BaseComponentSystem::getInstance()
 void BaseComponentSystem::initialize()
 {
 	if (P_SHARED_INSTANCE)
-		throw std::exception("BaseComponentSystem already created");
+		Logger::throw_exception("BaseComponentSystem already created");
 	P_SHARED_INSTANCE = new BaseComponentSystem();
 
 }

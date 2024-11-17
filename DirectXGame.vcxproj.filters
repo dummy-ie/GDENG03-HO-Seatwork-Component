@@ -37,9 +37,6 @@
     <Filter Include="GameEngine\Primitives\Cube">
       <UniqueIdentifier>{fbd6c00f-6bf1-422f-b2c6-033bdda412b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameEngine\Primitives\Quad">
-      <UniqueIdentifier>{6fc7811b-7d6e-4569-b6e8-5c4970c14ae8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine\Primitives\Plane">
       <UniqueIdentifier>{fcb2f4b6-6dec-4895-9ca4-3031911e8a47}</UniqueIdentifier>
     </Filter>
@@ -115,20 +112,26 @@
     <Filter Include="GameEngine\GraphicsEngine\ResourceManager\MeshManager">
       <UniqueIdentifier>{415520e1-0b08-45d4-8e66-1aedc781740e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameEngine\Primitives\Teapot">
-      <UniqueIdentifier>{abd180ed-39af-464b-a9ca-745fc3f64e86}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameEngine\Primitives\Bunny">
-      <UniqueIdentifier>{3c30fc1c-44d2-4730-ae10-81776573ccab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameEngine\Primitives\Armadillo">
-      <UniqueIdentifier>{b446127e-b7bf-4ef0-aed6-e961cb85ec2d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine\ComponentSystem">
       <UniqueIdentifier>{2be07752-b170-4496-86dd-762ec2c2518c}</UniqueIdentifier>
     </Filter>
     <Filter Include="GameEngine\ComponentSystem\PhysicsSystem">
       <UniqueIdentifier>{b52907f7-0d2f-4b69-b8fa-fada23dde020}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Primitives\Quad">
+      <UniqueIdentifier>{6fc7811b-7d6e-4569-b6e8-5c4970c14ae8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Primitives\MeshObject">
+      <UniqueIdentifier>{45672926-284e-4317-bc4c-784bed0829c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Primitives\MeshObject\Teapot">
+      <UniqueIdentifier>{abd180ed-39af-464b-a9ca-745fc3f64e86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Primitives\MeshObject\Armadillo">
+      <UniqueIdentifier>{b446127e-b7bf-4ef0-aed6-e961cb85ec2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Primitives\MeshObject\Bunny">
+      <UniqueIdentifier>{3c30fc1c-44d2-4730-ae10-81776573ccab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -304,13 +307,13 @@
       <Filter>GameEngine\GraphicsEngine\ResourceManager\MeshManager</Filter>
     </ClCompile>
     <ClCompile Include="Teapot.cpp">
-      <Filter>GameEngine\Primitives\Teapot</Filter>
+      <Filter>GameEngine\Primitives\MeshObject\Teapot</Filter>
     </ClCompile>
     <ClCompile Include="Bunny.cpp">
-      <Filter>GameEngine\Primitives\Bunny</Filter>
+      <Filter>GameEngine\Primitives\MeshObject\Bunny</Filter>
     </ClCompile>
     <ClCompile Include="Armadillo.cpp">
-      <Filter>GameEngine\Primitives\Armadillo</Filter>
+      <Filter>GameEngine\Primitives\MeshObject\Armadillo</Filter>
     </ClCompile>
     <ClCompile Include="BaseComponentSystem.cpp">
       <Filter>GameEngine\ComponentSystem</Filter>
@@ -323,6 +326,9 @@
     </ClCompile>
     <ClCompile Include="PhysicsSystem.cpp">
       <Filter>GameEngine\ComponentSystem\PhysicsSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshObject.cpp">
+      <Filter>GameEngine\Primitives\MeshObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -522,13 +528,13 @@
       <Filter>GameEngine\Math</Filter>
     </ClInclude>
     <ClInclude Include="Teapot.h">
-      <Filter>GameEngine\Primitives\Teapot</Filter>
+      <Filter>GameEngine\Primitives\MeshObject\Teapot</Filter>
     </ClInclude>
     <ClInclude Include="Bunny.h">
-      <Filter>GameEngine\Primitives\Bunny</Filter>
+      <Filter>GameEngine\Primitives\MeshObject\Bunny</Filter>
     </ClInclude>
     <ClInclude Include="Armadillo.h">
-      <Filter>GameEngine\Primitives\Armadillo</Filter>
+      <Filter>GameEngine\Primitives\MeshObject\Armadillo</Filter>
     </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>GameEngine\ComponentSystem</Filter>
@@ -541,6 +547,9 @@
     </ClInclude>
     <ClInclude Include="PhysicsSystem.h">
       <Filter>GameEngine\ComponentSystem\PhysicsSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshObject.h">
+      <Filter>GameEngine\Primitives\MeshObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

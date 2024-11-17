@@ -2,18 +2,22 @@
 #include "GameObject.h"
 #include "UIScreen.h"
 
-class InspectorScreen : public UIScreen
+namespace GDEditor
 {
+	using namespace GDEngine;
+	class InspectorScreen : public UIScreen
+	{
 
-private:
-	InspectorScreen();
-	~InspectorScreen();
+	private:
+		InspectorScreen();
+		~InspectorScreen();
 
-private:
-	friend class UIManager;
+	private:
+		friend class UIManager;
 
-private:
-	virtual void draw() override;
-	void drawInspector(GameObject* gameObject);
-	void drawTransformTable(GameObject* gameObject);
-};
+	private:
+		virtual void draw() override;
+		void drawInspector(GameObject* gameObject);
+		void drawTransformTable(GameObject* gameObject);
+	};
+}

@@ -5,97 +5,99 @@
 #include "PhysicsComponent.h"
 #include "Logger.h"
 
+using namespace GDEngine;
+
 PhysicsSystem::PhysicsSystem()
 {
-	this->physicsCommon = new PhysicsCommon();
+	this->m_physicsCommon = new PhysicsCommon();
 
 	PhysicsWorld::WorldSettings settings;
 	settings.defaultVelocitySolverNbIterations = 50;
 	settings.gravity = Vector3(0, -9.81, 0);
 
-	this->physicsWorld = this->physicsCommon->createPhysicsWorld(settings);
+	this->m_physicsWorld = this->m_physicsCommon->createPhysicsWorld(settings);
 
-	debug::Logger::log(this, "Created Physics World");
-	debug::Logger::log(this, "Initialize");
+	Logger::log(this, "Created Physics World");
+	Logger::log(this, "Initialize");
 }
 
 PhysicsSystem::~PhysicsSystem()
 {
-	delete this->physicsCommon;
+	delete this->m_physicsCommon;
 }
 
 void PhysicsSystem::registerComponent(PhysicsComponent* component)
 {
-	this->mapComponents[component->getName()] = component;
-	this->listComponents.push_back(component);
-	debug::Logger::log(component->getName() + " registered Component");
+	this->m_componentMap[component->getName()] = component;
+	this->m_componentList.push_back(component);
+	Logger::log(component->getName() + " registered Component");
 }
 
 void PhysicsSystem::unregisterComponent(PhysicsComponent* component)
 {
-	if (this->mapComponents[component->getName()] == NULL)
+	if (this->m_componentMap[component->getName()] == NULL)
 	{
-		debug::Logger::log(component->getName() + " not registered in Physics System");
+		Logger::log(component->getName() + " not registered in Physics System");
 		return;
 	}
 
 	int index = -1;
 
-	this->mapComponents.erase(component->getName());
-	for (int i = 0; i < this->listComponents.size() && index == -1; i++)
+	this->m_componentMap.erase(component->getName());
+	for (int i = 0; i < this->m_componentList.size() && index == -1; i++)
 	{
-		if (this->listComponents[i] == component)
+		if (this->m_componentList[i] == component)
 			index = i;
 	}
 
 	if (index != -1)
 	{
-		this->listComponents.erase(this->listComponents.begin() + index);
+		this->m_componentList.erase(this->m_componentList.begin() + index);
 	}
 
-	debug::Logger::log("Unregistered " + component->getName());
+	Logger::log("Unregistered " + component->getName());
 }
 
 void PhysicsSystem::unregisterComponentByName(std::string name)
 {
-	if (this->mapComponents[name] != NULL)
+	if (this->m_componentMap[name] != NULL)
 	{
-		this->unregisterComponent(this->mapComponents[name]);
+		this->unregisterComponent(this->m_componentMap[name]);
 	}
 }
 
 PhysicsComponent* PhysicsSystem::findComponentByName(std::string name)
 {
-	if (this->mapComponents[name] == NULL)
-		debug::Logger::error(this, "Component " + name + " is not found");
+	if (this->m_componentMap[name] == NULL)
+		Logger::error(this, "Component " + name + " is not found");
 
-	return this->mapComponents[name];
+	return this->m_componentMap[name];
 }
 
-std::vector<PhysicsComponent*> PhysicsSystem::getAllComponents()
+PhysicsSystem::PhysicsComponentList PhysicsSystem::getAllComponents()
 {
-	return this->listComponents;
+	return this->m_componentList;
 }
 
 void PhysicsSystem::updateAllComponents()
 {
 	if (EngineTime::getDeltaTime() > 0.0f)
 	{
-		this->physicsWorld->update(EngineTime::getDeltaTime());
-		for (int i = 0; i < this->listComponents.size(); i++)
+		this->m_physicsWorld->update(EngineTime::getDeltaTime());
+		for (int i = 0; i < this->m_componentList.size(); i++)
 		{
-			if (listComponents[i]->getOwner()->isActive())
-				this->listComponents[i]->perform(EngineTime::getDeltaTime());
+			if (m_componentList[i]->getOwner()->isActive())
+				this->m_componentList[i]->perform(EngineTime::getDeltaTime());
 		}
 	}
 }
 
 PhysicsWorld* PhysicsSystem::getPhysicsWorld()
 {
-	return this->physicsWorld;
+	return this->m_physicsWorld;
 }
 
 PhysicsCommon* PhysicsSystem::getPhysicsCommon()
 {
-	return this->physicsCommon;
+	return this->m_physicsCommon;
 }

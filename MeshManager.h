@@ -1,18 +1,20 @@
 #pragma once
 
 #include "ResourceManager.h"
-#include "Prerequisites.h"
 
-class MeshManager : public ResourceManager
+namespace GDEngine
 {
-public:
-	Mesh* createMeshFromFile(const wchar_t* filePath);
+	class MeshManager : public ResourceManager
+	{
+	public:
+		Mesh* createMeshFromFile(const wchar_t* filePath);
 
-protected:
-	virtual Resource* createResourceFromFileConcrete(const wchar_t* filePath);
-	friend class graphics::GraphicsEngine;
+	protected:
+		virtual Resource* createResourceFromFileConcrete(const wchar_t* filePath);
+		friend class GraphicsEngine;
 
-private:
-	MeshManager();
-	~MeshManager() override;
-};
+	private:
+		MeshManager();
+		~MeshManager() override;
+	};
+}

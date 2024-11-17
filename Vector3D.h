@@ -3,12 +3,12 @@
 #include <string>
 #include <ostream>
 
-namespace math
+namespace GDEngine
 {
 	class Vector3D
 	{
 	public:
-		float x, y, z;
+		float x = 0, y = 0, z = 0;
 
 	public:
 		Vector3D() : x(0), y(0), z(0) {}

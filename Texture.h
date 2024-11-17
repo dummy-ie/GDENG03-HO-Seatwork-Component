@@ -1,19 +1,25 @@
 #pragma once
 
 #include "Resource.h"
-#include "DeviceContext.h"
 #include <d3d11.h>
 
-class Texture : public Resource
+namespace GDEditor
 {
-private:
-	ID3D11Resource* texture = nullptr;
-	ID3D11ShaderResourceView* shaderResourceView = nullptr;
+	class CreditsScreen;
+}
 
-	friend class CreditsScreen;
-	friend class graphics::DeviceContext;
-public:
-	Texture(const wchar_t* fullPath);
-	~Texture() override;
-};
+namespace GDEngine
+{
+	class Texture : public Resource
+	{
+	private:
+		ID3D11Resource* m_texture = nullptr;
+		ID3D11ShaderResourceView* m_shaderResourceView = nullptr;
 
+		friend class GDEditor::CreditsScreen;
+		friend class DeviceContext;
+	public:
+		Texture(const wchar_t* fullPath);
+		~Texture() override;
+	};
+}

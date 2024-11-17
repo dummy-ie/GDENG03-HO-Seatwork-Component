@@ -5,7 +5,7 @@
 #include "RenderSystem.h"
 #include "Logger.h"
 
-using namespace graphics;
+using namespace GDEngine;
 
 TexturedVertexBuffer::TexturedVertexBuffer(RenderSystem* system) : VertexBuffer(system) {}
 
@@ -27,11 +27,13 @@ void TexturedVertexBuffer::load(void* list_vertices, UINT size_vertex, UINT size
 	D3D11_SUBRESOURCE_DATA init_data = {  };
 	init_data.pSysMem = list_vertices;
 
-	m_size_vertex = size_vertex;
-	m_size_list = size_list;
+	m_sizeVertex = size_vertex;
+	m_sizeList = size_list;
 
-	if (!debug::Logger::log(this, this->system->m_d3d_device->CreateBuffer(&buff_desc, &init_data, &m_buffer)))
-		throw std::exception("TexturedVertexBuffer not created successfully");
+	if (!Logger::log(this, this->m_system->m_D3DDevice->CreateBuffer(&buff_desc, &init_data, &m_buffer)))
+	{
+		Logger::throw_exception("TexturedVertexBuffer not created successfully");
+	}
 
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
@@ -43,6 +45,8 @@ void TexturedVertexBuffer::load(void* list_vertices, UINT size_vertex, UINT size
 
 	UINT size_layout = ARRAYSIZE(layout);
 
-	if (!debug::Logger::log(this, this->system->m_d3d_device->CreateInputLayout(layout, size_layout, shader_byte_code, size_byte_shader, &m_layout)))
-		throw std::exception("InputLayout not created successfully");
+	if (!Logger::log(this, this->m_system->m_D3DDevice->CreateInputLayout(layout, size_layout, shader_byte_code, size_byte_shader, &m_layout)))
+		Logger::throw_exception("InputLayout not created successfully");
+
+	Logger::log(this, "TexturedVertexBuffer created successfully");
 }

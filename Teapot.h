@@ -1,21 +1,19 @@
 #pragma once
 
-#include "GameObject.h"
+#include "MeshObject.h"
 
-class Teapot : public GameObject
+namespace GDEngine
 {
-private:
-	Mesh* teapotMesh;
-	ConstantBuffer* constantBuffer;
+	class Teapot : public MeshObject
+	{
+	public:
+		Teapot(std::string name);
+		~Teapot() override;
 
-public:
-	Teapot(std::string name);
-	~Teapot();
-
-public:
-	void onCreate() override;
-	void update(float deltaTime) override;
-	void draw(int width, int height) override;
-	void onDestroy() override;
-};
-
+	public:
+		void onCreate() override;
+		void update(float deltaTime) override;
+		void draw(int width, int height) override;
+		void onDestroy() override;
+	};
+}

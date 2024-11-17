@@ -20,7 +20,7 @@
 #include "ViewportScreen.h"
 #include "ToolsScreen.h"
 
-using namespace graphics;
+using namespace GDEditor;
 
 UIManager* UIManager::P_SHARED_INSTANCE = NULL;
 
@@ -76,7 +76,7 @@ void UIManager::draw()
 		ImGui::DockBuilderFinish(id);
 
 		firstTime = false;
-		debug::Logger::log(this, "Initialized Dock Space on First Run");
+		Logger::log(this, "Initialized Dock Space on First Run");
 	}
 
 	for (UIScreen* screen : listUI)
@@ -96,7 +96,7 @@ void UIManager::draw()
 	}
 }
 
-void UIManager::setActive(String name)
+void UIManager::setActive(std::string name)
 {
 	this->mapUI[name]->setActive(true);
 }
@@ -248,7 +248,7 @@ UIManager::UIManager(HWND hwnd)
 	ViewportManager::getInstance()->createViewport();
 
 
-	debug::Logger::log(this, "Initialized");
+	Logger::log(this, "Initialized");
 }
 
 UIManager::~UIManager()
@@ -256,7 +256,7 @@ UIManager::~UIManager()
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
-	debug::Logger::log(this, "Destroyed");
+	Logger::log(this, "Destroyed");
 }
 
 UIManager::UIManager(const UIManager&) {}
@@ -268,6 +268,8 @@ UIManager* UIManager::getInstance()
 
 void UIManager::initialize(HWND hwnd)
 {
+	if (P_SHARED_INSTANCE)
+		Logger::throw_exception("UIManager already created");
 	P_SHARED_INSTANCE = new UIManager(hwnd);
 }
 

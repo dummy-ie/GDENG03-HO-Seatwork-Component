@@ -2,35 +2,34 @@
 
 #include "GameObject.h"
 
-using namespace graphics;
+namespace GDEngine {
+	class Cube : public GameObject
+	{
+	protected:
+		//vertex vertex_list[8];
+		//Vector3D color;
 
-class Cube : public GameObject
-{
-protected:
-	//vertex vertex_list[8];
-	//Vector3D color;
+		VertexBuffer* m_vertexBuffer;
+		ConstantBuffer* m_constantBuffer;
+		IndexBuffer* m_indexBuffer;
 
-	VertexBuffer* vertexBuffer;
-	ConstantBuffer* constantBuffer;
-	IndexBuffer* indexBuffer;
+		float deltaRotation;
+		float angle;
+		float speed = 1.0f;
+		bool startRotate = false;
+		float elapsedTime = 0.0f;
+		float deltaScale = 0.0f;
 
-	float deltaRotation;
-	float angle;
-	float speed = 1.0f;
-	bool startRotate = false;
-	float elapsedTime = 0.0f;
-	float deltaScale = 0.0f;
+	public:
+		Cube(std::string name);
+		~Cube() override;
 
-public:
-	Cube(std::string name);
-	~Cube() override;
+	public:
+		void onCreate() override;
+		void update(float deltaTime) override;
+		void draw(int width, int height) override;
+		void onDestroy() override;
 
-public:
-	void onCreate() override;
-	void update(float deltaTime) override;
-	void draw(int width, int height) override;
-	void onDestroy() override;
-
-	void setSpeed(float speed);
-};
-
+		void setSpeed(float speed);
+	};
+}

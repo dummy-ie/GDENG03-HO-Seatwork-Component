@@ -5,10 +5,14 @@
 
 #include "Prerequisites.h"
 
+namespace GDEngine {
 	class ResourceManager
 	{
+	private:
+		typedef std::unordered_map<std::wstring, Resource*> ResourceMap;
+
 	protected:
-		std::unordered_map<std::wstring, Resource*> mapResources;
+		ResourceMap m_resourceMap;
 
 	protected:
 		ResourceManager();
@@ -24,5 +28,4 @@
 		ResourceManager(ResourceManager const&);
 		ResourceManager& operator=(ResourceManager const&);
 	};
-
-
+}

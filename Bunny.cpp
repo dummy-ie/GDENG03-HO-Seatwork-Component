@@ -1,72 +1,58 @@
 #include "Bunny.h"
 
-#include "ConstantBuffer.h"
+#include "GraphicsEngine.h"
 #include "ShaderLibrary.h"
-#include "DeviceContext.h"
-#include "Mesh.h"
 
-using namespace graphics;
+namespace GDEngine {
+	Bunny::Bunny(std::string name) : MeshObject(name, L"assets/meshes/bunny.obj")
+	{
+	}
 
-Bunny::Bunny(std::string name) : GameObject(name)
-{
-	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
-	MeshManager* meshManager = GraphicsEngine::getInstance()->getMeshManager();
+	Bunny::~Bunny()
+	{
+		MeshObject::~MeshObject();
+	}
 
-	this->mesh = meshManager->createMeshFromFile(L"assets/meshes/bunny.obj");
+	void Bunny::onCreate()
+	{
+		GameObject::onCreate();
+	}
 
-	CBObjectData cbData;
-	cbData.time = 0.0f;
+	void Bunny::update(float deltaTime)
+	{
+		RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+		CBObjectData cbObjectData;
 
-	constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBObjectData));
-}
+		cbObjectData.time = 0.0f;
 
-Bunny::~Bunny()
-{
-	delete constantBuffer;
-}
+		this->updateLocalMatrix();
 
-void Bunny::onCreate()
-{
-	GameObject::onCreate();
-}
+		cbObjectData.worldMatrix.setMatrix(this->m_localMatrix);
 
-void Bunny::update(float deltaTime)
-{
-	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
-	CBObjectData cbObjectData;
+		m_constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbObjectData);
+	}
 
-	cbObjectData.time = 0.0f;
+	void Bunny::draw(int width, int height)
+	{
+		ShaderNames shaderNames;
+		DeviceContext* deviceContext = GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext();
 
-	this->updateLocalMatrix();
-	
-	cbObjectData.worldMatrix.setMatrix(this->localMatrix);
+		Texture* brickTex = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"assets/textures/brick.png");
 
-	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbObjectData);
-}
+		VertexShader* vertexShader = ShaderLibrary::getInstance()->getVertexShader(shaderNames.TEXTURED_VERTEX_SHADER_NAME);
+		PixelShader* pixelShader = ShaderLibrary::getInstance()->getPixelShader(shaderNames.TEXTURED_PIXEL_SHADER_NAME);
 
-void Bunny::draw(int width, int height)
-{
-	ShaderNames shaderNames;
-	DeviceContext* deviceContext = GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext();
+		deviceContext->setTexture(brickTex);
+		deviceContext->setConstantBuffer(m_constantBuffer, 0);
 
-	Texture* brickTex = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"assets/textures/brick.png");
+		deviceContext->setVertexShader(vertexShader);
+		deviceContext->setPixelShader(pixelShader);
 
-	VertexShader* vertexShader = ShaderLibrary::getInstance()->getVertexShader(shaderNames.TEXTURED_VERTEX_SHADER_NAME);
-	PixelShader* pixelShader = ShaderLibrary::getInstance()->getPixelShader(shaderNames.TEXTURED_PIXEL_SHADER_NAME);
+		MeshObject::draw(width, height);
+	}
 
-	deviceContext->setTexture(brickTex);
-	deviceContext->setConstantBuffer(constantBuffer, 0);
-
-	deviceContext->setVertexShader(vertexShader);
-	deviceContext->setPixelShader(pixelShader);
-
-	deviceContext->setVertexBuffer(this->mesh->getVertexBuffer());
-	deviceContext->setIndexBuffer(this->mesh->getIndexBuffer());
-
-	deviceContext->drawIndexedTriangleList(this->mesh->getIndexBuffer()->getSizeIndexList(), 0, 0);
-}
-
-void Bunny::onDestroy()
-{
-	GameObject::onDestroy();
+	void Bunny::onDestroy()
+	{
+		GameObject::onDestroy();
+	}
 }

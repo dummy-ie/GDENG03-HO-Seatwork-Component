@@ -1,12 +1,8 @@
 #include "GraphicsEngine.h"
 
-#include <exception>
-
-#include "RenderSystem.h"
 #include "Logger.h"
-#include "ShaderLibrary.h"
 
-using namespace graphics;
+using namespace GDEngine;
 
 RenderSystem* GraphicsEngine::getRenderSystem()
 {
@@ -23,7 +19,7 @@ MeshManager* GraphicsEngine::getMeshManager()
 	return this->meshManager;
 }
 
-GraphicsEngine* GraphicsEngine::P_SHARED_INSTANCE = NULL;
+GraphicsEngine* GraphicsEngine::P_SHARED_INSTANCE = nullptr;
 GraphicsEngine::GraphicsEngine()
 {
 	try
@@ -32,7 +28,7 @@ GraphicsEngine::GraphicsEngine()
 	}
 	catch (...)
 	{
-		throw std::exception("RenderSystem not created successfully");
+		Logger::throw_exception("RenderSystem not created successfully");
 	}
 	try
 	{
@@ -40,7 +36,7 @@ GraphicsEngine::GraphicsEngine()
 	}
 	catch (...)
 	{
-		throw std::exception("TextureManager not created successfully");
+		Logger::throw_exception("TextureManager not created successfully");
 	}
 	try
 	{
@@ -48,9 +44,9 @@ GraphicsEngine::GraphicsEngine()
 	}
 	catch (...)
 	{
-		throw std::exception("MeshManager not created successfully");
+		Logger::throw_exception("MeshManager not created successfully");
 	}
-	debug::Logger::log(this, "Initialized");
+	Logger::log(this, "Initialized");
 }
 GraphicsEngine::~GraphicsEngine()
 {
@@ -58,7 +54,7 @@ GraphicsEngine::~GraphicsEngine()
 	delete textureManager;
 	delete renderSystem;
 	P_SHARED_INSTANCE = nullptr;
-	debug::Logger::log(this, "Released");
+	Logger::log(this, "Destroyed");
 }
 GraphicsEngine::GraphicsEngine(const GraphicsEngine&) {}
 
@@ -69,14 +65,13 @@ GraphicsEngine* GraphicsEngine::getInstance() {
 void GraphicsEngine::initialize()
 {
 	if (P_SHARED_INSTANCE)
-		throw std::exception("Graphics Engine already created");
+	{
+		Logger::throw_exception("Graphics Engine already created");
+	}
 	P_SHARED_INSTANCE = new GraphicsEngine();
 }
 
 void GraphicsEngine::destroy()
 {
-	if (P_SHARED_INSTANCE)
-	{
-		delete P_SHARED_INSTANCE;
-	}
+	delete P_SHARED_INSTANCE;
 }

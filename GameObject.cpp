@@ -4,31 +4,35 @@
 #include "Logger.h"
 #include "PhysicsSystem.h"
 
+
+using namespace GDEngine;
+
 GameObject::GameObject(std::string name)
 {
-	HRESULT result = CoCreateGuid(&guid);
-	if (!debug::Logger::log(this, result))
-		throw std::exception("Game Object GUID creation failed");
+	HRESULT result = CoCreateGuid(&m_guid);
+	if (!Logger::log(this, result)) {
+		Logger::throw_exception("Game Object GUID creation failed");
+	}
 
-	this->name = name;
-	this->localPosition = Vector3D::zero();
-	this->localRotation = Vector3D::zero();
-	this->localScale = Vector3D::one();
-	this->orientation = Vector4D(0, 0, 0, 1);
-	this->physics = false;
+	this->m_name = name;
+	this->m_localPosition = Vector3D::zero();
+	this->m_localRotation = Vector3D::zero();
+	this->m_localScale = Vector3D::one();
+	this->m_orientation = Vector4D(0, 0, 0, 1);
+	this->m_physics = false;
 
 	this->updateLocalMatrix();
 
-	this->active = true;
+	this->m_active = true;
 }
 
 GameObject::~GameObject()
 {
-	for (Component* component : listComponents)
+	for (Component* component : m_componentList)
 	{
 		component->detachOwner();
 	}
-	this->listComponents.clear();
+	this->m_componentList.clear();
 }
 
 void GameObject::onCreate()
@@ -37,7 +41,7 @@ void GameObject::onCreate()
 
 void GameObject::update(float deltaTime)
 {
-	debug::Logger::log("Updating Game Object : " + this->name);
+	Logger::log("Updating Game Object : " + this->m_name);
 }
 
 void GameObject::draw(int width, int height)
@@ -46,105 +50,105 @@ void GameObject::draw(int width, int height)
 
 void GameObject::setPosition(Vector3D position)
 {
-	this->localPosition = position;
+	this->m_localPosition = position;
 }
 
 void GameObject::setPosition(float x, float y, float z)
 {
-	this->localPosition = Vector3D(x, y, z);
+	this->m_localPosition = Vector3D(x, y, z);
 
 }
 
 Vector3D GameObject::getLocalPosition()
 {
-	return this->localPosition;
+	return this->m_localPosition;
 }
 
 void GameObject::setScale(float x, float y, float z)
 {
-	this->localScale = Vector3D(x, y, z);
+	this->m_localScale = Vector3D(x, y, z);
 }
 
 void GameObject::setScale(Vector3D scale)
 {
-	this->localScale = scale;
+	this->m_localScale = scale;
 }
 
 Vector3D GameObject::getLocalScale()
 {
-	return this->localScale;
+	return this->m_localScale;
 }
 
 void GameObject::setRotation(float x, float y, float z)
 {
-	this->localRotation = Vector3D(x, y, z);
+	this->m_localRotation = Vector3D(x, y, z);
 }
 
 void GameObject::setRotation(Vector3D rotation)
 {
-	this->localRotation = rotation;
+	this->m_localRotation = rotation;
 }
 
 void GameObject::setOrientation(Vector4D orientation)
 {
-	this->orientation = orientation;
+	this->m_orientation = orientation;
 }
 
 Vector3D GameObject::getLocalRotation()
 {
-	return this->localRotation;
+	return this->m_localRotation;
 }
 
 void GameObject::setName(std::string name)
 {
-	this->name = name;
+	this->m_name = name;
 }
 
 std::string GameObject::getName()
 {
-	return this->name;
+	return this->m_name;
 }
 
 GUID GameObject::getGuid()
 {
-	return this->guid;
+	return this->m_guid;
 }
 
 void GameObject::updateLocalMatrix()
 {
-	if (!physics)
+	if (!m_physics)
 	{
 		Matrix4x4 transform, rotation, translate;
 		Matrix4x4 temp;
 
 		// Scale
 		transform.setIdentity();
-		transform.setScale(this->localScale);
+		transform.setScale(this->m_localScale);
 
 		// Scale * Rotation
 		/*rotation.setIdentity();
-		rotation.setRotationZ(this->localRotation.z);
+		rotation.setRotationZ(this->m_localRotation.z);
 
 		temp.setIdentity();
-		temp.setRotationY(this->localRotation.y);
+		temp.setRotationY(this->m_localRotation.y);
 		rotation *= temp;
 
 		temp.setIdentity();
-		temp.setRotationX(this->localRotation.x);
+		temp.setRotationX(this->m_localRotation.x);
 		rotation *= temp;*/
 
 		rotation.setIdentity();
-		rotation.setRotation(this->orientation);
+		rotation.setRotation(this->m_orientation);
 
 		// Scale * Rotation * Translation
 		translate.setIdentity();
-		translate.setTranslation(this->localPosition);
+		translate.setTranslation(this->m_localPosition);
 
 
 		translate *= rotation;
 		transform *= translate;
 
-		this->localMatrix = transform;
+		this->m_localMatrix = transform;
 	}
 }
 
@@ -153,23 +157,23 @@ void GameObject::setLocalMatrix(float matrix[16])
 	Matrix4x4 transform, scale, translate, temp;
 
 	/*transform.setIdentity();
-	transform.setScale(this->localScale);
+	transform.setScale(this->m_localScale);
 
 	temp.setIdentity();
 	temp.setMatrix(matrix);
 
 	transform *= temp;
-	this->localMatrix = transform;*/
+	this->m_localMatrix = transform;*/
 
 	//temp.setIdentity();
-	//temp.setTranslation(this->localPosition);
+	//temp.setTranslation(this->m_localPosition);
 	//transform *= temp;
 
 	scale.setIdentity();
-	scale.setScale(this->localScale);
+	scale.setScale(this->m_localScale);
 
 	translate.setIdentity();
-	translate.setTranslation(this->localPosition);
+	translate.setTranslation(this->m_localPosition);
 
 	temp.setIdentity();
 	temp.setMatrix(matrix);
@@ -181,9 +185,9 @@ void GameObject::setLocalMatrix(float matrix[16])
 	scale *= translate;
 	transform = scale;
 
-	this->localMatrix = transform;
+	this->m_localMatrix = transform;
 
-	/*this->localPosition = Vector3D(matrix[12], matrix[13], matrix[14]);
+	/*this->m_localPosition = Vector3D(matrix[12], matrix[13], matrix[14]);
 
 	debug::Logger::log("[" + std::to_string(matrix[0]) + "," + std::to_string(matrix[1]) + "," + std::to_string(matrix[2]) + "," + std::to_string(matrix[3]) + "]");
 	debug::Logger::log("[" + std::to_string(matrix[4]) + "," + std::to_string(matrix[5]) + "," + std::to_string(matrix[6]) + "," + std::to_string(matrix[7]) + "]");
@@ -195,7 +199,7 @@ void GameObject::setLocalMatrix(float matrix[16])
 	//matrix[14] = 0;
 
 	scale.setIdentity();
-	scale.setScale(this->localScale);
+	scale.setScale(this->m_localScale);
 
 	/*temp.setIdentity();
 	temp.setMatrix(matrix);
@@ -204,12 +208,12 @@ void GameObject::setLocalMatrix(float matrix[16])
 
 	Matrix4x4 rotate;
 	rotate.setIdentity();
-	rotate.setRotation(orientation);
+	rotate.setRotation(m_orientation);
 	rotate.transpose();
 	rotate.getMatrix();
 
 	translate.setIdentity();
-	translate.setTranslation(this->localPosition);
+	translate.setTranslation(this->m_localPosition);
 
 	/*debug::Logger::log("[" + std::to_string(m_mat[0]) + "," + std::to_string(m_mat[1]) + "," + std::to_string(m_mat[2]) + "," + std::to_string(m_mat[3]) + "]");
 	debug::Logger::log("[" + std::to_string(m_mat[4]) + "," + std::to_string(m_mat[5]) + "," + std::to_string(m_mat[6]) + "," + std::to_string(m_mat[7]) + "]");
@@ -221,19 +225,19 @@ void GameObject::setLocalMatrix(float matrix[16])
 	scale *= translate;
 	transform = scale;
 
-	this->localMatrix = transform;*/
-	//this->localPosition = this->localMatrix.getTranslation();
+	this->m_localMatrix = transform;*/
+	//this->m_localPosition = this->m_localMatrix.getTranslation();
 }
 
 void GameObject::setLocalMatrix(Vector3D position, Vector4D orientation, float matrix[16])
 {
 	Matrix4x4 transform, scale, translate, temp;
 
-	this->localPosition = position;
-	this->orientation = orientation;
+	this->m_localPosition = position;
+	this->m_orientation = orientation;
 
 	scale.setIdentity();
-	scale.setScale(this->localScale);
+	scale.setScale(this->m_localScale);
 
 	temp.setIdentity();
 	temp.setMatrix(matrix);
@@ -242,12 +246,12 @@ void GameObject::setLocalMatrix(Vector3D position, Vector4D orientation, float m
 	scale *= temp;
 	transform = scale;
 
-	this->localMatrix = transform;
+	this->m_localMatrix = transform;
 }
 
 float* GameObject::getLocalMatrix()
 {
-	return this->localMatrix.getMatrix();
+	return this->m_localMatrix.getMatrix();
 }
 
 
@@ -262,20 +266,20 @@ float* GameObject::getPhysicsLocalMatrix()
 
 	// Scale * Rotation
 	rotation.setIdentity();
-	rotation.setRotationZ(this->localRotation.z);
+	rotation.setRotationZ(this->m_localRotation.z);
 
 	temp.setIdentity();
-	temp.setRotationY(this->localRotation.y);
+	temp.setRotationY(this->m_localRotation.y);
 	rotation *= temp;
 
 	temp.setIdentity();
-	temp.setRotationX(this->localRotation.x);
+	temp.setRotationX(this->m_localRotation.x);
 	rotation *= temp;
 
 	transform *= rotation;
 	// Scale * Rotation * Translation
 	temp.setIdentity();
-	temp.setTranslation(this->localPosition);
+	temp.setTranslation(this->m_localPosition);
 	transform *= temp;
 
 	return transform.getMatrix();
@@ -283,28 +287,28 @@ float* GameObject::getPhysicsLocalMatrix()
 
 bool GameObject::isActive()
 {
-	return this->active;
+	return this->m_active;
 
 }
 
 void GameObject::setActive(bool active)
 {
-	this->active = active;
+	this->m_active = active;
 }
 
 bool GameObject::isPhysics()
 {
-	return this->physics;
+	return this->m_physics;
 }
 
 void GameObject::setPhysics(bool physics)
 {
-	this->physics = physics;
+	this->m_physics = physics;
 }
 
 void GameObject::attachComponent(Component* component)
 {
-	this->listComponents.push_back(component);
+	this->m_componentList.push_back(component);
 	component->attachOwner(this);
 }
 
@@ -312,64 +316,64 @@ void GameObject::detachComponent(Component* component)
 {
 	int index = -1;
 
-	for (int i = 0; i < this->listComponents.size() && index == -1; i++)
+	for (int i = 0; i < this->m_componentList.size() && index == -1; i++)
 	{
-		if (this->listComponents[i] == component)
+		if (this->m_componentList[i] == component)
 			index = i;
 	}
 
 	if (index != -1)
-		this->listComponents.erase(this->listComponents.begin() + index);
+		this->m_componentList.erase(this->m_componentList.begin() + index);
 }
 
 Component* GameObject::findComponentByName(std::string name)
 {
-	for (int i = 0; i < this->listComponents.size(); i++)
+	for (int i = 0; i < this->m_componentList.size(); i++)
 	{
-		if (this->listComponents[i]->getName() == name)
+		if (this->m_componentList[i]->getName() == name)
 		{
-			return this->listComponents[i];
+			return this->m_componentList[i];
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 Component* GameObject::findComponentOfType(Component::ComponentType type, std::string name)
 {
-	for (int i = 0; i < this->listComponents.size(); i++)
+	for (int i = 0; i < this->m_componentList.size(); i++)
 	{
-		if (this->listComponents[i]->getName() == name && this->listComponents[i]->getType() == type)
+		if (this->m_componentList[i]->getName() == name && this->m_componentList[i]->getType() == type)
 		{
-			return this->listComponents[i];
+			return this->m_componentList[i];
 		}
 	}
 
 	return NULL;
 }
 
-std::vector<Component*> GameObject::getComponentsOfType(Component::ComponentType type)
+GameObject::ComponentList GameObject::getComponentsOfType(Component::ComponentType type)
 {
 	std::vector<Component*> components;
-	for (int i = 0; i < this->listComponents.size(); i++)
+	for (int i = 0; i < this->m_componentList.size(); i++)
 	{
-		if (this->listComponents[i]->getType() == type)
+		if (this->m_componentList[i]->getType() == type)
 		{
-			components.push_back(this->listComponents[i]);
+			components.push_back(this->m_componentList[i]);
 		}
 	}
 
 	return components;
 }
 
-std::vector<Component*> GameObject::getComponentsOfTypeRecursive(Component::ComponentType type)
+GameObject::ComponentList GameObject::getComponentsOfTypeRecursive(Component::ComponentType type)
 {
 	std::vector<Component*> components;
-	for (int i = 0; i < this->listComponents.size(); i++)
+	for (int i = 0; i < this->m_componentList.size(); i++)
 	{
-		if (this->listComponents[i]->getType() == type)
+		if (this->m_componentList[i]->getType() == type)
 		{
-			components.push_back(this->listComponents[i]);
+			components.push_back(this->m_componentList[i]);
 		}
 	}
 

@@ -1,21 +1,18 @@
 #pragma once
 
-#include "GameObject.h"
+#include "MeshObject.h"
 
-class Bunny : public GameObject
-{
-private:
-	Mesh* mesh;
-	ConstantBuffer* constantBuffer;
+namespace GDEngine {
+	class Bunny : public MeshObject
+	{
+	public:
+		Bunny(std::string name);
+		~Bunny() override;
 
-public:
-	Bunny(std::string name);
-	~Bunny();
-
-public:
-	void onCreate() override;
-	void update(float deltaTime) override;
-	void draw(int width, int height) override;
-	void onDestroy() override;
-};
-
+	public:
+		void onCreate() override;
+		void update(float deltaTime) override;
+		void draw(int width, int height) override;
+		void onDestroy() override;
+	};
+}

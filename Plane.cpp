@@ -1,106 +1,95 @@
 #include "Plane.h"
 
-#include "AppWindow.h"
-#include "CameraManager.h"
+#include "GraphicsEngine.h"
 #include "ShaderLibrary.h"
 
-Plane::Plane(std::string name) : GameObject(name)
-{
-
-	Vector3D color1 = Vector3D(255.0f / 255.0f, 227.0f / 255.0f, 222.0f / 255.0f);
-	Vector3D color2 = Vector3D(241.0f / 255.0f, 204.0f / 255.0f, 202.0f / 255.0f);
-	Vector3D color3 = Vector3D(226.0f / 255.0f, 180.0f / 255.0f, 181.0f / 255.0f);
-	Vector3D color4 = Vector3D(212.0f / 255.0f, 157.0f / 255.0f, 161.0f / 255.0f);
-
-	/*Vector3D color1 = Vector3D(1, 1, 1);
-	Vector3D color2 = Vector3D(1, 1, 1);
-	Vector3D color3 = Vector3D(1, 1, 1);
-	Vector3D color4 = Vector3D(1, 1, 1);*/
-
-	vertex list[] =
+namespace GDEngine {
+	Plane::Plane(std::string name) : GameObject(name)
 	{
-		{ Vector3D(-8.0f,0.0f,-8.0f),   color1, color1 },
-		{ Vector3D(-8.0f,0.0f,8.0f),   color2, color2 },
-		{ Vector3D(8.0f,0.0f,-8.0f), color3,  color3 },
-		{ Vector3D(8.0f,0.0f,8.0f),    color4, color4 },
 
-		{ Vector3D(-8.0f,0.0f,-8.0f),   color1, color1 },
-		{ Vector3D(-8.0f,0.0f,8.0f),   color2, color2 },
-		{ Vector3D(8.0f,0.0f,-8.0f), color3,  color3 },
-		{ Vector3D(8.0f,0.0f,8.0f),    color4, color4 }
-	};
+		Vector3D color1 = Vector3D(255.0f / 255.0f, 227.0f / 255.0f, 222.0f / 255.0f);
+		Vector3D color2 = Vector3D(241.0f / 255.0f, 204.0f / 255.0f, 202.0f / 255.0f);
+		Vector3D color3 = Vector3D(226.0f / 255.0f, 180.0f / 255.0f, 181.0f / 255.0f);
+		Vector3D color4 = Vector3D(212.0f / 255.0f, 157.0f / 255.0f, 161.0f / 255.0f);
 
-	/*vertex list[] =
+		vertex list[] =
+		{
+			{ Vector3D(-8.0f,0.0f,-8.0f),   color1, color1 },
+			{ Vector3D(-8.0f,0.0f,8.0f),   color2, color2 },
+			{ Vector3D(8.0f,0.0f,-8.0f), color3,  color3 },
+			{ Vector3D(8.0f,0.0f,8.0f),    color4, color4 },
+
+			{ Vector3D(-8.0f,0.0f,-8.0f),   color1, color1 },
+			{ Vector3D(-8.0f,0.0f,8.0f),   color2, color2 },
+			{ Vector3D(8.0f,0.0f,-8.0f), color3,  color3 },
+			{ Vector3D(8.0f,0.0f,8.0f),    color4, color4 }
+		};
+
+		RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+
+		CBObjectData cbData;
+		cbData.time = 0.0f;
+
+		m_constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBObjectData));
+
+		UINT sizeList = ARRAYSIZE(list);
+
+		ShaderNames shaderNames;
+
+		void* shaderByteCode = NULL;
+		size_t sizeShader = 0;
+
+		ShaderLibrary::getInstance()->requestVertexShaderData(shaderNames.BASE_VERTEX_SHADER_NAME, &shaderByteCode, &sizeShader);
+
+		m_vertexBuffer = renderSystem->createVertexBuffer(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
+	}
+
+	Plane::~Plane()
 	{
-		{ Vector3D(-0.5f,-0.5f,0.0f),   Vector3D(1, 1, 1), Vector3D(1, 1, 1) },
-		{ Vector3D(-0.5f,0.5f,0.0f),   Vector3D(1, 1, 1), Vector3D(1, 1, 1) },
-		{ Vector3D(0.5f,-0.5f,0.0f), Vector3D(1, 1, 1),  Vector3D(1, 1, 1) },
-		{ Vector3D(0.5f,0.5f,0.0f),    Vector3D(1, 1, 1), Vector3D(1, 1, 1) }
-	};*/
-	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+		delete m_constantBuffer;
+		delete m_vertexBuffer;
+		GameObject::~GameObject();
+	}
 
-	CBObjectData cbData;
-	cbData.time = 0.0f;
+	void Plane::onCreate()
+	{
+		GameObject::onCreate();
+	}
 
-	constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBObjectData));
+	void Plane::update(float deltaTime)
+	{
+		RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-	UINT sizeList = ARRAYSIZE(list);
+		CBObjectData cbData;
+		cbData.time = 0.0f;
 
-	ShaderNames shaderNames;
+		this->updateLocalMatrix();
 
-	void* shaderByteCode = NULL;
-	size_t sizeShader = 0;
+		cbData.worldMatrix.setMatrix(this->m_localMatrix);
 
-	ShaderLibrary::getInstance()->requestVertexShaderData(shaderNames.BASE_VERTEX_SHADER_NAME, &shaderByteCode, &sizeShader);
+		m_constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbData);
+	}
 
-	vertexBuffer = renderSystem->createVertexBuffer(list, sizeof(vertex), sizeList, shaderByteCode, sizeShader);
-}
+	// Sets shaders and draws afterwards
+	void Plane::draw(int width, int height)
+	{
+		ShaderNames shaderNames;
+		RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 
-Plane::~Plane()
-{
-	GameObject::~GameObject();
-}
+		VertexShader* vertexShader = ShaderLibrary::getInstance()->getVertexShader(shaderNames.BASE_VERTEX_SHADER_NAME);
+		PixelShader* pixelShader = ShaderLibrary::getInstance()->getPixelShader(shaderNames.BASE_PIXEL_SHADER_NAME);
 
-void Plane::onCreate()
-{
-	GameObject::onCreate();
-}
+		renderSystem->getImmediateDeviceContext()->setConstantBuffer(m_constantBuffer, 0);
 
-void Plane::update(float deltaTime)
-{
-	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+		renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
+		renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);
 
-	CBObjectData cbData;
-	cbData.time = 0.0f;
+		renderSystem->getImmediateDeviceContext()->setVertexBuffer(m_vertexBuffer);
 
-	this->updateLocalMatrix();
+		renderSystem->getImmediateDeviceContext()->drawTriangleStrip(m_vertexBuffer->getSizeVertexList(), 0);
+	}
 
-	cbData.worldMatrix.setMatrix(this->localMatrix);
-
-	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbData);
-}
-
-// Sets shaders and draws afterwards
-void Plane::draw(int width, int height)
-{
-	ShaderNames shaderNames;
-	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
-
-	VertexShader* vertexShader = ShaderLibrary::getInstance()->getVertexShader(shaderNames.BASE_VERTEX_SHADER_NAME);
-	PixelShader* pixelShader = ShaderLibrary::getInstance()->getPixelShader(shaderNames.BASE_PIXEL_SHADER_NAME);
-
-	renderSystem->getImmediateDeviceContext()->setConstantBuffer(constantBuffer, 0);
-
-	renderSystem->getImmediateDeviceContext()->setVertexShader(vertexShader);
-	renderSystem->getImmediateDeviceContext()->setPixelShader(pixelShader);
-
-	renderSystem->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
-
-	renderSystem->getImmediateDeviceContext()->drawTriangleStrip(vertexBuffer->getSizeVertexList(), 0);
-}
-
-void Plane::onDestroy()
-{
-	delete constantBuffer;
-	delete vertexBuffer;
+	void Plane::onDestroy()
+	{
+	}
 }

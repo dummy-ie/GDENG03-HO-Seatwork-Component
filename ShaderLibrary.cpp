@@ -1,11 +1,10 @@
 #include "ShaderLibrary.h"
 
 #include "GraphicsEngine.h"
-#include "Logger.h"
-#include "VertexShader.h"
-#include "PixelShader.h"
 
-using namespace graphics;
+#include "Logger.h"
+
+using namespace GDEngine;
 
 void ShaderLibrary::requestVertexShaderData(std::wstring vertexShaderName, void** shaderByteCode, size_t* sizeShader)
 {
@@ -16,7 +15,7 @@ void ShaderLibrary::requestVertexShaderData(std::wstring vertexShaderName, void*
 VertexShader* ShaderLibrary::getVertexShader(std::wstring vertexShaderName)
 {
 	if (this->activeVertexShaders[vertexShaderName] == NULL)
-		debug::Logger::log(L"Vertex shader " + vertexShaderName + L" not found.");
+		Logger::log(L"Vertex shader " + vertexShaderName + L" not found.");
 
 	return this->activeVertexShaders[vertexShaderName];
 }
@@ -24,7 +23,7 @@ VertexShader* ShaderLibrary::getVertexShader(std::wstring vertexShaderName)
 PixelShader* ShaderLibrary::getPixelShader(std::wstring pixelShaderName)
 {
 	if (this->activePixelShaders[pixelShaderName] == NULL)
-		debug::Logger::log(L"Pixel shader " + pixelShaderName + L" not found.");
+		Logger::log(L"Pixel shader " + pixelShaderName + L" not found.");
 
 	return this->activePixelShaders[pixelShaderName];
 }
@@ -51,7 +50,7 @@ ShaderLibrary::ShaderLibrary()
 	renderSystem->compileVertexShader(shaderNames.VERTEX_MESH_LAYOUT_SHADER_NAME.c_str(), "main", &shaderData.shaderByteCode, &shaderData.sizeShader);
 	this->activeVertexShaders[shaderNames.VERTEX_MESH_LAYOUT_SHADER_NAME] = renderSystem->createVertexShader(shaderData.shaderByteCode, shaderData.sizeShader);
 
-	debug::Logger::log(this, "Initialized");
+	Logger::log(this, "Initialized");
 }
 
 ShaderLibrary::~ShaderLibrary()
@@ -62,10 +61,10 @@ ShaderLibrary::~ShaderLibrary()
 
 	this->activeVertexShaders.clear();
 	this->activePixelShaders.clear();
-	debug::Logger::log(this, "Destroyed");
+	Logger::log(this, "Destroyed");
 }
 
-ShaderLibrary* ShaderLibrary::P_SHARED_INSTANCE = NULL;
+ShaderLibrary* ShaderLibrary::P_SHARED_INSTANCE = nullptr;
 ShaderLibrary::ShaderLibrary(ShaderLibrary const&) {}
 ShaderLibrary* ShaderLibrary::getInstance()
 {
@@ -74,13 +73,12 @@ ShaderLibrary* ShaderLibrary::getInstance()
 void ShaderLibrary::initialize()
 {
 	if (P_SHARED_INSTANCE)
-		throw std::exception("Shader Library already created");
+	{
+		Logger::throw_exception("Shader Library already created");
+	}
 	P_SHARED_INSTANCE = new ShaderLibrary();
 }
 void ShaderLibrary::destroy()
 {
-	if (P_SHARED_INSTANCE)
-	{
-		delete P_SHARED_INSTANCE;
-	}
+	delete P_SHARED_INSTANCE;
 }

@@ -1,72 +1,57 @@
 #include "Teapot.h"
 
-#include "ConstantBuffer.h"
+#include "GraphicsEngine.h"
+
 #include "ShaderLibrary.h"
-#include "DeviceContext.h"
-#include "Mesh.h"
 
-using namespace graphics;
+namespace GDEngine {
+	Teapot::Teapot(std::string name) : MeshObject(name, L"assets/meshes/teapot.obj")
+	{
+	}
 
-Teapot::Teapot(std::string name) : GameObject(name)
-{
-	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
-	MeshManager* meshManager = GraphicsEngine::getInstance()->getMeshManager();
+	Teapot::~Teapot()
+	{
+		MeshObject::~MeshObject();
+	}
 
-	this->teapotMesh = meshManager->createMeshFromFile(L"assets/meshes/teapot.obj");
+	void Teapot::onCreate()
+	{
+		GameObject::onCreate();
+	}
 
-	CBObjectData cbData;
-	cbData.time = 0.0f;
+	void Teapot::update(float deltaTime)
+	{
+		RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
+		CBObjectData cbObjectData;
 
-	constantBuffer = renderSystem->createConstantBuffer(&cbData, sizeof(CBObjectData));
-}
+		cbObjectData.time = 0.0f;
 
-Teapot::~Teapot()
-{
-	delete constantBuffer;
-}
+		this->updateLocalMatrix();
 
-void Teapot::onCreate()
-{
-	GameObject::onCreate();
-}
+		cbObjectData.worldMatrix.setMatrix(this->m_localMatrix);
 
-void Teapot::update(float deltaTime)
-{
-	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
-	CBObjectData cbObjectData;
+		m_constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbObjectData);
+	}
 
-	cbObjectData.time = 0.0f;
+	void Teapot::draw(int width, int height)
+	{
+		ShaderNames shaderNames;
+		DeviceContext* deviceContext = GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext();
 
-	this->updateLocalMatrix();
+		Texture* brickTex = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"assets/textures/brick.png");
 
-	cbObjectData.worldMatrix.setMatrix(this->localMatrix);
+		VertexShader* vertexShader = ShaderLibrary::getInstance()->getVertexShader(shaderNames.TEXTURED_VERTEX_SHADER_NAME);
+		PixelShader* pixelShader = ShaderLibrary::getInstance()->getPixelShader(shaderNames.TEXTURED_PIXEL_SHADER_NAME);
 
-	constantBuffer->update(renderSystem->getImmediateDeviceContext(), &cbObjectData);
-}
+		deviceContext->setTexture(brickTex);
 
-void Teapot::draw(int width, int height)
-{
-	ShaderNames shaderNames;
-	DeviceContext* deviceContext = GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext();
+		deviceContext->setVertexShader(vertexShader);
+		deviceContext->setPixelShader(pixelShader);
+		MeshObject::draw(width, height);
+	}
 
-	Texture* brickTex = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"assets/textures/brick.png");
-
-	VertexShader* vertexShader = ShaderLibrary::getInstance()->getVertexShader(shaderNames.TEXTURED_VERTEX_SHADER_NAME);
-	PixelShader* pixelShader = ShaderLibrary::getInstance()->getPixelShader(shaderNames.TEXTURED_PIXEL_SHADER_NAME);
-
-	deviceContext->setTexture(brickTex);
-	deviceContext->setConstantBuffer(constantBuffer, 0);
-
-	deviceContext->setVertexShader(vertexShader);
-	deviceContext->setPixelShader(pixelShader);
-
-	deviceContext->setVertexBuffer(this->teapotMesh->getVertexBuffer());
-	deviceContext->setIndexBuffer(this->teapotMesh->getIndexBuffer());
-
-	deviceContext->drawIndexedTriangleList(this->teapotMesh->getIndexBuffer()->getSizeIndexList(), 0, 0);
-}
-
-void Teapot::onDestroy()
-{
-	GameObject::onDestroy();
+	void Teapot::onDestroy()
+	{
+		GameObject::onDestroy();
+	}
 }

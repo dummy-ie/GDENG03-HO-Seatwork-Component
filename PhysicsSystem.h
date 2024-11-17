@@ -5,31 +5,36 @@
 #include <vector>
 #include <reactphysics3d/reactphysics3d.h>
 
-using namespace reactphysics3d;
-
-class PhysicsComponent;
-class PhysicsSystem
+namespace GDEngine
 {
-private:
-	std::unordered_map<std::string, PhysicsComponent*> mapComponents;
-	std::vector<PhysicsComponent*> listComponents;
+	using namespace reactphysics3d;
+	class PhysicsComponent;
+	class PhysicsSystem
+	{
+	private:
+		typedef std::unordered_map<std::string, PhysicsComponent*> PhysicsComponentMap;
+		typedef std::vector<PhysicsComponent*> PhysicsComponentList;
 
-	PhysicsCommon* physicsCommon;
-	PhysicsWorld* physicsWorld;
+	private:
+		PhysicsComponentMap m_componentMap;
+		PhysicsComponentList m_componentList;
 
-public:
-	PhysicsSystem();
-	~PhysicsSystem();
+		PhysicsCommon* m_physicsCommon;
+		PhysicsWorld* m_physicsWorld;
 
-public:
-	void registerComponent(PhysicsComponent* component);
-	void unregisterComponent(PhysicsComponent* component);
-	void unregisterComponentByName(std::string name);
-	PhysicsComponent* findComponentByName(std::string name);
-	std::vector<PhysicsComponent*> getAllComponents();
+	public:
+		PhysicsSystem();
+		~PhysicsSystem();
 
-	void updateAllComponents();
-	PhysicsWorld* getPhysicsWorld();
-	PhysicsCommon* getPhysicsCommon();
-};
+	public:
+		void registerComponent(PhysicsComponent* component);
+		void unregisterComponent(PhysicsComponent* component);
+		void unregisterComponentByName(std::string name);
+		PhysicsComponent* findComponentByName(std::string name);
+		PhysicsComponentList getAllComponents();
 
+		void updateAllComponents();
+		PhysicsWorld* getPhysicsWorld();
+		PhysicsCommon* getPhysicsCommon();
+	};
+}

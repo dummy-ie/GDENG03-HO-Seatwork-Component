@@ -6,7 +6,7 @@
 #include "Vector3D.h"
 #include "Vector4D.h"
 
-namespace math
+namespace GDEngine
 {
 	class Matrix4x4
 	{
@@ -161,10 +161,10 @@ namespace math
 
 		float* getMatrix()
 		{
-			debug::Logger::log("[" + std::to_string(m_mat[0][0]) + "," + std::to_string(m_mat[0][1]) + "," + std::to_string(m_mat[0][2]) + "," + std::to_string(m_mat[0][3]) + "]");
+			/*debug::Logger::log("[" + std::to_string(m_mat[0][0]) + "," + std::to_string(m_mat[0][1]) + "," + std::to_string(m_mat[0][2]) + "," + std::to_string(m_mat[0][3]) + "]");
 			debug::Logger::log("[" + std::to_string(m_mat[1][0]) + "," + std::to_string(m_mat[1][1]) + "," + std::to_string(m_mat[1][2]) + "," + std::to_string(m_mat[1][3]) + "]");
 			debug::Logger::log("[" + std::to_string(m_mat[2][0]) + "," + std::to_string(m_mat[2][1]) + "," + std::to_string(m_mat[2][2]) + "," + std::to_string(m_mat[2][3]) + "]");
-			debug::Logger::log("[" + std::to_string(m_mat[3][0]) + "," + std::to_string(m_mat[3][1]) + "," + std::to_string(m_mat[3][2]) + "," + std::to_string(m_mat[3][3]) + "]");
+			debug::Logger::log("[" + std::to_string(m_mat[3][0]) + "," + std::to_string(m_mat[3][1]) + "," + std::to_string(m_mat[3][2]) + "," + std::to_string(m_mat[3][3]) + "]");*/
 			return *this->m_mat;
 		}
 

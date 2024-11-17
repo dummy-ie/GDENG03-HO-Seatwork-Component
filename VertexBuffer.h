@@ -3,15 +3,15 @@
 #include <d3d11.h>
 #include "Prerequisites.h"
 
-namespace graphics
+namespace GDEngine
 {
 	class VertexBuffer
 	{
 	protected:
-		RenderSystem* system = nullptr;
+		RenderSystem* m_system = nullptr;
 
-		UINT m_size_vertex;
-		UINT m_size_list;
+		UINT m_sizeVertex;
+		UINT m_sizeList;
 
 		ID3D11InputLayout* m_layout;
 		ID3D11Buffer* m_buffer;

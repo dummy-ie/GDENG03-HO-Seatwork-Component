@@ -1,27 +1,28 @@
 #pragma once
 
-
-class PhysicsSystem;
-class BaseComponentSystem
+namespace GDEngine
 {
-private:
-	PhysicsSystem* physicsSystem;
+	class PhysicsSystem;
+	class BaseComponentSystem
+	{
+	private:
+		PhysicsSystem* m_physicsSystem;
 
-public:
-	PhysicsSystem* getPhysicsSystem();
+	public:
+		PhysicsSystem* getPhysicsSystem();
 
-private:
-	static BaseComponentSystem* P_SHARED_INSTANCE;
+	private:
+		static BaseComponentSystem* P_SHARED_INSTANCE;
 
-private:
-	BaseComponentSystem();
-	~BaseComponentSystem();
-	BaseComponentSystem(BaseComponentSystem const&);
-	BaseComponentSystem& operator = (BaseComponentSystem const&);
+	private:
+		BaseComponentSystem();
+		~BaseComponentSystem();
+		BaseComponentSystem(BaseComponentSystem const&);
+		BaseComponentSystem& operator = (BaseComponentSystem const&);
 
-public:
-	static BaseComponentSystem* getInstance();
-	static void initialize();
-	static void destroy();
-};
-
+	public:
+		static BaseComponentSystem* getInstance();
+		static void initialize();
+		static void destroy();
+	};
+}

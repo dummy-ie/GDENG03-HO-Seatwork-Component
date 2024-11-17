@@ -1,11 +1,14 @@
 #include "ProfilerScreen.h"
 
 #include "imgui.h"
-#include "UIManager.h"
+#include "Logger.h"
+
+using namespace GDEditor;
+using namespace GDEngine;
 
 ProfilerScreen::ProfilerScreen() : UIScreen("ProfilerScreen")
 {
-    debug::Logger::log(this, "Initialized");
+    Logger::log(this, "Initialized");
 }
 
 ProfilerScreen::~ProfilerScreen()

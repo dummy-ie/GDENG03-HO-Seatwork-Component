@@ -5,7 +5,7 @@
 
 #include "Prerequisites.h"
 
-namespace graphics
+namespace GDEngine
 {
 	class ShaderNames
 	{
@@ -22,8 +22,12 @@ namespace graphics
 	class ShaderLibrary
 	{
 	private:
-		std::unordered_map<std::wstring, VertexShader*> activeVertexShaders;
-		std::unordered_map<std::wstring, PixelShader*> activePixelShaders;
+		typedef std::unordered_map<std::wstring, VertexShader*> VertexShaderMap;
+		typedef std::unordered_map<std::wstring, PixelShader*> PixelShaderMap;
+
+	private:
+		VertexShaderMap activeVertexShaders;
+		PixelShaderMap activePixelShaders;
 
 	public:
 		class ShaderData

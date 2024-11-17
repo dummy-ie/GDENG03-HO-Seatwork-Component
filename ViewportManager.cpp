@@ -1,14 +1,17 @@
 #include "ViewportManager.h"
 
+using namespace GDEditor;
 
-ViewportManager* ViewportManager::P_SHARED_INSTANCE = NULL;
+ViewportManager* ViewportManager::P_SHARED_INSTANCE = nullptr;
 
 ViewportManager::ViewportManager()
 {
+	Logger::log(this, "Initialized");
 }
 
 ViewportManager::~ViewportManager()
 {
+	Logger::log(this, "Destroyed");
 }
 
 ViewportManager::ViewportManager(const ViewportManager&) {}
@@ -23,6 +26,10 @@ ViewportManager* ViewportManager::getInstance()
 
 void ViewportManager::initialize()
 {
+	if (P_SHARED_INSTANCE)
+	{
+		Logger::throw_exception("Viewport Manager already created");
+	}
 	P_SHARED_INSTANCE = new ViewportManager();
 }
 

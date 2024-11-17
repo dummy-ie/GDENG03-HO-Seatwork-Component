@@ -1,21 +1,18 @@
 #pragma once
 
-#include "GameObject.h"
+#include "MeshObject.h"
 
-class Armadillo : public GameObject
-{
-private:
-	Mesh* mesh;
-	ConstantBuffer* constantBuffer;
+namespace GDEngine {
+	class Armadillo : public MeshObject
+	{
+	public:
+		Armadillo(std::string name);
+		~Armadillo() override;
 
-public:
-	Armadillo(std::string name);
-	~Armadillo();
-
-public:
-	void onCreate() override;
-	void update(float deltaTime) override;
-	void draw(int width, int height) override;
-	void onDestroy() override;
-};
-
+	public:
+		void onCreate() override;
+		void update(float deltaTime) override;
+		void draw(int width, int height) override;
+		void onDestroy() override;
+	};
+}
