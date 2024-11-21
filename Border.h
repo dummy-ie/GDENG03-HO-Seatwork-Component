@@ -3,7 +3,7 @@
 #include "GameObject.h"
 
 namespace GDEngine {
-	class Border : public GameObject
+	class Border : public AGameObject
 	{
 	private:
 		VertexBuffer* m_vertexBuffer;

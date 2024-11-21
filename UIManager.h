@@ -19,6 +19,8 @@ public:
 	const std::string COLOR_PICKER_SCREEN = "COLOR_PICKER_SCREEN";
 	const std::string VIEWPORT_SCREEN = "VIEWPORT_SCREEN";
 	const std::string TOOLS_SCREEN = "TOOLS_SCREEN";
+	const std::string ACTION_SCREEN = "ACTION_SCREEN";
+	const std::string PLAYBACK_SCREEN = "PLAYBACK_SCREEN";
 };
 
 	class UIManager

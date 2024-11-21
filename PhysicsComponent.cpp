@@ -7,7 +7,7 @@
 
 using namespace GDEngine;
 
-PhysicsComponent::PhysicsComponent(std::string name, GameObject* owner) : Component(name, Physics, owner)
+PhysicsComponent::PhysicsComponent(std::string name, AGameObject* owner) : AComponent(name, Physics, owner)
 {
 	BaseComponentSystem::getInstance()->getPhysicsSystem()->registerComponent(this);
 	PhysicsCommon* physicsCommon = BaseComponentSystem::getInstance()->getPhysicsSystem()->getPhysicsCommon();
@@ -47,7 +47,7 @@ PhysicsComponent::PhysicsComponent(std::string name, GameObject* owner) : Compon
 PhysicsComponent::~PhysicsComponent()
 {
 	BaseComponentSystem::getInstance()->getPhysicsSystem()->unregisterComponent(this);
-	Component::~Component();
+	AComponent::~AComponent();
 
 	PhysicsWorld* physicsWorld = BaseComponentSystem::getInstance()->getPhysicsSystem()->getPhysicsWorld();
 	physicsWorld->destroyRigidBody(this->m_rigidBody);
@@ -79,7 +79,7 @@ void PhysicsComponent::perform(float deltaTime)
 	const Vector3D position2 = this->getOwner()->getLocalPosition();
 
 	//this->getOwner()->setLocalMatrix(Vector3D(position.x, position.y, position.z), Vector4D(orientation.x, orientation.y, orientation.z, orientation.w), matrix);
-	Logger::log("Updating Component : " + this->m_name);
+	//Logger::log("Updating Component : " + this->m_name);
 }
 
 RigidBody* PhysicsComponent::getRigidBody()

@@ -15,7 +15,7 @@ namespace GDEngine {
 
 	void Bunny::onCreate()
 	{
-		GameObject::onCreate();
+		AGameObject::onCreate();
 	}
 
 	void Bunny::update(float deltaTime)
@@ -53,6 +53,6 @@ namespace GDEngine {
 
 	void Bunny::onDestroy()
 	{
-		GameObject::onDestroy();
+		AGameObject::onDestroy();
 	}
 }

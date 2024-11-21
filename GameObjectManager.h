@@ -10,13 +10,13 @@ namespace GDEngine
 	class GameObjectManager
 	{
 	private:
-		typedef std::unordered_map<std::string, GameObject*> GameObjectTable;
-		typedef std::vector<GameObject*> GameObjectList;
+		typedef std::unordered_map<std::string, AGameObject*> GameObjectTable;
+		typedef std::vector<AGameObject*> GameObjectList;
 
 	private:
 		GameObjectTable m_gameObjectTable;
 		GameObjectList m_gameObjectList;
-		GameObject* m_selectedObject;
+		AGameObject* m_selectedObject;
 
 	public:
 		void createCube();
@@ -33,15 +33,19 @@ namespace GDEngine
 		void draw(int width, int height);
 
 		GameObjectList getAllObjects();
-		GameObject* findObjectByName(std::string name);
-		void addObject(GameObject* gameObject);
-		void deleteObject(GameObject* gameObject);
+		AGameObject* findObjectByName(std::string name);
+		void addObject(AGameObject* gameObject);
+		void deleteObject(AGameObject* gameObject);
 		void deleteObjectByName(std::string name);
 		void deleteAllObjects();
 		void setSelectedObject(std::string name);
 		void setSelectedObject(GUID guid);
-		void setSelectedObject(GameObject* gameObject);
-		GameObject* getSelectedObject();
+		void setSelectedObject(AGameObject* gameObject);
+		AGameObject* getSelectedObject();
+
+		void saveEditStates();
+		void restoreEditStates();
+		void applyAction(EditorAction* action);
 
 	private:
 		static GameObjectManager* P_SHARED_INSTANCE;

@@ -7,7 +7,7 @@
 
 using namespace GDEngine;
 
-Camera::Camera(std::string name) : GameObject(name)
+Camera::Camera(std::string name) : AGameObject(name)
 {
 	CBCameraData cbData;
 	constantBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createConstantBuffer(&cbData, sizeof(CBCameraData));
@@ -20,12 +20,12 @@ Camera::Camera(std::string name) : GameObject(name)
 Camera::~Camera()
 {
 	delete constantBuffer;
-	GameObject::~GameObject();
+	AGameObject::~AGameObject();
 }
 
 void Camera::onCreate()
 {
-	GameObject::onCreate();
+	AGameObject::onCreate();
 }
 
 void Camera::update(float deltaTime)
@@ -108,7 +108,7 @@ void Camera::updateProjectionMatrix()
 
 void Camera::onDestroy()
 {
-	GameObject::onDestroy();
+	AGameObject::onDestroy();
 }
 
 Matrix4x4 Camera::getViewMatrix()

@@ -12,6 +12,8 @@
 #include "Teapot.h"
 #include "TexturedCube.h"
 
+#include "EditorAction.h"
+
 #include "Logger.h"
 
 using namespace GDEngine;
@@ -40,12 +42,12 @@ void GameObjectManager::createPhysicsPlane()
 	plane->setPhysics(true);
 	this->addObject(plane);
 	plane->attachComponent(new PhysicsComponent("PhysicsComponent " + plane->getName(), plane));
-	PhysicsComponent* component = (PhysicsComponent*)plane->findComponentOfType(Component::ComponentType::Physics, "PhysicsComponent " + plane->getName());
+	PhysicsComponent* component = (PhysicsComponent*)plane->findComponentOfType(AComponent::ComponentType::Physics, "PhysicsComponent " + plane->getName());
 	component->getRigidBody()->setType(BodyType::KINEMATIC);
 
 	/*Plane* plane = new Plane("Physics Plane");
 	plane->attachComponent(new PhysicsComponent("PhysicsComponent", plane));
-	PhysicsComponent* component = (PhysicsComponent*)plane->findComponentOfType(Component::ComponentType::Physics, "PhysicsComponent");
+	PhysicsComponent* component = (PhysicsComponent*)plane->findComponentOfType(AComponent::ComponentType::Physics, "PhysicsComponent");
 	component->getRigidBody()->setType(BodyType::KINEMATIC);
 	this->addObject(plane);*/
 }
@@ -88,19 +90,18 @@ void GameObjectManager::createArmadillo()
 
 void GameObjectManager::update(float deltaTime)
 {
-	for (GameObject* gameObject : this->m_gameObjectList)
+	for (AGameObject* gameObject : this->m_gameObjectList)
 	{
 		if (gameObject->isActive())
 		{
 			gameObject->update(deltaTime);
 		}
 	}
-	BaseComponentSystem::getInstance()->getPhysicsSystem()->updateAllComponents();
 }
 
 void GameObjectManager::draw(int width, int height)
 {
-	for (GameObject* gameObject : this->m_gameObjectList)
+	for (AGameObject* gameObject : this->m_gameObjectList)
 	{
 		if (gameObject->isActive())
 			gameObject->draw(width, height);
@@ -112,7 +113,7 @@ GameObjectManager::GameObjectList GameObjectManager::getAllObjects()
 	return this->m_gameObjectList;
 }
 
-GameObject* GameObjectManager::findObjectByName(std::string name)
+AGameObject* GameObjectManager::findObjectByName(std::string name)
 {
 	if (this->m_gameObjectTable[name] != NULL)
 	{
@@ -125,7 +126,7 @@ GameObject* GameObjectManager::findObjectByName(std::string name)
 	}
 }
 
-void GameObjectManager::addObject(GameObject* gameObject)
+void GameObjectManager::addObject(AGameObject* gameObject)
 {
 	if (this->m_gameObjectTable[gameObject->getName()] != NULL)
 	{
@@ -150,7 +151,7 @@ void GameObjectManager::addObject(GameObject* gameObject)
 	Logger::log(gameObject->getName() + " added to hierarchy");
 }
 
-void GameObjectManager::deleteObject(GameObject* gameObject)
+void GameObjectManager::deleteObject(AGameObject* gameObject)
 {
 	int index = -1;
 
@@ -171,7 +172,7 @@ void GameObjectManager::deleteObject(GameObject* gameObject)
 
 void GameObjectManager::deleteObjectByName(std::string name)
 {
-	GameObject* object = this->findObjectByName(name);
+	AGameObject* object = this->findObjectByName(name);
 
 	if (object != NULL)
 	{
@@ -183,7 +184,7 @@ void GameObjectManager::deleteAllObjects()
 {
 	if (!this->m_gameObjectList.empty())
 	{
-		for (GameObject* gameObject : this->m_gameObjectList)
+		for (AGameObject* gameObject : this->m_gameObjectList)
 			gameObject->onDestroy();
 		this->m_gameObjectList.clear();
 		this->m_gameObjectTable.clear();
@@ -192,7 +193,7 @@ void GameObjectManager::deleteAllObjects()
 
 void GameObjectManager::setSelectedObject(GUID guid)
 {
-	for (GameObject* object : m_gameObjectList)
+	for (AGameObject* object : m_gameObjectList)
 	{
 		GUID objectGuid = object->getGuid();
 		if (IsEqualGUID(objectGuid, guid))
@@ -211,14 +212,41 @@ void GameObjectManager::setSelectedObject(std::string name)
 	}
 }
 
-void GameObjectManager::setSelectedObject(GameObject* gameObject)
+void GameObjectManager::setSelectedObject(AGameObject* gameObject)
 {
 	this->m_selectedObject = gameObject;
 }
 
-GameObject* GameObjectManager::getSelectedObject()
+AGameObject* GameObjectManager::getSelectedObject()
 {
 	return this->m_selectedObject;
+}
+
+void GameObjectManager::saveEditStates()
+{
+	for (AGameObject* gameObject : m_gameObjectList) {
+		gameObject->saveEditState();
+	}
+}
+
+void GameObjectManager::restoreEditStates()
+{
+	for (AGameObject* gameObject : m_gameObjectList) {
+		gameObject->restoreEditState();
+	}
+}
+
+void GameObjectManager::applyAction(EditorAction* action)
+{
+	Logger::log(action->getOwnerName());
+	AGameObject* gameObject = this->findObjectByName(action->getOwnerName());
+	if (gameObject != nullptr)
+	{
+		//gameObject->setLocalMatrix(action->getStoredMatrix().getMatrix());
+		gameObject->setPosition(action->getStoredPosition());
+		gameObject->setRotation(action->getStoredOrientation().x, action->getStoredOrientation().y, action->getStoredOrientation().z);
+		gameObject->setScale(action->getStoredScale());
+	}
 }
 
 GameObjectManager::GameObjectManager()

@@ -23,9 +23,9 @@ void HierarchyScreen::draw()
 	ImGui::SetNextWindowSize(ImVec2(UIManager::WINDOW_WIDTH / 6, UIManager::WINDOW_HEIGHT), ImGuiCond_Once);
 	ImGui::Begin("Hierarchy", &isActive);
 	
-	std::vector<GameObject*> list = GameObjectManager::getInstance()->getAllObjects();
+	std::vector<AGameObject*> list = GameObjectManager::getInstance()->getAllObjects();
 
-	for (GameObject* gameObject : list)
+	for (AGameObject* gameObject : list)
 	{
 		std::string guidString;
 		GUID guid = gameObject->getGuid();

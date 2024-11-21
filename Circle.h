@@ -5,7 +5,7 @@
 #include "GameObject.h"
 
 namespace GDEngine {
-	class Circle : public GameObject
+	class Circle : public AGameObject
 	{
 	private:
 		float radius;

@@ -1,5 +1,7 @@
 #include "InspectorScreen.h"
 
+#include "ActionHistory.h"
+#include "EngineBackend.h"
 #include "imgui.h"
 #include "imgui_stdlib.h"
 #include "UIManager.h"
@@ -20,42 +22,43 @@ void InspectorScreen::draw()
 {
 	ImGui::SetNextWindowSize(ImVec2(UIManager::WINDOW_WIDTH / 6, UIManager::WINDOW_HEIGHT), ImGuiCond_Once);
 	ImGui::Begin("Inspector", &isActive);
-	
-	this->drawInspector(GameObjectManager::getInstance()->getSelectedObject());
 
+	m_selectedObject = GameObjectManager::getInstance()->getSelectedObject();
+	if (m_selectedObject != nullptr)
+	{
+		this->drawInspector();
+	}
+	
 	ImGui::End();
 }
 
-void InspectorScreen::drawInspector(GameObject* gameObject)
+void InspectorScreen::drawInspector()
 {
-	if (gameObject == NULL)
-		return;
-
-	std::string name = gameObject->getName();
-	bool isActive = gameObject->isActive();
+	std::string name = m_selectedObject->getName();
+	bool isActive = m_selectedObject->isActive();
 
 	if (ImGui::Checkbox("##Active", &isActive))
 	{
-		gameObject->setActive(isActive);
+		m_selectedObject->setActive(isActive);
 	}
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(-1);
 	if (ImGui::InputText("##Name", &name))
 	{
 		if (ImGui::IsItemDeactivatedAfterEdit())
-			gameObject->setName(name);
+			m_selectedObject->setName(name);
 	}
 
-	this->drawTransformTable(gameObject);
+	this->drawTransformTable(m_selectedObject);
 	
 	if (ImGui::Button("Delete", ImVec2(ImGui::GetWindowSize().x - 15, 20)))
 	{
 		GameObjectManager::getInstance()->setSelectedObject(nullptr);
-		GameObjectManager::getInstance()->deleteObject(gameObject);
+		GameObjectManager::getInstance()->deleteObject(m_selectedObject);
 	}
 }
 
-void InspectorScreen::drawTransformTable(GameObject* gameObject)
+void InspectorScreen::drawTransformTable(AGameObject* gameObject)
 {
 	int rows = 3;
 
@@ -83,6 +86,13 @@ void InspectorScreen::drawTransformTable(GameObject* gameObject)
 
 			if (ImGui::DragFloat3(dragLabel.c_str(), values, 0.01f))
 			{
+				if(!m_hasChanged)
+				{
+					ActionHistory::getInstance()->recordAction(gameObject);
+				}
+
+				m_hasChanged = true;
+
 				switch (i)
 				{
 				case 0:
@@ -95,6 +105,18 @@ void InspectorScreen::drawTransformTable(GameObject* gameObject)
 					gameObject->setScale(Vector3D(values[0], values[1], values[2]));
 					break;
 				}
+			}
+
+			if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
+			{
+				m_isLeftDown = true;
+			}
+			else
+				m_isLeftDown = false;
+
+			if (m_hasChanged && !m_isLeftDown)
+			{
+				m_hasChanged = false;
 			}
 		}
 

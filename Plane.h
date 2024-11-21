@@ -4,7 +4,7 @@
 
 namespace GDEngine
 {
-	class Plane : public GameObject
+	class Plane : public AGameObject
 	{
 	private:
 		VertexBuffer* m_vertexBuffer;

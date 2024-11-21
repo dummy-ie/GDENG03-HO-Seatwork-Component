@@ -10,7 +10,7 @@
 
 using namespace GDEngine;
 
-Border::Border(std::string name) : GameObject(name)
+Border::Border(std::string name) : AGameObject(name)
 {
 	vertex list[] =
 	{
@@ -46,7 +46,7 @@ Border::~Border()
 
 void Border::onCreate()
 {
-	GameObject::onCreate();
+	AGameObject::onCreate();
 }
 
 void Border::update(float deltaTime)

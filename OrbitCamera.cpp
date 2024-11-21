@@ -30,7 +30,7 @@ void OrbitCamera::update(float deltaTime)
 	this->setPosition(Vector3D(x, 0, z));
 }
 
-void OrbitCamera::setObjectToOrbit(GameObject* objectToOrbit)
+void OrbitCamera::setObjectToOrbit(AGameObject* objectToOrbit)
 {
 	this->objectToOrbit = objectToOrbit;
 }

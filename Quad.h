@@ -3,7 +3,7 @@
 #include "GameObject.h"
 
 namespace GDEngine {
-	class Quad : public GameObject
+	class Quad : public AGameObject
 	{
 	private:
 		VertexBuffer* m_vertexBuffer;

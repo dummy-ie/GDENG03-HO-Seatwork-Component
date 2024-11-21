@@ -1,7 +1,6 @@
 #include "UIManager.h"
 
-#include "ColorPickerScreen.h"
-#include "CreditsScreen.h"
+
 #include "EngineTime.h"
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
@@ -19,6 +18,10 @@
 #include "ProfilerScreen.h"
 #include "ViewportScreen.h"
 #include "ToolsScreen.h"
+#include "PlaybackScreen.h"
+#include "ActionScreen.h"
+#include "ColorPickerScreen.h"
+#include "CreditsScreen.h"
 
 using namespace GDEditor;
 
@@ -244,6 +247,14 @@ UIManager::UIManager(HWND hwnd)
 	ColorPickerScreen* colorPickerScreen = new ColorPickerScreen();
 	this->mapUI[uiNames.COLOR_PICKER_SCREEN] = colorPickerScreen;
 	this->listUI.push_back(colorPickerScreen);
+
+	ActionScreen* actionScreen = new ActionScreen();
+	this->mapUI[uiNames.ACTION_SCREEN] = actionScreen;
+	this->listUI.push_back(actionScreen);
+
+	PlaybackScreen* playbackScreen = new PlaybackScreen();
+	this->mapUI[uiNames.PLAYBACK_SCREEN] = playbackScreen;
+	this->listUI.push_back(playbackScreen);
 
 	ViewportManager::getInstance()->createViewport();
 

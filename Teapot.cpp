@@ -16,7 +16,7 @@ namespace GDEngine {
 
 	void Teapot::onCreate()
 	{
-		GameObject::onCreate();
+		AGameObject::onCreate();
 	}
 
 	void Teapot::update(float deltaTime)
@@ -52,6 +52,6 @@ namespace GDEngine {
 
 	void Teapot::onDestroy()
 	{
-		GameObject::onDestroy();
+		AGameObject::onDestroy();
 	}
 }

@@ -16,7 +16,7 @@ namespace GDEngine
 
 	void Armadillo::onCreate()
 	{
-		GameObject::onCreate();
+		AGameObject::onCreate();
 	}
 
 	void Armadillo::update(float deltaTime)
@@ -54,6 +54,6 @@ namespace GDEngine
 
 	void Armadillo::onDestroy()
 	{
-		GameObject::onDestroy();
+		AGameObject::onDestroy();
 	}
 }

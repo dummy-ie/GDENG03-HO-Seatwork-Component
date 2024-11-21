@@ -4,7 +4,7 @@
 #include "ShaderLibrary.h"
 
 namespace GDEngine {
-	Plane::Plane(std::string name) : GameObject(name)
+	Plane::Plane(std::string name) : AGameObject(name)
 	{
 
 		Vector3D color1 = Vector3D(255.0f / 255.0f, 227.0f / 255.0f, 222.0f / 255.0f);
@@ -48,12 +48,12 @@ namespace GDEngine {
 	{
 		delete m_constantBuffer;
 		delete m_vertexBuffer;
-		GameObject::~GameObject();
+		AGameObject::~AGameObject();
 	}
 
 	void Plane::onCreate()
 	{
-		GameObject::onCreate();
+		AGameObject::onCreate();
 	}
 
 	void Plane::update(float deltaTime)

@@ -4,7 +4,7 @@
 
 namespace GDEngine
 {
-	class MeshObject : public GameObject
+	class MeshObject : public AGameObject
 	{
 	protected:
 		Mesh* m_mesh;

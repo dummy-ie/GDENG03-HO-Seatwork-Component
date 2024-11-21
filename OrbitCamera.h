@@ -7,7 +7,7 @@ namespace GDEngine
 	class OrbitCamera : public Camera
 	{
 	private:
-		GameObject* objectToOrbit;
+		AGameObject* objectToOrbit;
 
 		float speed = 0.0f;
 		float angle = 0.0f;
@@ -18,7 +18,7 @@ namespace GDEngine
 
 	public:
 		void update(float deltaTime) override;
-		void setObjectToOrbit(GameObject* objectToOrbit);
+		void setObjectToOrbit(AGameObject* objectToOrbit);
 		void setSpeed(float speed);
 	};
 }

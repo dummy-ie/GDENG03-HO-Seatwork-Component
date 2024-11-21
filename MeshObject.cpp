@@ -6,7 +6,7 @@
 
 namespace GDEngine
 {
-	MeshObject::MeshObject(std::string name, const wchar_t* meshFilePath) : GameObject(name)
+	MeshObject::MeshObject(std::string name, const wchar_t* meshFilePath) : AGameObject(name)
 	{
 		RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 		MeshManager* meshManager = GraphicsEngine::getInstance()->getMeshManager();
@@ -26,12 +26,12 @@ namespace GDEngine
 
 	void MeshObject::onCreate()
 	{
-		GameObject::onCreate();
+		AGameObject::onCreate();
 	}
 
 	void MeshObject::update(float deltaTime)
 	{
-		GameObject::update(deltaTime);
+		AGameObject::update(deltaTime);
 	}
 
 	void MeshObject::draw(int width, int height)
@@ -45,11 +45,11 @@ namespace GDEngine
 
 		deviceContext->drawIndexedTriangleList(this->m_mesh->getIndexBuffer()->getSizeIndexList(), 0, 0);
 
-		GameObject::draw(width, height);
+		AGameObject::draw(width, height);
 	}
 
 	void MeshObject::onDestroy()
 	{
-		GameObject::onDestroy();
+		AGameObject::onDestroy();
 	}
 }

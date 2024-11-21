@@ -8,7 +8,7 @@
 
 using namespace GDEngine;
 
-Circle::Circle(std::string name, float radius, int sides, void* shaderByteCode, size_t sizeShader) : GameObject(name)
+Circle::Circle(std::string name, float radius, int sides, void* shaderByteCode, size_t sizeShader) : AGameObject(name)
 {
 	this->radius = radius;
 	this->sides = sides;

@@ -11,7 +11,7 @@
 
 using namespace GDEngine;
 
-Cube::Cube(std::string name) : GameObject(name)
+Cube::Cube(std::string name) : AGameObject(name)
 {
 
 	Vector3D color1 = Vector3D(230.0f / 255.0f, 230.0f / 255.0f, 250.0f / 255.0f);
@@ -85,17 +85,17 @@ Cube::~Cube()
 	delete m_vertexBuffer;
 	delete m_indexBuffer;
 	delete m_constantBuffer;
-	GameObject::~GameObject();
+	AGameObject::~AGameObject();
 }
 
 void Cube::onCreate()
 {
-	GameObject::onCreate();
+	AGameObject::onCreate();
 }
 
 void Cube::update(float deltaTime)
 {
-	GameObject::update(deltaTime);
+	AGameObject::update(deltaTime);
 	RenderSystem* renderSystem = GraphicsEngine::getInstance()->getRenderSystem();
 	CBObjectData cbObjectData;
 

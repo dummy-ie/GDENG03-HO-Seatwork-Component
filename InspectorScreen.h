@@ -7,17 +7,25 @@ namespace GDEditor
 	using namespace GDEngine;
 	class InspectorScreen : public UIScreen
 	{
+	private:
+		friend class UIManager;
 
 	private:
 		InspectorScreen();
 		~InspectorScreen();
 
 	private:
-		friend class UIManager;
+		virtual void draw() override;
+		void drawInspector();
+		void drawTransformTable(AGameObject* gameObject);
 
 	private:
-		virtual void draw() override;
-		void drawInspector(GameObject* gameObject);
-		void drawTransformTable(GameObject* gameObject);
+		AGameObject* m_selectedObject = nullptr;
+		float m_position[3];
+		float m_scale[3];
+		float m_rotation[3];
+		bool m_hasChanged = false;
+		bool m_isLeftDown = false;
+
 	};
 }

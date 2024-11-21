@@ -3,7 +3,7 @@
 #include "GameObject.h"
 
 namespace GDEngine {
-	class Cube : public GameObject
+	class Cube : public AGameObject
 	{
 	protected:
 		//vertex vertex_list[8];

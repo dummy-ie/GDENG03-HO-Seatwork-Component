@@ -133,6 +133,9 @@
     <Filter Include="GameEngine\Primitives\MeshObject\Bunny">
       <UniqueIdentifier>{3c30fc1c-44d2-4730-ae10-81776573ccab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\Backend">
+      <UniqueIdentifier>{4970389f-5716-4bf2-b16d-5c14be1509e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -321,7 +324,7 @@
     <ClCompile Include="PhysicsComponent.cpp">
       <Filter>GameEngine\ComponentSystem\PhysicsSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
+    <ClCompile Include="AComponent.cpp">
       <Filter>GameEngine\ComponentSystem</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsSystem.cpp">
@@ -329,6 +332,21 @@
     </ClCompile>
     <ClCompile Include="MeshObject.cpp">
       <Filter>GameEngine\Primitives\MeshObject</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineBackend.cpp">
+      <Filter>GameEngine\Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorAction.cpp">
+      <Filter>GameEngine\Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionHistory.cpp">
+      <Filter>GameEngine\Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionScreen.cpp">
+      <Filter>Editor\Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaybackScreen.cpp">
+      <Filter>Editor\Screens</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -536,7 +554,7 @@
     <ClInclude Include="Armadillo.h">
       <Filter>GameEngine\Primitives\MeshObject\Armadillo</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
+    <ClInclude Include="AComponent.h">
       <Filter>GameEngine\ComponentSystem</Filter>
     </ClInclude>
     <ClInclude Include="BaseComponentSystem.h">
@@ -550,6 +568,21 @@
     </ClInclude>
     <ClInclude Include="MeshObject.h">
       <Filter>GameEngine\Primitives\MeshObject</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineBackend.h">
+      <Filter>GameEngine\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorAction.h">
+      <Filter>GameEngine\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionHistory.h">
+      <Filter>GameEngine\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionScreen.h">
+      <Filter>Editor\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaybackScreen.h">
+      <Filter>Editor\Screens</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

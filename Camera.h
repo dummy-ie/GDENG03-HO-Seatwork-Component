@@ -12,7 +12,7 @@ namespace GDEngine
 		ORTHO_TOP,
 	};
 
-	class Camera : public GameObject
+	class Camera : public AGameObject
 	{
 	private:
 		ConstantBuffer* constantBuffer;

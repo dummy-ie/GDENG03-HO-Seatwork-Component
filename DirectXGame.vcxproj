@@ -139,6 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ActionHistory.cpp" />
+    <ClCompile Include="ActionScreen.cpp" />
     <ClCompile Include="Armadillo.cpp" />
     <ClCompile Include="BaseComponentSystem.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -146,7 +148,7 @@
     </ClCompile>
     <ClCompile Include="Bunny.cpp" />
     <ClCompile Include="ColorPickerScreen.cpp" />
-    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="AComponent.cpp" />
     <ClCompile Include="CreditsScreen.cpp" />
     <ClCompile Include="AppWindow.cpp" />
     <ClCompile Include="Border.cpp" />
@@ -156,6 +158,8 @@
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="DeviceContext.cpp" />
+    <ClCompile Include="EditorAction.cpp" />
+    <ClCompile Include="EngineBackend.cpp" />
     <ClCompile Include="EngineTime.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="HierarchyScreen.cpp" />
@@ -177,6 +181,7 @@
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="PhysicsSystem.cpp" />
+    <ClCompile Include="PlaybackScreen.cpp" />
     <ClCompile Include="ProfilerScreen.cpp" />
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="Resource.cpp" />
@@ -212,6 +217,8 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActionHistory.h" />
+    <ClInclude Include="ActionScreen.h" />
     <ClInclude Include="Armadillo.h" />
     <ClInclude Include="BaseComponentSystem.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -219,7 +226,7 @@
     </ClInclude>
     <ClInclude Include="Bunny.h" />
     <ClInclude Include="ColorPickerScreen.h" />
-    <ClInclude Include="Component.h">
+    <ClInclude Include="AComponent.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClInclude>
@@ -231,6 +238,8 @@
     <ClInclude Include="Circle.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="EditorAction.h" />
+    <ClInclude Include="EngineBackend.h" />
     <ClInclude Include="GraphicsEngine.h" />
     <ClInclude Include="MeshObject.h" />
     <ClInclude Include="PhysicsComponent.h">
@@ -238,6 +247,7 @@
       </ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="PhysicsSystem.h" />
+    <ClInclude Include="PlaybackScreen.h" />
     <ClInclude Include="Teapot.h" />
     <ClInclude Include="VertexMesh.h" />
     <ClInclude Include="HierarchyScreen.h" />

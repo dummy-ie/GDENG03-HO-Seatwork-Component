@@ -6,7 +6,7 @@
 #include "ShaderLibrary.h"
 
 namespace GDEngine {
-	Quad::Quad(std::string name) : GameObject(name)
+	Quad::Quad(std::string name) : AGameObject(name)
 	{
 		vertex list[] =
 		{
@@ -40,7 +40,7 @@ namespace GDEngine {
 
 	void Quad::onCreate()
 	{
-		GameObject::onCreate();
+		AGameObject::onCreate();
 	}
 
 	void Quad::update(float deltaTime)

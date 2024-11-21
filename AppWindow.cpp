@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 
+#include "ActionHistory.h"
 #include "imgui.h"
 
 #include "Random.h"
@@ -22,6 +23,7 @@
 
 #include "DeviceContext.h"
 #include "ConstantBuffer.h"
+#include "EngineBackend.h"
 #include "ShaderLibrary.h"
 
 #include "Logger.h"
@@ -57,7 +59,27 @@ void AppWindow::onUpdate()
 
 	renderSystem->getImmediateDeviceContext()->setViewportSize(width, height);
 
-	GameObjectManager::getInstance()->update(deltaTime);
+	EngineBackend* backend = EngineBackend::getInstance();
+	if (backend->getMode() == EngineBackend::EditorMode::PLAY)
+	{
+		GameObjectManager::getInstance()->update(deltaTime);
+		BaseComponentSystem::getInstance()->getPhysicsSystem()->updateAllComponents();
+	}
+	else if (backend->getMode() == EngineBackend::EditorMode::EDITOR)
+	{
+		GameObjectManager::getInstance()->update(deltaTime);
+	}
+	else if (backend->getMode() == EngineBackend::EditorMode::PAUSED)
+	{
+		if (backend->insideFrameStep())
+		{
+			GameObjectManager::getInstance()->update(deltaTime);
+			BaseComponentSystem::getInstance()->getPhysicsSystem()->updateAllComponents();
+			backend->endFrameStep();
+		}
+	}
+	
+	
 
 	UIManager::getInstance()->draw();
 
@@ -88,6 +110,8 @@ void AppWindow::onDestroy()
 	BaseComponentSystem::destroy();
 	GameObjectManager::destroy();
 	ViewportManager::destroy();
+	ActionHistory::destroy();
+	EngineBackend::destroy();
 	ShaderLibrary::destroy();
 	GraphicsEngine::destroy();
 	InputSystem::destroy();
@@ -144,6 +168,8 @@ void AppWindow::initializeEngine()
 	{
 		GraphicsEngine::initialize();
 		ShaderLibrary::initialize();
+		EngineBackend::initialize();
+		ActionHistory::initialize();
 		Random::initialize();
 		InputSystem::getInstance()->addListener(this);
 		ViewportManager::initialize();

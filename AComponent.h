@@ -4,26 +4,26 @@
 
 namespace GDEngine
 {
-	class GameObject;
-	class Component
+	class AGameObject;
+	class AComponent
 	{
 	public:
 		enum ComponentType { NotSet = -1, Script = 0, Renderer = 1, Input = 2, Physics = 3 };
 
 	protected:
-		GameObject* m_owner;
+		AGameObject* m_owner;
 		ComponentType m_type;
 		std::string m_name;
 
 	public:
-		Component(std::string name, ComponentType type, GameObject* owner);
-		virtual ~Component();
+		AComponent(std::string name, ComponentType type, AGameObject* owner);
+		virtual ~AComponent();
 
 	public:
-		void attachOwner(GameObject* owner);
+		void attachOwner(AGameObject* owner);
 		void detachOwner();
 
-		GameObject* getOwner();
+		AGameObject* getOwner();
 		ComponentType getType();
 
 		std::string getName();
